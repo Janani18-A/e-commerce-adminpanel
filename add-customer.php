@@ -120,7 +120,7 @@ $current_page = 'add-customer';
         </div>
     </div>
 
-    <?php include 'logout-modal.php'; ?>
+    <?php include 'templates/modal/logout-modal.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/script.js"></script>
 </body>

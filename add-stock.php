@@ -1,67 +1,6 @@
 <?php
 $current_page = 'stock-management';
-session_start();
 
-// Initialize stock items in session if not exists
-if (!isset($_SESSION['stock_items']) || empty($_SESSION['stock_items'])) {
-    $_SESSION['stock_items'] = [
-        ['id' => 1, 'item_name' => 'Item Alpha', 'sku' => 'STK-001', 'category' => 'Raw Materials', 'quantity' => 150, 'unit' => 'kg', 'supplier' => 'Supplier A', 'location' => 'Warehouse 1', 'status' => 'In Stock', 'badge' => 'success', 'color' => '2563EB', 'image' => ''],
-        ['id' => 2, 'item_name' => 'Item Beta', 'sku' => 'STK-002', 'category' => 'Packaging', 'quantity' => 25, 'unit' => 'boxes', 'supplier' => 'Supplier B', 'location' => 'Warehouse 2', 'status' => 'Low Stock', 'badge' => 'warning', 'color' => 'F59E0B', 'image' => ''],
-        ['id' => 3, 'item_name' => 'Item Gamma', 'sku' => 'STK-003', 'category' => 'Finished Goods', 'quantity' => 0, 'unit' => 'units', 'supplier' => 'Supplier C', 'location' => 'Warehouse 1', 'status' => 'Out of Stock', 'badge' => 'danger', 'color' => 'EF4444', 'image' => ''],
-        ['id' => 4, 'item_name' => 'Item Delta', 'sku' => 'STK-004', 'category' => 'Raw Materials', 'quantity' => 75, 'unit' => 'liters', 'supplier' => 'Supplier A', 'location' => 'Warehouse 3', 'status' => 'In Stock', 'badge' => 'success', 'color' => '8B5CF6', 'image' => ''],
-        ['id' => 5, 'item_name' => 'Item Epsilon', 'sku' => 'STK-005', 'category' => 'Packaging', 'quantity' => 120, 'unit' => 'rolls', 'supplier' => 'Supplier D', 'location' => 'Warehouse 2', 'status' => 'In Stock', 'badge' => 'success', 'color' => '06B6D4', 'image' => ''],
-        ['id' => 6, 'item_name' => 'Item Zeta', 'sku' => 'STK-006', 'category' => 'Finished Goods', 'quantity' => 8, 'unit' => 'units', 'supplier' => 'Supplier B', 'location' => 'Warehouse 1', 'status' => 'Low Stock', 'badge' => 'warning', 'color' => '1E293B', 'image' => '']
-    ];
-}
-
-// Handle form submission on same page
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
-    $item_name = trim($_POST['item_name'] ?? '');
-    $sku = trim($_POST['sku'] ?? '');
-    $category = trim($_POST['category'] ?? '');
-    $quantity = intval($_POST['quantity'] ?? 0);
-    $unit = trim($_POST['unit'] ?? '');
-    $supplier = trim($_POST['supplier'] ?? '');
-    $location = trim($_POST['location'] ?? '');
-    $status = trim($_POST['status'] ?? 'In Stock');
-    $description = trim($_POST['description'] ?? '');
-    $image = $_POST['item_image'] ?? '';
-    
-    if (!empty($item_name) && !empty($sku) && $quantity >= 0 && !empty($unit)) {
-        $badge = 'success';
-        if ($status === 'Low Stock') $badge = 'warning';
-        if ($status === 'Out of Stock') $badge = 'danger';
-        
-        $colors = ['2563EB', 'F59E0B', 'EF4444', '8B5CF6', '06B6D4', '1E293B', 'EC4899', '10B981'];
-        $color = $colors[array_rand($colors)];
-        
-        $newItem = [
-            'id' => count($_SESSION['stock_items']) + 1,
-            'item_name' => $item_name,
-            'sku' => $sku,
-            'category' => $category ?: 'Uncategorized',
-            'quantity' => $quantity,
-            'unit' => $unit,
-            'supplier' => $supplier ?: 'N/A',
-            'location' => $location ?: 'N/A',
-            'status' => $status,
-            'badge' => $badge,
-            'color' => $color,
-            'description' => $description,
-            'image' => $image
-        ];
-        
-        $_SESSION['stock_items'][] = $newItem;
-        $success = true;
-        $successMessage = "Stock item '$item_name' added successfully!";
-        $itemId = $newItem['id'];
-        
-        // Clear form data
-        $_POST = array();
-    } else {
-        $error = "Please fill all required fields correctly.";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,23 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
             border-color: #2563EB;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
-        .breadcrumb-custom {
-            font-size: 0.9rem;
-            color: #64748B;
-        }
-        .breadcrumb-custom a { 
-            color: #2563EB; 
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .breadcrumb-custom a:hover { 
-            text-decoration: underline; 
-        }
-        .breadcrumb-custom i { 
-            margin: 0 8px; 
-            font-size: 0.7rem; 
-            color: #94A3B8; 
-        }
+        
+        
         .alert-success-custom {
             background: #D1FAE5;
             color: #065F46;
@@ -160,7 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
             color: #EF4444;
         }
 
-        /* Responsive */
         @media (max-width: 767.98px) {
             .sidebar-wrapper { width: 0; transform: translateX(-100%); transition: all 0.3s ease; }
             .sidebar-wrapper.open { width: 280px; transform: translateX(0); }
@@ -180,24 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
     <?php include 'templates/navbar.php'; ?>
     
     <!-- Sidebar -->
-     <?php include 'templates/sidebar.php'; ?>
+    <?php include 'templates/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="content-area main-content">
         <div id="add-stock-page" class="page-section active-page">
             
-            <!-- Breadcrumb -->
-            <div class="breadcrumb-custom mb-3">
-                <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
-                <i class="fas fa-chevron-right"></i>
-                <a href="stock-management.php">Stock Management</a>
-                <i class="fas fa-chevron-right"></i>
-                <span>Add Stock Item</span>
-            </div>
+            
 
             <!-- Page Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2"><i class="fas fa-boxes me-2 text-primary"></i> Add Stock Item</h1>
+                <h1 class="h2">Add Stock Item</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <a href="stock-management.php" class="btn btn-sm btn-outline-secondary">
@@ -207,44 +123,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
                 </div>
             </div>
 
-            <!-- Success Message -->
-            <?php if (isset($success) && $success): ?>
-            <div class="alert-success-custom">
-                <span>
-                    <i class="fas fa-check-circle me-2"></i> 
-                    <strong><?= $successMessage ?></strong>
-                </span>
-                <div class="d-flex gap-2 flex-wrap">
-                    <a href="stock-management.php" class="alert-link">
-                        <i class="fas fa-list me-1"></i> View All Stock
-                    </a>
-                    <a href="add-stock-item.php" class="alert-link">
-                        <i class="fas fa-plus me-1"></i> Add Another
-                    </a>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <?php if (isset($error)): ?>
-            <div class="alert-error-custom">
-                <i class="fas fa-exclamation-circle me-2"></i> <?= $error ?>
-            </div>
-            <?php endif; ?>
+            <!-- Alert Container -->
+            <div id="alertContainer"></div>
 
             <!-- Form -->
             <div class="form-section">
-                <form id="addStockForm" action="" method="POST">
+                <form id="addStockForm" onsubmit="return saveStockItem(event)">
                     <input type="hidden" name="add_stock_item" value="1">
                     
                     <!-- Item Name & SKU -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Item Name <span class="required-star">*</span></label>
-                            <input type="text" class="form-control" id="itemName" name="item_name" placeholder="Enter item name" value="<?= htmlspecialchars($_POST['item_name'] ?? '') ?>" required>
+                            <input type="text" class="form-control" id="itemName" placeholder="Enter item name" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">SKU <span class="required-star">*</span></label>
-                            <input type="text" class="form-control" id="itemSku" name="sku" placeholder="Enter SKU" value="<?= htmlspecialchars($_POST['sku'] ?? '') ?>" required>
+                            <input type="text" class="form-control" id="itemSku" placeholder="Enter SKU" required>
                         </div>
                     </div>
 
@@ -252,28 +147,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Category</label>
-                            <select class="form-select" id="itemCategory" name="category">
+                            <select class="form-select" id="itemCategory">
                                 <option value="">Select Category</option>
-                                <option value="Raw Materials" <?= ($_POST['category'] ?? '') === 'Raw Materials' ? 'selected' : '' ?>>Raw Materials</option>
-                                <option value="Packaging" <?= ($_POST['category'] ?? '') === 'Packaging' ? 'selected' : '' ?>>Packaging</option>
-                                <option value="Finished Goods" <?= ($_POST['category'] ?? '') === 'Finished Goods' ? 'selected' : '' ?>>Finished Goods</option>
-                                <option value="Supplies" <?= ($_POST['category'] ?? '') === 'Supplies' ? 'selected' : '' ?>>Supplies</option>
-                                <option value="Equipment" <?= ($_POST['category'] ?? '') === 'Equipment' ? 'selected' : '' ?>>Equipment</option>
+                                <option value="Raw Materials">Raw Materials</option>
+                                <option value="Packaging">Packaging</option>
+                                <option value="Finished Goods">Finished Goods</option>
+                                <option value="Supplies">Supplies</option>
+                                <option value="Equipment">Equipment</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Unit <span class="required-star">*</span></label>
-                            <select class="form-select" id="itemUnit" name="unit" required>
+                            <select class="form-select" id="itemUnit" required>
                                 <option value="">Select Unit</option>
-                                <option value="kg" <?= ($_POST['unit'] ?? '') === 'kg' ? 'selected' : '' ?>>Kilogram (kg)</option>
-                                <option value="g" <?= ($_POST['unit'] ?? '') === 'g' ? 'selected' : '' ?>>Gram (g)</option>
-                                <option value="liters" <?= ($_POST['unit'] ?? '') === 'liters' ? 'selected' : '' ?>>Liters (L)</option>
-                                <option value="ml" <?= ($_POST['unit'] ?? '') === 'ml' ? 'selected' : '' ?>>Milliliters (ml)</option>
-                                <option value="units" <?= ($_POST['unit'] ?? '') === 'units' ? 'selected' : '' ?>>Units</option>
-                                <option value="boxes" <?= ($_POST['unit'] ?? '') === 'boxes' ? 'selected' : '' ?>>Boxes</option>
-                                <option value="rolls" <?= ($_POST['unit'] ?? '') === 'rolls' ? 'selected' : '' ?>>Rolls</option>
-                                <option value="pcs" <?= ($_POST['unit'] ?? '') === 'pcs' ? 'selected' : '' ?>>Pieces (pcs)</option>
-                                <option value="packs" <?= ($_POST['unit'] ?? '') === 'packs' ? 'selected' : '' ?>>Packs</option>
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="liters">Liters (L)</option>
+                                <option value="ml">Milliliters (ml)</option>
+                                <option value="units">Units</option>
+                                <option value="boxes">Boxes</option>
+                                <option value="rolls">Rolls</option>
+                                <option value="pcs">Pieces (pcs)</option>
+                                <option value="packs">Packs</option>
                             </select>
                         </div>
                     </div>
@@ -282,14 +177,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Quantity <span class="required-star">*</span></label>
-                            <input type="number" class="form-control" id="itemQuantity" name="quantity" placeholder="0" min="0" value="<?= htmlspecialchars($_POST['quantity'] ?? '') ?>" required>
+                            <input type="number" class="form-control" id="itemQuantity" placeholder="0" min="0" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-select" id="itemStatus" name="status">
-                                <option value="In Stock" <?= ($_POST['status'] ?? 'In Stock') === 'In Stock' ? 'selected' : '' ?>>In Stock</option>
-                                <option value="Low Stock" <?= ($_POST['status'] ?? '') === 'Low Stock' ? 'selected' : '' ?>>Low Stock</option>
-                                <option value="Out of Stock" <?= ($_POST['status'] ?? '') === 'Out of Stock' ? 'selected' : '' ?>>Out of Stock</option>
+                            <select class="form-select" id="itemStatus">
+                                <option value="In Stock">In Stock</option>
+                                <option value="Low Stock">Low Stock</option>
+                                <option value="Out of Stock">Out of Stock</option>
                             </select>
                         </div>
                     </div>
@@ -298,27 +193,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Supplier</label>
-                            <input type="text" class="form-control" id="itemSupplier" name="supplier" placeholder="Enter supplier name" value="<?= htmlspecialchars($_POST['supplier'] ?? '') ?>">
+                            <input type="text" class="form-control" id="itemSupplier" placeholder="Enter supplier name">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Location</label>
-                            <input type="text" class="form-control" id="itemLocation" name="location" placeholder="Enter storage location" value="<?= htmlspecialchars($_POST['location'] ?? '') ?>">
+                            <input type="text" class="form-control" id="itemLocation" placeholder="Enter storage location">
                         </div>
                     </div>
 
                     <!-- Description -->
                     <div class="mb-3">
                         <label class="form-label">Description</label>
-                        <textarea class="form-control" id="itemDescription" name="description" rows="4" placeholder="Item description (optional)"><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+                        <textarea class="form-control" id="itemDescription" rows="4" placeholder="Item description (optional)"></textarea>
                     </div>
 
                     <!-- Buttons -->
                     <div class="d-flex gap-2 flex-wrap">
                         <button type="submit" class="btn btn-primary" id="saveItemBtn">
-                            <i class="fas fa-save me-1"></i> Save Stock Item
+                            Save Stock Item
                         </button>
                         <a href="stock-management.php" class="btn btn-secondary">
-                            <i class="fas fa-times me-1"></i> Cancel
+                            Cancel
                         </a>
                     </div>
                 </form>
@@ -330,56 +225,188 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
     <script src="assets/js/script.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // ============================================================
+        // STOCK DATA - READ FROM LOCALSTORAGE
+        // ============================================================
+        function getStockItems() {
+            return JSON.parse(localStorage.getItem('stock_items') || '[]');
+        }
 
-            // ---- FORM VALIDATION BEFORE SUBMIT ----
-            document.getElementById('addStockForm')?.addEventListener('submit', function(e) {
-                var itemName = document.getElementById('itemName')?.value.trim() || '';
-                var sku = document.getElementById('itemSku')?.value.trim() || '';
-                var quantity = document.getElementById('itemQuantity')?.value || '';
-                var unit = document.getElementById('itemUnit')?.value || '';
+        function saveStockItems(items) {
+            localStorage.setItem('stock_items', JSON.stringify(items));
+        }
 
-                if (!itemName) {
-                    e.preventDefault();
-                    alert('Please enter item name');
-                    document.getElementById('itemName').focus();
-                    return false;
-                }
-                if (!sku) {
-                    e.preventDefault();
-                    alert('Please enter SKU');
-                    document.getElementById('itemSku').focus();
-                    return false;
-                }
-                if (quantity === '' || parseInt(quantity) < 0) {
-                    e.preventDefault();
-                    alert('Please enter valid quantity (0 or more)');
-                    document.getElementById('itemQuantity').focus();
-                    return false;
-                }
-                if (!unit) {
-                    e.preventDefault();
-                    alert('Please select a unit');
-                    document.getElementById('itemUnit').focus();
-                    return false;
-                }
-                return true;
-            });
+        // Initialize stock items in localStorage if empty
+        if (getStockItems().length === 0) {
+            const defaultItems = [
+                {id: 1, item_name: 'Item Alpha', sku: 'STK-001', category: 'Raw Materials', quantity: 150, unit: 'kg', supplier: 'Supplier A', location: 'Warehouse 1', status: 'In Stock', badge: 'success', color: '2563EB', image: '', description: ''},
+                {id: 2, item_name: 'Item Beta', sku: 'STK-002', category: 'Packaging', quantity: 25, unit: 'boxes', supplier: 'Supplier B', location: 'Warehouse 2', status: 'Low Stock', badge: 'warning', color: 'F59E0B', image: '', description: ''},
+                {id: 3, item_name: 'Item Gamma', sku: 'STK-003', category: 'Finished Goods', quantity: 0, unit: 'units', supplier: 'Supplier C', location: 'Warehouse 1', status: 'Out of Stock', badge: 'danger', color: 'EF4444', image: '', description: ''},
+                {id: 4, item_name: 'Item Delta', sku: 'STK-004', category: 'Raw Materials', quantity: 75, unit: 'liters', supplier: 'Supplier A', location: 'Warehouse 3', status: 'In Stock', badge: 'success', color: '8B5CF6', image: '', description: ''},
+                {id: 5, item_name: 'Item Epsilon', sku: 'STK-005', category: 'Packaging', quantity: 120, unit: 'rolls', supplier: 'Supplier D', location: 'Warehouse 2', status: 'In Stock', badge: 'success', color: '06B6D4', image: '', description: ''},
+                {id: 6, item_name: 'Item Zeta', sku: 'STK-006', category: 'Finished Goods', quantity: 8, unit: 'units', supplier: 'Supplier B', location: 'Warehouse 1', status: 'Low Stock', badge: 'warning', color: '1E293B', image: '', description: ''}
+            ];
+            saveStockItems(defaultItems);
+        }
 
-            // ---- AUTO UPDATE STATUS BASED ON QUANTITY ----
-            document.getElementById('itemQuantity')?.addEventListener('input', function() {
-                var qty = parseInt(this.value) || 0;
-                var statusSelect = document.getElementById('itemStatus');
-                if (qty <= 0) {
-                    statusSelect.value = 'Out of Stock';
-                } else if (qty <= 10) {
-                    statusSelect.value = 'Low Stock';
-                } else {
-                    statusSelect.value = 'In Stock';
-                }
-            });
+        // ============================================================
+        // AUTO UPDATE STATUS BASED ON QUANTITY
+        // ============================================================
+        document.getElementById('itemQuantity')?.addEventListener('input', function() {
+            var qty = parseInt(this.value) || 0;
+            var statusSelect = document.getElementById('itemStatus');
+            if (qty <= 0) {
+                statusSelect.value = 'Out of Stock';
+            } else if (qty <= 10) {
+                statusSelect.value = 'Low Stock';
+            } else {
+                statusSelect.value = 'In Stock';
+            }
+        });
 
-            // ---- SIDEBAR TOGGLE (Mobile) ----
+        // ============================================================
+        // AUTO GENERATE SKU FROM ITEM NAME
+        // ============================================================
+        document.getElementById('itemName')?.addEventListener('input', function() {
+            var skuField = document.getElementById('itemSku');
+            if (!skuField.value.trim()) {
+                var name = this.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '-');
+                skuField.value = 'STK-' + name;
+            }
+        });
+
+        // ============================================================
+        // SHOW ALERT
+        // ============================================================
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alertContainer');
+            const colors = {
+                success: { bg: '#D1FAE5', color: '#065F46', border: '#10B981', icon: 'check-circle' },
+                error: { bg: '#FEE2E2', color: '#991B1B', border: '#EF4444', icon: 'exclamation-circle' }
+            };
+            const c = colors[type] || colors.success;
+            
+            container.innerHTML = `
+                <div class="alert-success-custom" style="background: ${c.bg}; color: ${c.color}; border-left-color: ${c.border};">
+                    <span>
+                        <i class="fas fa-${c.icon} me-2"></i>
+                        <strong>${message}</strong>
+                    </span>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="stock-management.php" class="alert-link">
+                            <i class="fas fa-list me-1"></i> View All Stock
+                        </a>
+                        <a href="add-stock.php" class="alert-link">
+                            <i class="fas fa-plus me-1"></i> Add Another
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const alert = container.querySelector('.alert-success-custom');
+                if (alert) alert.style.display = 'none';
+            }, 5000);
+        }
+
+        // ============================================================
+        // SAVE STOCK ITEM
+        // ============================================================
+        function saveStockItem(e) {
+            e.preventDefault();
+
+            // Get form values
+            const item_name = document.getElementById('itemName').value.trim();
+            const sku = document.getElementById('itemSku').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            const quantity = parseInt(document.getElementById('itemQuantity').value);
+            const unit = document.getElementById('itemUnit').value;
+            const supplier = document.getElementById('itemSupplier').value.trim();
+            const location = document.getElementById('itemLocation').value.trim();
+            const status = document.getElementById('itemStatus').value;
+            const description = document.getElementById('itemDescription').value.trim();
+
+            // Validate
+            if (!item_name) {
+                alert('Please enter item name');
+                document.getElementById('itemName').focus();
+                return false;
+            }
+            if (!sku) {
+                alert('Please enter SKU');
+                document.getElementById('itemSku').focus();
+                return false;
+            }
+            if (!category) {
+                alert('Please select a category');
+                document.getElementById('itemCategory').focus();
+                return false;
+            }
+            if (isNaN(quantity) || quantity < 0) {
+                alert('Please enter valid quantity (0 or more)');
+                document.getElementById('itemQuantity').focus();
+                return false;
+            }
+            if (!unit) {
+                alert('Please select a unit');
+                document.getElementById('itemUnit').focus();
+                return false;
+            }
+
+            // Determine badge
+            let badge = 'success';
+            if (status === 'Low Stock') badge = 'warning';
+            if (status === 'Out of Stock') badge = 'danger';
+
+            // Colors
+            const colors = ['2563EB', 'F59E0B', 'EF4444', '8B5CF6', '06B6D4', '1E293B', 'EC4899', '10B981'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            // Get existing items
+            const items = getStockItems();
+            const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+
+            // Create new item - Using same structure as stock-management.php
+            const newItem = {
+                id: newId,
+                item_name: item_name,
+                sku: sku,
+                category: category || 'Uncategorized',
+                quantity: quantity,
+                unit: unit,
+                supplier: supplier || 'N/A',
+                location: location || 'N/A',
+                status: status,
+                badge: badge,
+                color: color,
+                description: description,
+                image: ''
+            };
+
+            // Save to localStorage
+            items.push(newItem);
+            saveStockItems(items);
+
+            // Show success message
+            showAlert(`Stock item '${item_name}' added successfully!`, 'success');
+
+            // Reset form
+            document.getElementById('addStockForm').reset();
+            document.getElementById('itemStatus').value = 'In Stock';
+
+            // Redirect after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = 'stock-management.php?added=1';
+            }, 1500);
+
+            console.log('Stock item saved:', newItem);
+            return false;
+        }
+
+        // ============================================================
+        // SIDEBAR TOGGLE (Mobile)
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
             var sidebarToggle = document.querySelector('.sidebar-toggle');
             if (sidebarToggle) {
                 sidebarToggle.addEventListener('click', function () {
@@ -397,10 +424,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_stock_item'])) {
                 }
             });
 
-            // ---- AUTO FOCUS ON FIRST FIELD ----
+            // Auto focus on first field
             document.getElementById('itemName')?.focus();
 
-            console.log('Add Stock Item page initialized');
+            console.log('Add Stock Item page initialized (100% JavaScript with localStorage)');
         });
     </script>
 </body>

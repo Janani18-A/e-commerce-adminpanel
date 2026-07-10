@@ -1,102 +1,6 @@
 <?php
 $current_page = 'discounts';
-session_start();
 
-// Get discount ID from URL
-$discountId = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-// Find the discount in session
-$discount = null;
-if (isset($_SESSION['discounts'])) {
-    foreach ($_SESSION['discounts'] as $d) {
-        if ($d['id'] === $discountId) {
-            $discount = $d;
-            break;
-        }
-    }
-}
-
-// If discount not found, redirect
-if (!$discount) {
-    header('Location: discounts.php');
-    exit;
-}
-
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_discount'])) {
-    $id = intval($_POST['discount_id'] ?? 0);
-    $code = strtoupper(trim($_POST['discount_code'] ?? ''));
-    $type = trim($_POST['discount_type'] ?? '');
-    $value = floatval($_POST['discount_value'] ?? 0);
-    $eligibility = trim($_POST['discount_eligibility'] ?? '');
-    $usage = trim($_POST['usage_limit'] ?? 'No limit');
-    $status = trim($_POST['discount_status'] ?? 'Active');
-    $description = trim($_POST['discount_description'] ?? '');
-    $minOrder = floatval($_POST['min_order'] ?? 0);
-    
-    if ($id > 0 && !empty($code) && $value > 0) {
-        foreach ($_SESSION['discounts'] as &$d) {
-            if ($d['id'] === $id) {
-                // Determine discount display
-                $discountDisplay = $value . '% OFF';
-                $typeClass = 'percentage';
-                if ($type === 'Fixed Amount') {
-                    $discountDisplay = '$' . number_format($value, 2) . ' OFF';
-                    $typeClass = 'fixed';
-                } else if ($type === 'Free Shipping') {
-                    $discountDisplay = 'Free Shipping';
-                    $typeClass = 'fixed';
-                } else if ($type === 'Buy X Get Y') {
-                    $discountDisplay = 'Buy ' . $value . ' Get 1';
-                    $typeClass = 'fixed';
-                }
-                
-                // Determine eligibility badge
-                $eligClass = 'all';
-                if ($eligibility === 'Specific Category') $eligClass = 'category';
-                if ($eligibility === 'Specific Product' || $eligibility === 'New Customers') $eligClass = 'specific';
-                
-                // Determine status badge
-                $statusClass = 'active';
-                if ($status === 'Inactive') $statusClass = 'inactive';
-                if ($status === 'Scheduled') $statusClass = 'scheduled';
-                
-                $d['code'] = $code;
-                $d['discount'] = $discountDisplay;
-                $d['type'] = $typeClass;
-                $d['eligibility'] = $eligibility ?: 'All Products';
-                $d['badge_elig'] = $eligClass;
-                $d['usage'] = $usage === 'No limit' ? 'No limit' : intval($usage);
-                $d['status'] = $status;
-                $d['badge_status'] = $statusClass;
-                $d['description'] = $description;
-                $d['min_order'] = $minOrder;
-                break;
-            }
-        }
-        
-        $success = true;
-        $successMessage = "Coupon '$code' updated successfully!";
-        
-        // Update discount variable
-        foreach ($_SESSION['discounts'] as $d) {
-            if ($d['id'] === $discountId) {
-                $discount = $d;
-                break;
-            }
-        }
-    } else {
-        $error = "Please enter coupon code and valid discount value.";
-    }
-}
-
-// Get the discount data (after possible update)
-foreach ($_SESSION['discounts'] as $d) {
-    if ($d['id'] === $discountId) {
-        $discount = $d;
-        break;
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,24 +21,23 @@ foreach ($_SESSION['discounts'] as $d) {
             border: 1px solid #E2E8F0;
             padding: 2rem;
         }
-        .form-section .form-label { font-weight: 500; color: #1E293B; }
+        .form-section .form-label { 
+            font-weight: 500; 
+            color: #1E293B; 
+            font-size: 0.875rem;
+        }
         .form-section .form-control,
         .form-section .form-select {
             border-radius: 0.5rem;
             border-color: #E2E8F0;
+            font-size: 0.875rem;
         }
         .form-section .form-control:focus,
         .form-section .form-select:focus {
             border-color: #2563EB;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
-        .breadcrumb-custom {
-            font-size: 0.9rem;
-            color: #64748B;
-        }
-        .breadcrumb-custom a { color: #2563EB; text-decoration: none; cursor: pointer; }
-        .breadcrumb-custom a:hover { text-decoration: underline; }
-        .breadcrumb-custom i { margin: 0 8px; font-size: 0.7rem; color: #94A3B8; }
+        
         .alert-success-custom {
             background: #D1FAE5;
             color: #065F46;
@@ -168,7 +71,30 @@ foreach ($_SESSION['discounts'] as $d) {
             border-radius: 8px;
             margin-bottom: 1rem;
         }
-        .sidebar-toggle { display: none; background: transparent; border: none; color: #1E293B; font-size: 1.2rem; padding: 0 10px; }
+        .sidebar-toggle { 
+            display: none; 
+            background: transparent; 
+            border: none; 
+            color: #1E293B; 
+            font-size: 1.2rem; 
+            padding: 0 10px; 
+        }
+        .section-header {
+            background: #F8FAFC;
+            padding: 10px 16px;
+            border-radius: 0.5rem;
+            border: 1px solid #E2E8F0;
+            margin-bottom: 1.5rem;
+        }
+        .section-header h6 {
+            margin: 0;
+            font-weight: 600;
+            color: #1E293B;
+            font-size: 0.95rem;
+        }
+        .required-star {
+            color: #EF4444;
+        }
 
         @media (max-width: 767.98px) {
             .sidebar-wrapper { width: 0; transform: translateX(-100%); transition: all 0.3s ease; }
@@ -189,114 +115,169 @@ foreach ($_SESSION['discounts'] as $d) {
     <?php include 'templates/navbar.php'; ?>
     
     <!-- Sidebar -->
-     <?php include 'templates/sidebar.php'; ?>
+    <?php include 'templates/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="content-area main-content">
-        <div id="edit-discount-page" class="page-section active-page">
+        <div id="edit-coupon-page" class="page-section active-page">
             
-            <!-- Breadcrumb -->
-            <div class="breadcrumb-custom mb-3">
-                <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
-                <i class="fas fa-chevron-right"></i>
-                <a href="discount.php">Discounts</a>
-                <i class="fas fa-chevron-right"></i>
-                <span>Edit Coupon</span>
-            </div>
+            
 
             <!-- Page Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Edit Coupon</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <a href="discount.php" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Coupons
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <!-- Success Message -->
-            <?php if (isset($success) && $success): ?>
-            <div class="alert-success-custom">
-                <span>
-                    <i class="fas fa-check-circle me-2"></i> 
-                    <strong><?= $successMessage ?></strong>
-                </span>
-                <a href="discount.php" class="alert-link">
-                    <i class="fas fa-arrow-right me-1"></i> View Coupons
-                </a>
-            </div>
-            <?php endif; ?>
-
-            <?php if (isset($error)): ?>
-            <div class="alert-error-custom">
-                <i class="fas fa-exclamation-circle me-2"></i> <?= $error ?>
-            </div>
-            <?php endif; ?>
+            <!-- Alert Container -->
+            <div id="alertContainer"></div>
 
             <!-- Form -->
             <div class="form-section">
-                <form id="editDiscountForm" action="" method="POST">
+                <form id="editCouponForm" onsubmit="return updateCoupon(event)">
                     <input type="hidden" name="update_discount" value="1">
-                    <input type="hidden" name="discount_id" value="<?= $discount['id'] ?>">
-                    
+                    <input type="hidden" name="discount_id" id="discountId" value="">
+
+                    <!-- ========================================== -->
+                    <!-- COUPON DETAILS                            -->
+                    <!-- ========================================== -->
+                    <div class="section-header">
+                        <h6>Coupon Details</h6>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Coupon Code <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="couponCode" name="discount_code" value="<?= htmlspecialchars($discount['code']) ?>" required>
+                            <label class="form-label">Code <span class="required-star">*</span></label>
+                            <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code" required>
+                            <small class="text-muted">Enter a coupon code</small>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Discount Type</label>
-                            <select class="form-select" id="discountType" name="discount_type">
-                                <option <?= ($discount['type'] ?? '') === 'percentage' ? 'selected' : '' ?>>Percentage</option>
-                                <option <?= ($discount['type'] ?? '') === 'fixed' ? 'selected' : '' ?>>Fixed Amount</option>
-                                <option <?= ($discount['type'] ?? '') === 'fixed' && strpos($discount['discount'], 'Free Shipping') !== false ? 'selected' : '' ?>>Free Shipping</option>
-                                <option <?= ($discount['type'] ?? '') === 'fixed' && strpos($discount['discount'], 'Buy') !== false ? 'selected' : '' ?>>Buy X Get Y</option>
+                            <label class="form-label">Coupon Type</label>
+                            <select class="form-select" id="couponType">
+                                <option value="Percentage">Percentage</option>
+                                <option value="Fixed Amount">Fixed Amount</option>
+                                <option value="Free Shipping">Free Shipping</option>
+                                <option value="Buy X Get Y">Buy X Get Y</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Discount Value <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="discountValue" name="discount_value" value="<?= preg_replace('/[^0-9.]/', '', $discount['discount']) ?>" required>
+                            <label class="form-label">Discount <span class="required-star">*</span></label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="discountValue" placeholder="0" step="0.01" min="0" required>
+                                <span class="input-group-text" id="discountSymbol">%</span>
+                            </div>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label class="form-label">Apply coupon</label>
+                            <select class="form-select" id="applyCoupon">
+                                <option value="All Products">All Products</option>
+                                <option value="Specific Category">Specific Category</option>
+                                <option value="Specific Product">Specific Product</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Minimum quantity of products</label>
+                            <input type="number" class="form-control" id="minQuantity" placeholder="0" min="0" value="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Minimum purchase amount</label>
+                            <input type="number" class="form-control" id="minAmount" placeholder="0.00" step="0.01" min="0" value="0">
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- CUSTOMER ELIGIBILITY                      -->
+                    <!-- ========================================== -->
+                    <div class="section-header mt-4">
+                        <h6>Customer Eligibility</h6>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
                             <label class="form-label">Eligibility</label>
-                            <select class="form-select" id="eligibility" name="discount_eligibility">
-                                <option <?= ($discount['eligibility'] ?? '') === 'All Products' ? 'selected' : '' ?>>All Products</option>
-                                <option <?= ($discount['eligibility'] ?? '') === 'Category: Electronics' || ($discount['eligibility'] ?? '') === 'Category: Accessories' ? 'selected' : '' ?>>Specific Category</option>
-                                <option <?= ($discount['eligibility'] ?? '') === 'Smart Devices' ? 'selected' : '' ?>>Specific Product</option>
-                                <option <?= ($discount['eligibility'] ?? '') === 'New Customers' ? 'selected' : '' ?>>New Customers</option>
+                            <select class="form-select" id="customerEligibility">
+                                <option value="Everyone">Everyone</option>
+                                <option value="Regular Customers">Regular Customers</option>
+                                <option value="New Customers">New Customers</option>
                             </select>
                         </div>
                     </div>
 
+                    <!-- ========================================== -->
+                    <!-- USAGE LIMITS                              -->
+                    <!-- ========================================== -->
+                    <div class="section-header mt-4">
+                        <h6>Usage Limits</h6>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Usage Limit</label>
-                            <input type="text" class="form-control" id="usageLimit" name="usage_limit" value="<?= htmlspecialchars($discount['usage']) ?>">
+                            <label class="form-label">Limit number of times this discount can be used in total <span class="required-star">*</span></label>
+                            <input type="number" class="form-control" id="usageLimitTotal" placeholder="0" min="0" value="0" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Limit number of times this discount can be used per customer <span class="required-star">*</span></label>
+                            <input type="number" class="form-control" id="usageLimitPerCustomer" placeholder="0" min="0" value="0" required>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- COUPON VALIDITY                           -->
+                    <!-- ========================================== -->
+                    <div class="section-header mt-4">
+                        <h6>Coupon Validity</h6>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">From <span class="required-star">*</span></label>
+                            <input type="date" class="form-control" id="validFrom" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Till <span class="required-star">*</span></label>
+                            <input type="date" class="form-control" id="validTill" required>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- STATUS                                    -->
+                    <!-- ========================================== -->
+                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-select" id="discountStatus" name="discount_status">
-                                <option <?= ($discount['status'] ?? '') === 'Active' ? 'selected' : '' ?>>Active</option>
-                                <option <?= ($discount['status'] ?? '') === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-                                <option <?= ($discount['status'] ?? '') === 'Scheduled' ? 'selected' : '' ?>>Scheduled</option>
+                            <select class="form-select" id="couponStatus">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="Expired">Expired</option>
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Minimum Order Amount</label>
-                            <input type="number" class="form-control" id="minOrder" name="min_order" placeholder="0.00" step="0.01" value="<?= htmlspecialchars($discount['min_order'] ?? '') ?>">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Description</label>
-                            <textarea class="form-control" id="discountDescription" name="discount_description" rows="2" placeholder="Coupon description"><?= htmlspecialchars($discount['description'] ?? '') ?></textarea>
+                            <textarea class="form-control" id="couponDescription" rows="2" placeholder="Coupon description"></textarea>
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary" id="updateDiscountBtn">
-                            <i class="fas fa-save me-1"></i> Update Coupon
+                    <!-- Submit Buttons -->
+                    <div class="d-flex gap-2 flex-wrap mt-4 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary" id="updateCouponBtn">
+                            Update
                         </button>
-                        <a href="discount.php" class="btn btn-secondary">Cancel</a>
+                        <a href="discount.php" class="btn btn-secondary">
+                            Cancel
+                        </a>
                     </div>
                 </form>
             </div>
@@ -307,27 +288,229 @@ foreach ($_SESSION['discounts'] as $d) {
     <script src="assets/js/script.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // ============================================================
+        // COUPON DATA - READ FROM LOCALSTORAGE
+        // ============================================================
+        function getCoupons() {
+            return JSON.parse(localStorage.getItem('coupons') || '[]');
+        }
 
-            // ---- FORM VALIDATION BEFORE SUBMIT ----
-            document.getElementById('editDiscountForm')?.addEventListener('submit', function(e) {
-                var code = document.getElementById('couponCode')?.value.trim() || '';
-                var value = document.getElementById('discountValue')?.value || '';
+        function saveCoupons(coupons) {
+            localStorage.setItem('coupons', JSON.stringify(coupons));
+        }
 
-                if (!code) {
-                    e.preventDefault();
-                    alert('Please enter coupon code');
-                    return false;
-                }
-                if (!value || value <= 0) {
-                    e.preventDefault();
-                    alert('Please enter valid discount value');
-                    return false;
-                }
-                return true;
-            });
+        // ============================================================
+        // GET COUPON ID FROM URL
+        // ============================================================
+        function getCouponId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get('id')) || 0;
+        }
 
-            // ---- SIDEBAR TOGGLE (Mobile) ----
+        // ============================================================
+        // UPDATE DISCOUNT SYMBOL BASED ON TYPE
+        // ============================================================
+        document.getElementById('couponType')?.addEventListener('change', function() {
+            const symbol = document.getElementById('discountSymbol');
+            const valueInput = document.getElementById('discountValue');
+            const type = this.value;
+            
+            if (type === 'Percentage') {
+                symbol.textContent = '%';
+                valueInput.placeholder = '0';
+                valueInput.step = '0.01';
+                valueInput.readOnly = false;
+            } else if (type === 'Fixed Amount') {
+                symbol.textContent = '$';
+                valueInput.placeholder = '0.00';
+                valueInput.step = '0.01';
+                valueInput.readOnly = false;
+            } else if (type === 'Free Shipping') {
+                symbol.textContent = 'Free';
+                valueInput.value = 0;
+                valueInput.readOnly = true;
+                valueInput.placeholder = 'Free';
+            } else if (type === 'Buy X Get Y') {
+                symbol.textContent = 'Buy X';
+                valueInput.placeholder = '0';
+                valueInput.step = '1';
+                valueInput.readOnly = false;
+            }
+        });
+
+        // ============================================================
+        // LOAD COUPON DATA
+        // ============================================================
+        function loadCoupon() {
+            const id = getCouponId();
+            const coupons = getCoupons();
+            const coupon = coupons.find(c => c.id === id);
+
+            if (!coupon) {
+                window.location.href = 'discount.php';
+                return;
+            }
+
+            // Fill form fields
+            document.getElementById('discountId').value = coupon.id;
+            document.getElementById('couponCode').value = coupon.code || '';
+            document.getElementById('couponType').value = coupon.type || 'Percentage';
+            document.getElementById('discountValue').value = coupon.discount || 0;
+            document.getElementById('applyCoupon').value = coupon.apply || 'All Products';
+            document.getElementById('customerEligibility').value = coupon.eligibility || 'Everyone';
+            document.getElementById('usageLimitTotal').value = coupon.usage_total || 0;
+            document.getElementById('usageLimitPerCustomer').value = coupon.usage_per_customer || 0;
+            document.getElementById('validFrom').value = coupon.valid_from || '';
+            document.getElementById('validTill').value = coupon.valid_till || '';
+            document.getElementById('couponStatus').value = coupon.status || 'Active';
+            document.getElementById('couponDescription').value = coupon.description || '';
+            document.getElementById('minQuantity').value = coupon.min_quantity || 0;
+            document.getElementById('minAmount').value = coupon.min_amount || 0;
+
+            // Update symbol based on type
+            const type = coupon.type || 'Percentage';
+            const symbol = document.getElementById('discountSymbol');
+            const valueInput = document.getElementById('discountValue');
+            
+            if (type === 'Percentage') {
+                symbol.textContent = '%';
+                valueInput.readOnly = false;
+            } else if (type === 'Fixed Amount') {
+                symbol.textContent = '$';
+                valueInput.readOnly = false;
+            } else if (type === 'Free Shipping') {
+                symbol.textContent = 'Free';
+                valueInput.readOnly = true;
+            } else if (type === 'Buy X Get Y') {
+                symbol.textContent = 'Buy X';
+                valueInput.readOnly = false;
+            }
+
+            console.log('Coupon loaded:', coupon);
+        }
+
+        // ============================================================
+        // SHOW ALERT
+        // ============================================================
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alertContainer');
+            const colors = {
+                success: { bg: '#D1FAE5', color: '#065F46', border: '#10B981', icon: 'check-circle' },
+                error: { bg: '#FEE2E2', color: '#991B1B', border: '#EF4444', icon: 'exclamation-circle' }
+            };
+            const c = colors[type] || colors.success;
+            
+            container.innerHTML = `
+                <div class="alert-success-custom" style="background: ${c.bg}; color: ${c.color}; border-left-color: ${c.border};">
+                    <span>
+                        <i class="fas fa-${c.icon} me-2"></i>
+                        <strong>${message}</strong>
+                    </span>
+                    <a href="discount.php" class="alert-link">
+                        <i class="fas fa-arrow-right me-1"></i> View Coupons
+                    </a>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const alert = container.querySelector('.alert-success-custom');
+                if (alert) alert.style.display = 'none';
+            }, 5000);
+        }
+
+        // ============================================================
+        // UPDATE COUPON
+        // ============================================================
+        function updateCoupon(e) {
+            e.preventDefault();
+
+            const id = parseInt(document.getElementById('discountId').value);
+            const code = document.getElementById('couponCode').value.trim().toUpperCase();
+            const type = document.getElementById('couponType').value;
+            const discount = parseFloat(document.getElementById('discountValue').value);
+            const apply = document.getElementById('applyCoupon').value;
+            const eligibility = document.getElementById('customerEligibility').value;
+            const usage_total = parseInt(document.getElementById('usageLimitTotal').value) || 0;
+            const usage_per_customer = parseInt(document.getElementById('usageLimitPerCustomer').value) || 0;
+            const valid_from = document.getElementById('validFrom').value;
+            const valid_till = document.getElementById('validTill').value;
+            const status = document.getElementById('couponStatus').value;
+            const description = document.getElementById('couponDescription').value.trim();
+            const min_quantity = parseInt(document.getElementById('minQuantity').value) || 0;
+            const min_amount = parseFloat(document.getElementById('minAmount').value) || 0;
+
+            // Validate
+            if (!code) {
+                alert('Please enter coupon code');
+                document.getElementById('couponCode').focus();
+                return false;
+            }
+            if (type !== 'Free Shipping' && (!discount || discount <= 0)) {
+                alert('Please enter valid discount value');
+                document.getElementById('discountValue').focus();
+                return false;
+            }
+            if (!valid_from) {
+                alert('Please select valid from date');
+                document.getElementById('validFrom').focus();
+                return false;
+            }
+            if (!valid_till) {
+                alert('Please select valid till date');
+                document.getElementById('validTill').focus();
+                return false;
+            }
+            if (new Date(valid_from) > new Date(valid_till)) {
+                alert('Valid from date cannot be after valid till date');
+                document.getElementById('validFrom').focus();
+                return false;
+            }
+
+            // Get coupons and update
+            const coupons = getCoupons();
+            const index = coupons.findIndex(c => c.id === id);
+            
+            if (index === -1) {
+                showAlert('Coupon not found', 'error');
+                return false;
+            }
+
+            // Update coupon
+            coupons[index] = {
+                ...coupons[index],
+                code: code,
+                type: type,
+                discount: discount || 0,
+                apply: apply,
+                eligibility: eligibility,
+                usage_total: usage_total,
+                usage_per_customer: usage_per_customer,
+                valid_from: valid_from,
+                valid_till: valid_till,
+                status: status,
+                description: description,
+                min_quantity: min_quantity,
+                min_amount: min_amount,
+                updated_at: new Date().toISOString()
+            };
+
+            saveCoupons(coupons);
+
+            showAlert(`Coupon '${code}' updated successfully!`, 'success');
+
+            setTimeout(() => {
+                window.location.href = 'discount.php';
+            }, 1500);
+
+            return false;
+        }
+
+        // ============================================================
+        // SIDEBAR TOGGLE
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCoupon();
+
             var sidebarToggle = document.querySelector('.sidebar-toggle');
             if (sidebarToggle) {
                 sidebarToggle.addEventListener('click', function () {
@@ -345,7 +528,7 @@ foreach ($_SESSION['discounts'] as $d) {
                 }
             });
 
-            console.log('Edit Discount page initialized');
+            console.log('Edit Coupon page initialized (100% JavaScript with localStorage)');
         });
     </script>
 </body>

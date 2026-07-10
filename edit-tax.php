@@ -50,58 +50,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-    <?php include ('templates/navbar.php'); ?>
-    <?php include('templates/sidebar.php'); ?>
+     <?php include ('templates/navbar.php'); ?>
+   <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container bg-white border rounded-4 overflow-hidden">
+        <div class="settings-container">
             <!-- Header -->
-            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
+            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 class="fs-4 fw-bold text-dark mb-0">Edit Tax Rule</h1>
-                    <p class="text-secondary small mb-0">Update tax rule details.</p>
+                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">✏️ Edit Tax Rule</h1>
+                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Update tax rule details.</p>
                 </div>
-                <a href="taxes.php" class="btn btn-light border mt-2 mt-sm-0">
+                <a href="taxes.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                     <i class="fas fa-arrow-left"></i> Back to Taxes
                 </a>
             </div>
 
             <?php if ($success_message): ?>
-                <div class="alert alert-success m-3 rounded-3">
+                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
-                    <br><small class="text-secondary">Redirecting to tax rules list...</small>
+                    <br><small>Redirecting to tax rules list...</small>
                 </div>
                 <script>
                     setTimeout(function() {
-                        if (typeof showToast === 'function') {
-                            showToast('<?php echo $success_message; ?>', 'success');
-                        }
+                        showToast('<?php echo $success_message; ?>', 'success');
                     }, 500);
                 </script>
             <?php endif; ?>
 
             <?php if ($error_message): ?>
-                <div class="alert alert-danger m-3 rounded-3">
+                <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
                     <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
                 </div>
                 <script>
-                    if (typeof showToast === 'function') {
-                        showToast('<?php echo $error_message; ?>', 'error');
-                    }
+                    showToast('<?php echo $error_message; ?>', 'error');
                 </script>
             <?php endif; ?>
 
             <!-- Form Content -->
-            <div class="bg-white border rounded-3 p-4 m-3">
+            <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
                 <form method="POST" action="" onsubmit="return updateTaxRule();">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Category <span class="text-danger">*</span></label>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Category <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="category" value="<?php echo htmlspecialchars($rule['category']); ?>" required>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Tax Percentage <span class="text-danger">*</span></label>
-                            <select class="form-select" name="tax_percent" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Tax Percentage <span class="text-danger">*</span></label>
+                            <select class="form-control" name="tax_percent" required>
                                 <option value="">Select Tax %</option>
                                 <option value="0%" <?php echo $rule['tax'] == '0%' ? 'selected' : ''; ?>>0%</option>
                                 <option value="5%" <?php echo $rule['tax'] == '5%' ? 'selected' : ''; ?>>5%</option>
@@ -110,9 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <option value="28%" <?php echo $rule['tax'] == '28%' ? 'selected' : ''; ?>>28%</option>
                             </select>
                         </div>
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold small">Applicable <span class="text-danger">*</span></label>
-                            <select class="form-select" name="applicable" required>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Applicable <span class="text-danger">*</span></label>
+                            <select class="form-control" name="applicable" required>
                                 <option value="">Select Applicable Region</option>
                                 <option value="All States" <?php echo $rule['applicable'] == 'All States' ? 'selected' : ''; ?>>All States</option>
                                 <option value="Tamil Nadu" <?php echo $rule['applicable'] == 'Tamil Nadu' ? 'selected' : ''; ?>>Tamil Nadu</option>
@@ -131,11 +127,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <!-- Buttons -->
-                    <div class="d-flex gap-3 mt-4">
-                        <button type="submit" class="btn btn-primary px-4 py-2">
+                    <div class="d-flex gap-3 mt-3">
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
                             <i class="fas fa-save"></i> Update Tax Rule
                         </button>
-                        <a href="taxes.php" class="btn btn-light border px-4 py-2">
+                        <a href="taxes.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                             Cancel
                         </a>
                     </div>
@@ -146,13 +142,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
-
-    <script>
-    function updateTaxRule() {
-        // Your existing update logic
-        // Validate form if needed
-        return true; // Allow form submission
-    }
-    </script>
 </body>
 </html>

@@ -1962,6 +1962,78 @@ function confirmLogout() {
     }
 }
 
+// ==========================================
+// PRODUCTS FUNCTIONALITY
+// ==========================================
+
+let editingRow = null;
+
+document.getElementById('saveProductBtn')?.addEventListener('click', function () {
+    const name = document.getElementById('productName').value.trim();
+    if (!name) { showToast('Please enter product name', 'warning'); return; }
+    showToast('Product added successfully!', 'success');
+});
+
+console.log('Products page initialized');
+
+// ==========================================
+// CATEGORIES FUNCTIONALITY
+// ==========================================
+
+document.getElementById('saveCategoryBtn')?.addEventListener('click', function () {
+    const name = document.getElementById('categoryName').value.trim();
+    if (!name) { showToast('Please enter category name', 'warning'); return; }
+    showToast('Category added successfully!', 'success');
+});
+
+console.log('Product Categories page initialized');
+
+// ==========================================
+// STOCK MANAGEMENT FUNCTIONALITY
+// ==========================================
+
+document.getElementById('updateStockBtn')?.addEventListener('click', function () {
+    showToast('Stock updated successfully!', 'success');
+});
+
+console.log('Stock Management page initialized');
+
+// ==========================================
+// DISCOUNTS FUNCTIONALITY
+// ==========================================
+
+document.getElementById('saveDiscountBtn')?.addEventListener('click', function () {
+    const code = document.getElementById('couponCode').value.trim().toUpperCase();
+    if (!code) { showToast('Please enter coupon code', 'warning'); return; }
+    showToast(`Coupon "${code}" created successfully!`, 'success');
+});
+
+console.log('Discounts page initialized');
+
+// ==========================================
+// UTILITY FUNCTIONS
+// ==========================================
+
+function updatePaginationInfo() {
+    const tables = [
+        { id: 'productTableBody', info: document.getElementById('paginationInfo') },
+        { id: 'categoryTableBody', info: document.getElementById('categoryPaginationInfo') },
+        { id: 'discountTableBody', info: document.getElementById('discountPaginationInfo') }
+    ];
+
+    tables.forEach(({ id, info }) => {
+        if (info) {
+            const tbody = document.getElementById(id);
+            if (tbody) {
+                const visibleRows = tbody.querySelectorAll('tr:not([style*="display: none"])');
+                const totalRows = tbody.querySelectorAll('tr').length;
+                const start = visibleRows.length > 0 ? 1 : 0;
+                const end = visibleRows.length;
+                info.textContent = `Showing ${start} to ${end} of ${totalRows} entries`;
+            }
+        }
+    });
+}
 
 // ---- SLIDE IN ANIMATION ----
 const styleEl = document.createElement('style');

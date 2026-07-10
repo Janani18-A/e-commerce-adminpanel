@@ -30,86 +30,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-    <?php include ('templates/navbar.php'); ?>
-    <?php include('templates/sidebar.php'); ?>
+     <?php include ('templates/navbar.php'); ?>
+   <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container bg-white border rounded-4 overflow-hidden">
+        <div class="settings-container">
             <!-- Header -->
-            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
+            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 class="fs-4 fw-bold text-dark mb-0">SMS OTP</h1>
-                    <p class="text-secondary small mb-0">Enable secure phone verification and one-time password authentication for customers.</p>
+                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">📱 SMS OTP</h1>
+                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Enable secure phone verification and one-time password authentication for customers.</p>
                 </div>
-                <a href="settings.php" class="btn btn-light border mt-2 mt-sm-0">
+                <a href="settings.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                     <i class="fas fa-arrow-left"></i> Back to Settings
                 </a>
             </div>
 
             <?php if ($success_message): ?>
-                <div class="alert alert-success m-3 rounded-3">
+                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
                 </div>
+                <script>
+                    setTimeout(function() {
+                        showToast('<?php echo $success_message; ?>', 'success');
+                    }, 500);
+                </script>
             <?php endif; ?>
 
-            <form method="POST" action="" onsubmit="return saveSmsSettings();" class="p-3">
-                <div class="bg-white border rounded-3 p-4">
+            <form method="POST" action="" onsubmit="return saveSmsSettings();">
+                <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
                     
                     <!-- Enable SMS OTP - Main Toggle -->
-                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-2">
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" name="enable_sms" value="1" checked 
-                                   style="width:48px; height:26px; cursor:pointer;" 
-                                   onchange="toggleSmsMain(this)" id="smsMainToggle">
+                    <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 10px;">
+                        <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                            <input type="checkbox" name="enable_sms" value="1" checked 
+                                   style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                   onchange="toggleSmsMain(this)">
+                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;">
+                                <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
+                            </span>
+                        </label>
+                        <div>
+                            <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Enable SMS OTP</div>
+                            <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Enable phone verification for customers</div>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="fw-medium text-dark small">Enable SMS OTP</div>
-                            <div class="text-secondary small">Enable phone verification for customers</div>
-                        </div>
-                        <span id="smsMainStatus" class="text-success fw-medium small">Enabled</span>
+                        <span id="smsMainStatus" style="margin-left: auto; font-size: 12px; color: #10B981; font-weight: 500;">Enabled</span>
                     </div>
 
-                    <!-- OTP Content -->
+                    <!-- OTP Content - Hidden when main toggle is OFF -->
                     <div id="otpContent">
                         <!-- Enable Login OTP -->
-                        <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-2">
-                            <div class="form-check form-switch mb-0">
-                                <input class="form-check-input" type="checkbox" name="enable_login_otp" value="1" 
-                                       style="width:48px; height:26px; cursor:pointer;" 
-                                       onchange="toggleOtpSub(this, 'login')" id="loginOtpToggle">
+                        <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 10px;">
+                            <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                                <input type="checkbox" name="enable_login_otp" value="1" 
+                                       style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                       onchange="toggleOtpSub(this, 'login')">
+                                <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #CBD5E1; border-radius: 34px; transition: 0.3s;">
+                                    <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s;"></span>
+                                </span>
+                            </label>
+                            <div>
+                                <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Enable Login OTP</div>
+                                <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Require OTP for customer login</div>
                             </div>
-                            <div class="flex-grow-1">
-                                <div class="fw-medium text-dark small">Enable Login OTP</div>
-                                <div class="text-secondary small">Require OTP for customer login</div>
-                            </div>
-                            <span id="loginStatus" class="text-secondary fw-medium small">Disabled</span>
+                            <span id="loginStatus" style="margin-left: auto; font-size: 12px; color: #94A3B8; font-weight: 500;">Disabled</span>
                         </div>
 
                         <!-- Enable Checkout OTP -->
-                        <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-3">
-                            <div class="form-check form-switch mb-0">
-                                <input class="form-check-input" type="checkbox" name="enable_checkout_otp" value="1" 
-                                       style="width:48px; height:26px; cursor:pointer;" 
-                                       onchange="toggleOtpSub(this, 'checkout')" id="checkoutOtpToggle">
+                        <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 20px;">
+                            <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                                <input type="checkbox" name="enable_checkout_otp" value="1" 
+                                       style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                       onchange="toggleOtpSub(this, 'checkout')">
+                                <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #CBD5E1; border-radius: 34px; transition: 0.3s;">
+                                    <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s;"></span>
+                                </span>
+                            </label>
+                            <div>
+                                <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Enable Checkout OTP</div>
+                                <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Require OTP for high-value orders</div>
                             </div>
-                            <div class="flex-grow-1">
-                                <div class="fw-medium text-dark small">Enable Checkout OTP</div>
-                                <div class="text-secondary small">Require OTP for high-value orders</div>
-                            </div>
-                            <span id="checkoutStatus" class="text-secondary fw-medium small">Disabled</span>
+                            <span id="checkoutStatus" style="margin-left: auto; font-size: 12px; color: #94A3B8; font-weight: 500;">Disabled</span>
                         </div>
 
                         <!-- OTP Expiry Time -->
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small">OTP Expiry Time</label>
+                            <label class="form-label fw-bold">OTP Expiry Time</label>
                             <input type="number" class="form-control" name="otp_expiry" value="5" placeholder="Enter minutes" style="max-width: 200px;">
-                            <small class="text-secondary" style="font-size: 11px;">Minutes</small>
+                            <small style="color: #94A3B8;">Minutes</small>
                         </div>
 
                         <!-- SMS Provider -->
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small">SMS Provider</label>
-                            <select class="form-select" name="sms_provider" onchange="showProviderConfig(this.value)" style="max-width: 300px;">
+                            <label class="form-label fw-bold">SMS Provider</label>
+                            <select class="form-control" name="sms_provider" onchange="showProviderConfig(this.value)" style="max-width: 300px;">
                                 <option value="twilio">Twilio</option>
                                 <option value="msg91">MSG91</option>
                                 <option value="textlocal">TextLocal</option>
@@ -118,71 +132,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <!-- Provider Configurations -->
-                        <div id="twilioConfig" class="provider-config bg-light rounded-3 p-3 mb-3">
-                            <h6 class="fw-semibold text-dark mb-3">Twilio Configuration</h6>
+                        <div id="twilioConfig" class="provider-config" style="background: #F8FAFC; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                            <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 12px;">Twilio Configuration</h6>
                             <div class="mb-3">
-                                <label class="form-label small">Account SID</label>
+                                <label class="form-label">Account SID</label>
                                 <input type="text" class="form-control" name="account_sid" value="ACxxxxxxxxxxxxxxxxxxxxxxxx" placeholder="Enter Account SID">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small">Auth Token</label>
+                                <label class="form-label">Auth Token</label>
                                 <input type="password" class="form-control" name="auth_token" value="••••••••••••••" placeholder="Enter Auth Token">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small">From Number</label>
+                                <label class="form-label">From Number</label>
                                 <input type="tel" class="form-control" name="from_number" value="+1234567890" placeholder="Enter from number">
                             </div>
                         </div>
 
-                        <div id="msg91Config" class="provider-config bg-light rounded-3 p-3 mb-3" style="display:none;">
-                            <h6 class="fw-semibold text-dark mb-3">MSG91 Configuration</h6>
+                        <div id="msg91Config" class="provider-config" style="display:none; background: #F8FAFC; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                            <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 12px;">MSG91 Configuration</h6>
                             <div class="mb-3">
-                                <label class="form-label small">Auth Key</label>
+                                <label class="form-label">Auth Key</label>
                                 <input type="text" class="form-control" value="••••••••••••••" placeholder="Enter Auth Key">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small">Sender ID</label>
+                                <label class="form-label">Sender ID</label>
                                 <input type="text" class="form-control" value="MYSTORE" placeholder="Enter Sender ID">
                             </div>
                         </div>
 
-                        <div id="textlocalConfig" class="provider-config bg-light rounded-3 p-3 mb-3" style="display:none;">
-                            <h6 class="fw-semibold text-dark mb-3">TextLocal Configuration</h6>
+                        <div id="textlocalConfig" class="provider-config" style="display:none; background: #F8FAFC; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                            <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 12px;">TextLocal Configuration</h6>
                             <div class="mb-3">
-                                <label class="form-label small">API Key</label>
+                                <label class="form-label">API Key</label>
                                 <input type="text" class="form-control" value="••••••••••••••" placeholder="Enter API Key">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small">Sender</label>
+                                <label class="form-label">Sender</label>
                                 <input type="text" class="form-control" value="MYSTORE" placeholder="Enter Sender">
                             </div>
                         </div>
 
-                        <div id="fast2smsConfig" class="provider-config bg-light rounded-3 p-3 mb-3" style="display:none;">
-                            <h6 class="fw-semibold text-dark mb-3">Fast2SMS Configuration</h6>
+                        <div id="fast2smsConfig" class="provider-config" style="display:none; background: #F8FAFC; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                            <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 12px;">Fast2SMS Configuration</h6>
                             <div class="mb-3">
-                                <label class="form-label small">API Key</label>
+                                <label class="form-label">API Key</label>
                                 <input type="text" class="form-control" value="••••••••••••••" placeholder="Enter API Key">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small">Sender ID</label>
+                                <label class="form-label">Sender ID</label>
                                 <input type="text" class="form-control" value="MYSTORE" placeholder="Enter Sender ID">
                             </div>
                         </div>
 
                         <!-- Message Template -->
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small">Message Template</label>
+                            <label class="form-label fw-bold">Message Template</label>
                             <textarea class="form-control" name="message_template" rows="2">Your OTP for {store_name} is {otp}. Valid for {expiry} minutes.</textarea>
                         </div>
                     </div>
 
                     <!-- Buttons -->
                     <div class="d-flex gap-3 mt-4">
-                        <button type="submit" class="btn btn-primary px-4 py-2">
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
-                        <a href="settings.php" class="btn btn-light border px-4 py-2">
+                        <a href="settings.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                             Cancel
                         </a>
                     </div>
@@ -193,118 +207,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
-
-    <script>
-    // Toggle main SMS OTP
-    function toggleSmsMain(checkbox) {
-        const statusElement = document.getElementById('smsMainStatus');
-        const otpContent = document.getElementById('otpContent');
-        
-        if (checkbox.checked) {
-            if (statusElement) {
-                statusElement.textContent = 'Enabled';
-                statusElement.className = 'text-success fw-medium small';
-            }
-            if (otpContent) {
-                otpContent.style.display = 'block';
-                otpContent.style.opacity = '1';
-                otpContent.style.pointerEvents = 'auto';
-                // Enable all inputs inside
-                const inputs = otpContent.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    input.disabled = false;
-                    input.style.opacity = '1';
-                    input.style.background = '#FFFFFF';
-                });
-            }
-        } else {
-            if (statusElement) {
-                statusElement.textContent = 'Disabled';
-                statusElement.className = 'text-secondary fw-medium small';
-            }
-            if (otpContent) {
-                otpContent.style.display = 'none';
-                otpContent.style.opacity = '0.5';
-                otpContent.style.pointerEvents = 'none';
-                // Disable all inputs inside
-                const inputs = otpContent.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    input.disabled = true;
-                    input.style.opacity = '0.5';
-                    input.style.background = '#F1F5F9';
-                });
-            }
-        }
-    }
-
-    // Toggle OTP sub options
-    function toggleOtpSub(checkbox, type) {
-        const statusMap = {
-            'login': 'loginStatus',
-            'checkout': 'checkoutStatus'
-        };
-        
-        const statusElement = document.getElementById(statusMap[type]);
-        
-        if (checkbox.checked) {
-            if (statusElement) {
-                statusElement.textContent = 'Enabled';
-                statusElement.className = 'text-success fw-medium small';
-            }
-        } else {
-            if (statusElement) {
-                statusElement.textContent = 'Disabled';
-                statusElement.className = 'text-secondary fw-medium small';
-            }
-        }
-    }
-
-    // Show provider configuration
-    function showProviderConfig(value) {
-        document.querySelectorAll('.provider-config').forEach(el => {
-            el.style.display = 'none';
-        });
-        const selected = document.getElementById(value + 'Config');
-        if (selected) {
-            selected.style.display = 'block';
-        }
-    }
-
-    // Save SMS settings
-    function saveSmsSettings() {
-        const enabled = document.querySelector('input[name="enable_sms"]')?.checked;
-        const loginOtp = document.querySelector('input[name="enable_login_otp"]')?.checked;
-        const checkoutOtp = document.querySelector('input[name="enable_checkout_otp"]')?.checked;
-        
-        const enabledFeatures = [];
-        if (enabled) {
-            enabledFeatures.push('SMS OTP');
-            if (loginOtp) enabledFeatures.push('Login OTP');
-            if (checkoutOtp) enabledFeatures.push('Checkout OTP');
-        }
-        
-        if (typeof showToast === 'function') {
-            if (enabledFeatures.length > 0) {
-                showToast('SMS OTP settings saved! (' + enabledFeatures.join(', ') + ')', 'success');
-            } else {
-                showToast(' SMS OTP disabled!', 'info');
-            }
-        }
-        
-        return true;
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        // Show Twilio config by default
-        showProviderConfig('twilio');
-        
-        // Set initial state for main toggle
-        const mainCheckbox = document.querySelector('input[name="enable_sms"]');
-        if (mainCheckbox && mainCheckbox.checked) {
-            document.getElementById('otpContent').style.display = 'block';
-        }
-    });
-    </script>
 </body>
 </html>

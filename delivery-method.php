@@ -43,63 +43,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-    <?php include ('templates/navbar.php'); ?>
-    <?php include('templates/sidebar.php'); ?>
+     <?php include ('templates/navbar.php'); ?>
+   <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container bg-white border rounded-4 overflow-hidden">
+        <div class="settings-container">
             <!-- Header -->
-            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
+            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 class="fs-4 fw-bold text-dark mb-0">Delivery Method</h1>
-                    <p class="text-secondary small mb-0">Configure shipping methods, delivery charges, and service areas.</p>
+                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">🚚 Delivery Method</h1>
+                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Configure shipping methods, delivery charges, and service areas.</p>
                 </div>
-                <a href="settings.php" class="btn btn-light border mt-2 mt-sm-0">
+                <a href="settings.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                     <i class="fas fa-arrow-left"></i> Back to Settings
                 </a>
             </div>
 
             <?php if ($success_message): ?>
-                <div class="alert alert-success m-3 rounded-3">
+                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
                 </div>
                 <script>
                     setTimeout(function() {
-                        if (typeof showToast === 'function') {
-                            showToast('<?php echo $success_message; ?>', 'success');
-                        }
+                        showToast('<?php echo $success_message; ?>', 'success');
                     }, 500);
                 </script>
             <?php endif; ?>
 
-            <form method="POST" action="" onsubmit="return saveDeliverySettings();" class="p-3">
-                <div class="bg-white border rounded-3 p-4">
+            <form method="POST" action="" onsubmit="return saveDeliverySettings();">
+                <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
                     
                     <!-- Enable Shipping Toggle -->
-                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-3">
-                        <label class="position-relative d-inline-block" style="width:48px; height:26px; flex-shrink:0; cursor:pointer;">
+                    <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 20px;">
+                        <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
                             <input type="checkbox" name="enable_shipping" value="1" checked 
-                                   class="opacity-0 position-absolute w-100 h-100" 
-                                   style="z-index:2; cursor:pointer;" 
+                                   style="opacity: 0; width: 0; height: 0; position: absolute;" 
                                    onchange="toggleDeliveryToggle(this)">
-                            <span class="position-absolute top-0 start-0 end-0 bottom-0 rounded-pill transition" 
-                                  style="background:#2563EB; transition:0.3s;">
-                                <span class="position-absolute bg-white rounded-circle" 
-                                      style="height:20px; width:20px; left:3px; bottom:3px; transition:0.3s; transform:translateX(22px);"></span>
+                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;">
+                                <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
                             </span>
                         </label>
-                        <div class="flex-grow-1">
-                            <div class="fw-medium text-dark small">Enable Shipping</div>
-                            <div class="text-secondary small">Enable shipping for orders</div>
+                        <div>
+                            <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Enable Shipping</div>
+                            <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Enable shipping for orders</div>
                         </div>
-                        <span id="shippingStatus" class="text-success fw-medium small">Enabled</span>
+                        <span id="shippingStatus" style="margin-left: auto; font-size: 12px; color: #10B981; font-weight: 500;">Enabled</span>
                     </div>
 
                     <!-- Shipping Methods Table -->
-                    <h6 class="fw-semibold text-dark mb-3">Shipping Methods</h6>
+                    <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">Shipping Methods</h6>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-light">
+                        <table class="table table-bordered">
+                            <thead style="background: #F8FAFC;">
                                 <tr>
                                     <th>Method</th>
                                     <th>Charge</th>
@@ -120,13 +115,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="edit-delivery.php?id=<?php echo $method['id']; ?>" class="btn btn-primary btn-sm">
+                                        <a href="edit-delivery.php?id=<?php echo $method['id']; ?>" class="btn btn-sm btn-primary" style="padding: 3px 8px; margin-right: 3px;">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="delivery-method.php?toggle=1&id=<?php echo $method['id']; ?>" class="btn btn-sm <?php echo $method['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" onclick="return confirm('Change status?')">
+                                        <a href="delivery-method.php?toggle=1&id=<?php echo $method['id']; ?>" class="btn btn-sm <?php echo $method['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" style="padding: 3px 8px; margin-right: 3px;" onclick="return confirm('Change status?')">
                                             <i class="fas <?php echo $method['status'] == 'Active' ? 'fa-pause' : 'fa-play'; ?>"></i>
                                         </a>
-                                        <a href="delivery-method.php?delete=1&id=<?php echo $method['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this delivery method?')">
+                                        <a href="delivery-method.php?delete=1&id=<?php echo $method['id']; ?>" class="btn btn-sm btn-danger" style="padding: 3px 8px;" onclick="return confirm('Are you sure you want to delete this delivery method?')">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>
@@ -138,21 +133,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Free Shipping Threshold -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Free Shipping Threshold</label>
+                        <label class="form-label fw-bold">Free Shipping Threshold</label>
                         <input type="text" class="form-control" name="free_shipping" value="₹1000" placeholder="Enter threshold amount" style="max-width: 300px;">
                     </div>
 
                     <!-- Add Method Button -->
-                    <a href="add-delivery.php" class="btn btn-primary">
+                    <a href="add-delivery.php" class="btn btn-primary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
                         <i class="fas fa-plus"></i> Add Method
                     </a>
 
                     <!-- Buttons -->
                     <div class="d-flex gap-3 mt-4">
-                        <button type="submit" class="btn btn-primary px-4 py-2">
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
-                        <a href="settings.php" class="btn btn-light border px-4 py-2">
+                        <a href="settings.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                             Cancel
                         </a>
                     </div>
@@ -163,59 +158,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
-
-    <script>
-    // Toggle delivery shipping
-    function toggleDeliveryToggle(checkbox) {
-        const statusElement = document.getElementById('shippingStatus');
-        const toggleSpan = checkbox.parentElement.querySelector('span:first-child');
-        const circleSpan = toggleSpan.querySelector('span');
-        
-        if (checkbox.checked) {
-            // Enabled
-            toggleSpan.style.background = '#2563EB';
-            circleSpan.style.transform = 'translateX(22px)';
-            if (statusElement) {
-                statusElement.textContent = 'Enabled';
-                statusElement.className = 'text-success fw-medium small';
-            }
-        } else {
-            // Disabled
-            toggleSpan.style.background = '#CBD5E1';
-            circleSpan.style.transform = 'translateX(0)';
-            if (statusElement) {
-                statusElement.textContent = 'Disabled';
-                statusElement.className = 'text-secondary fw-medium small';
-            }
-        }
-    }
-
-    // Save delivery settings
-    function saveDeliverySettings() {
-        // Your existing save logic
-        return true; // Allow form submission
-    }
-
-    // Initialize toggle on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkbox = document.querySelector('input[name="enable_shipping"]');
-        if (checkbox && checkbox.checked) {
-            const statusElement = document.getElementById('shippingStatus');
-            const toggleSpan = checkbox.parentElement.querySelector('span:first-child');
-            const circleSpan = toggleSpan.querySelector('span');
-            
-            if (statusElement) {
-                statusElement.textContent = 'Enabled';
-                statusElement.className = 'text-success fw-medium small';
-            }
-            if (toggleSpan) {
-                toggleSpan.style.background = '#2563EB';
-                if (circleSpan) {
-                    circleSpan.style.transform = 'translateX(22px)';
-                }
-            }
-        }
-    });
-    </script>
 </body>
 </html>

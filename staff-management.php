@@ -56,70 +56,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-    <?php include ('templates/navbar.php'); ?>
-    <?php include('templates/sidebar.php'); ?>
+     <?php include ('templates/navbar.php'); ?>
+   <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container bg-white border rounded-4 overflow-hidden">
+        <div class="settings-container">
             <!-- Header -->
-            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
+            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 class="fs-4 fw-bold text-dark mb-0">Staff Management</h1>
-                    <p class="text-secondary small mb-0">Control staff access, permissions, and administrative roles.</p>
+                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">👨‍💼 Staff Management</h1>
+                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Control staff access, permissions, and administrative roles.</p>
                 </div>
-                <a href="settings.php" class="btn btn-light border mt-2 mt-sm-0">
+                <a href="settings.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                     <i class="fas fa-arrow-left"></i> Back to Settings
                 </a>
             </div>
 
             <?php if ($success_message): ?>
-                <div class="alert alert-success m-3 rounded-3">
+                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
                 </div>
                 <script>
                     setTimeout(function() {
-                        if (typeof showToast === 'function') {
-                            showToast('<?php echo $success_message; ?>', 'success');
-                        }
+                        showToast('<?php echo $success_message; ?>', 'success');
                     }, 500);
                 </script>
             <?php endif; ?>
 
             <?php if ($error_message): ?>
-                <div class="alert alert-danger m-3 rounded-3">
+                <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
                     <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
                 </div>
                 <script>
-                    if (typeof showToast === 'function') {
-                        showToast('<?php echo $error_message; ?>', 'error');
-                    }
+                    showToast('<?php echo $error_message; ?>', 'error');
                 </script>
             <?php endif; ?>
 
-            <form method="POST" action="" class="p-3">
-                <div class="bg-white border rounded-3 p-4">
+            <form method="POST" action="">
+                <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
                     
                     <!-- Enable Staff Management Toggle -->
-                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-3">
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" name="enable_staff" value="1" checked 
-                                   style="width:48px; height:26px; cursor:pointer;" 
-                                   onchange="toggleStaffManagement(this)" id="staffToggle">
+                    <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 20px;">
+                        <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                            <input type="checkbox" name="enable_staff" value="1" checked 
+                                   style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                   onchange="toggleStaffManagement(this)">
+                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;">
+                                <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
+                            </span>
+                        </label>
+                        <div>
+                            <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Enable Staff Management</div>
+                            <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Allow staff management features</div>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="fw-medium text-dark small">Enable Staff Management</div>
-                            <div class="text-secondary small">Allow staff management features</div>
-                        </div>
-                        <span id="staffStatus" class="text-success fw-medium small">Enabled</span>
+                        <span id="staffStatus" style="margin-left: auto; font-size: 12px; color: #10B981; font-weight: 500;">Enabled</span>
                     </div>
 
                     <!-- Staff Content - Hidden when disabled -->
                     <div id="staffContent">
                         <!-- Staff List -->
-                        <h6 class="fw-semibold text-dark mb-3">Staff List</h6>
+                        <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">Staff List</h6>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead class="table-light">
+                            <table class="table table-bordered">
+                                <thead style="background: #F8FAFC;">
                                     <tr>
                                         <th>Name</th>
                                         <th>Email</th>
@@ -140,13 +139,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="edit-staff.php?id=<?php echo $staff['id']; ?>" class="btn btn-primary btn-sm">
+                                            <a href="edit-staff.php?id=<?php echo $staff['id']; ?>" class="btn btn-sm btn-primary" style="padding: 3px 8px; margin-right: 3px;">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="staff-management.php?toggle=1&id=<?php echo $staff['id']; ?>" class="btn btn-sm <?php echo $staff['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" onclick="return confirm('Change status?')">
+                                            <a href="staff-management.php?toggle=1&id=<?php echo $staff['id']; ?>" class="btn btn-sm <?php echo $staff['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" style="padding: 3px 8px; margin-right: 3px;" onclick="return confirm('Change status?')">
                                                 <i class="fas <?php echo $staff['status'] == 'Active' ? 'fa-pause' : 'fa-play'; ?>"></i>
                                             </a>
-                                            <a href="staff-management.php?delete=1&id=<?php echo $staff['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this staff member?')">
+                                            <a href="staff-management.php?delete=1&id=<?php echo $staff['id']; ?>" class="btn btn-sm btn-danger" style="padding: 3px 8px;" onclick="return confirm('Are you sure you want to delete this staff member?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>
@@ -157,40 +156,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
                         </div>
 
                         <!-- Add New Staff Form -->
-                        <h6 class="fw-semibold text-dark mt-4 mb-3">Add New Staff</h6>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Name <span class="text-danger">*</span></label>
+                        <h6 style="font-weight: 600; color: #1E293B; margin: 25px 0 15px;">Add New Staff</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="staff_name" placeholder="Enter name" required>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Email <span class="text-danger">*</span></label>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" name="staff_email" placeholder="Enter email" required>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Role</label>
-                                <select class="form-select" name="staff_role">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Role</label>
+                                <select class="form-control" name="staff_role">
                                     <option value="Admin">Admin</option>
                                     <option value="Manager">Manager</option>
                                     <option value="Staff" selected>Staff</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Password <span class="text-danger">*</span></label>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Password <span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" name="staff_password" placeholder="Enter password" required>
                             </div>
                         </div>
-                        <button type="submit" name="add_staff" class="btn btn-primary mt-3">
+                        <button type="submit" name="add_staff" class="btn btn-primary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
                             <i class="fas fa-plus"></i> Add Staff
                         </button>
                     </div>
 
                     <!-- Buttons -->
                     <div class="d-flex gap-3 mt-4">
-                        <button type="submit" name="save_settings" class="btn btn-primary px-4 py-2">
+                        <button type="submit" name="save_settings" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
-                        <a href="settings.php" class="btn btn-light border px-4 py-2">
+                        <a href="settings.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
                             Cancel
                         </a>
                     </div>
@@ -201,59 +200,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
-
-    <script>
-    // Toggle Staff Management
-    function toggleStaffManagement(checkbox) {
-        const statusElement = document.getElementById('staffStatus');
-        const contentEl = document.getElementById('staffContent');
-        
-        if (checkbox.checked) {
-            // ENABLED - Show all staff content
-            if (statusElement) {
-                statusElement.textContent = 'Enabled';
-                statusElement.className = 'text-success fw-medium small';
-            }
-            if (contentEl) {
-                contentEl.style.display = 'block';
-                contentEl.style.opacity = '1';
-                contentEl.style.pointerEvents = 'auto';
-                // Enable all inputs inside
-                const inputs = contentEl.querySelectorAll('input, select');
-                inputs.forEach(input => {
-                    input.disabled = false;
-                    input.style.opacity = '1';
-                    input.style.background = '#FFFFFF';
-                });
-            }
-        } else {
-            // DISABLED - Hide all staff content
-            if (statusElement) {
-                statusElement.textContent = 'Disabled';
-                statusElement.className = 'text-secondary fw-medium small';
-            }
-            if (contentEl) {
-                contentEl.style.display = 'none';
-                contentEl.style.opacity = '0.5';
-                contentEl.style.pointerEvents = 'none';
-                // Disable all inputs inside
-                const inputs = contentEl.querySelectorAll('input, select');
-                inputs.forEach(input => {
-                    input.disabled = true;
-                    input.style.opacity = '0.5';
-                    input.style.background = '#F1F5F9';
-                });
-            }
-        }
-    }
-
-    // Initialize on page load - ensure content is visible
-    document.addEventListener('DOMContentLoaded', function() {
-        const mainCheckbox = document.getElementById('staffToggle');
-        if (mainCheckbox && mainCheckbox.checked) {
-            document.getElementById('staffContent').style.display = 'block';
-        }
-    });
-    </script>
 </body>
 </html>

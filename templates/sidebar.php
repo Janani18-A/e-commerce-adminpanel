@@ -1,7 +1,10 @@
 <div class="sidebar-custom">
     <div class="sidebar-header">
         <h2>
-            <span>Menu</span>
+            <svg class="icon">
+                <use href="assets/icons/icons.svg#icon-store" />
+            </svg>
+            <span>E-Shop</span>
         </h2>
     </div>
     <ul class="sidebar-menu">
@@ -19,6 +22,7 @@
                     <use href="assets/icons/icons.svg#icon-orders" />
                 </svg>
                 <span>Orders</span>
+                <span class="badge-menu">12</span>
             </a>
         </li>
         <li>
@@ -54,22 +58,6 @@
             </a>
         </li>
         <li>
-            <a href="product-report.php">
-                <svg class="icon">
-                    <use href="assets/icons/icons.svg#icon-product-report" />
-                </svg>
-                <span>Product Report</span>
-            </a>
-        </li>
-        <li>
-            <a href="sales-reports.php">
-                <svg class="icon">
-                    <use href="assets/icons/icons.svg#icon-sales-report" />
-                </svg>
-                <span>Sales Report</span>
-            </a>
-        </li>
-        <li>
             <a href="stock-management.php">
                 <svg class="icon">
                     <use href="assets/icons/icons.svg#icon-stock" />
@@ -77,8 +65,6 @@
                 <span>Stock Management</span>
             </a>
         </li>
-
-
         <li>
             <a href="pages.php">
                 <svg class="icon">
@@ -87,7 +73,27 @@
                 <span>Pages</span>
             </a>
         </li>
+        <li class="dropdown">
+            <a href="#">
+                <svg class="icon">
+                    <use href="assets/icons/icons.svg#icon-reports" />
+                </svg>
+                <span>Reports</span>
+                <svg class="icon arrow">
+                    <use href="assets/icons/icons.svg#icon-chevron-down" />
+                </svg>
+            </a>
+            <ul class="dropdown-menu-custom">
+                <li><a href="reports.php"><svg class="icon">
+                            <use href="assets/icons/icons.svg#icon-chevron-right" />
+                        </svg> Sales Report</a></li>
 
+                <li><a href="#"><svg class="icon">
+                            <use href="assets/icons/icons.svg#icon-chevron-right" />
+                        </svg> Product Report</a></li>
+                
+                    </ul>
+        </li>
         <li>
             <a href="discount.php">
                 <svg class="icon">
@@ -112,6 +118,6 @@
                 <span>Settings</span>
             </a>
         </li>
-
+        
     </ul>
-</div> 
+</div>

@@ -1,31 +1,6 @@
 <?php
 $current_page = 'discounts';
-session_start();
 
-// Initialize discounts in session if not exists
-if (!isset($_SESSION['discounts']) || empty($_SESSION['discounts'])) {
-    $_SESSION['discounts'] = [
-        ['id' => 1, 'code' => 'SUMMER20', 'discount' => '20% OFF', 'type' => 'percentage', 'eligibility' => 'All Products', 'badge_elig' => 'all', 'usage' => 150, 'expires' => 'Jul 31, 2026', 'status' => 'Active', 'badge_status' => 'active'],
-        ['id' => 2, 'code' => 'FREESHIP', 'discount' => 'Free Shipping', 'type' => 'fixed', 'eligibility' => 'Category: Electronics', 'badge_elig' => 'category', 'usage' => 75, 'expires' => 'Aug 15, 2026', 'status' => 'Active', 'badge_status' => 'active'],
-        ['id' => 3, 'code' => 'WELCOME10', 'discount' => '10% OFF', 'type' => 'percentage', 'eligibility' => 'New Customers', 'badge_elig' => 'specific', 'usage' => 200, 'expires' => 'Dec 31, 2026', 'status' => 'Active', 'badge_status' => 'active'],
-        ['id' => 4, 'code' => 'HOLIDAY25', 'discount' => '25% OFF', 'type' => 'percentage', 'eligibility' => 'All Products', 'badge_elig' => 'all', 'usage' => 50, 'expires' => 'Dec 25, 2026', 'status' => 'Scheduled', 'badge_status' => 'scheduled'],
-        ['id' => 5, 'code' => 'FLASH50', 'discount' => '50% OFF', 'type' => 'percentage', 'eligibility' => 'Smart Devices', 'badge_elig' => 'specific', 'usage' => 30, 'expires' => 'Jun 30, 2026', 'status' => 'Expired', 'badge_status' => 'expired'],
-        ['id' => 6, 'code' => 'BOGO2026', 'discount' => 'Buy 1 Get 1', 'type' => 'fixed', 'eligibility' => 'Category: Accessories', 'badge_elig' => 'category', 'usage' => 100, 'expires' => 'Sep 30, 2026', 'status' => 'Active', 'badge_status' => 'active']
-    ];
-}
-
-// Handle Delete Discount
-if (isset($_GET['delete']) && isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $_SESSION['discounts'] = array_values(array_filter($_SESSION['discounts'], function($d) use ($id) {
-        return $d['id'] !== $id;
-    }));
-    header('Location: discounts.php?deleted=1');
-    exit;
-}
-
-$discounts = $_SESSION['discounts'];
-$showDeleted = isset($_GET['deleted']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,14 +18,7 @@ $showDeleted = isset($_GET['deleted']);
         * { box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #F8FAFC; }
 
-        .breadcrumb-custom {
-            font-size: 0.9rem;
-            color: #64748B;
-        }
-        .breadcrumb-custom a { color: #2563EB; text-decoration: none; cursor: pointer; }
-        .breadcrumb-custom a:hover { text-decoration: underline; }
-        .breadcrumb-custom i { margin: 0 8px; font-size: 0.7rem; color: #94A3B8; }
-
+        
         .discount-table-container {
             background: #FFFFFF;
             border-radius: 8px;
@@ -229,25 +197,16 @@ $showDeleted = isset($_GET['deleted']);
     <?php include 'templates/navbar.php'; ?>
     
     <!-- Sidebar -->
-     <?php include 'templates/sidebar.php'; ?>
+    <?php include 'templates/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="content-area main-content">
         <div id="discounts-page" class="page-section active-page">
             
-            <!-- Breadcrumb -->
-            <div class="breadcrumb-custom mb-3">
-                <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
-                <i class="fas fa-chevron-right"></i>
-                <span>Discounts</span>
-            </div>
+            
 
-            <!-- Alerts -->
-            <?php if ($showDeleted): ?>
-            <div class="alert-custom success show" style="background: #FEE2E2; color: #991B1B; border-left-color: #EF4444;">
-                <i class="fas fa-trash me-2"></i> Coupon deleted successfully!
-            </div>
-            <?php endif; ?>
+            <!-- Alert Container -->
+            <div id="alertContainer"></div>
 
             <!-- Page Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-3 mb-3 border-bottom">
@@ -264,10 +223,11 @@ $showDeleted = isset($_GET['deleted']);
                 <div class="left-section">
                     <span class="text-muted" style="font-size:0.85rem;">Show</span>
                     <select class="form-select form-select-sm entries-select" id="entriesSelect">
-                        <option>10</option>
-                        <option>25</option>
-                        <option>50</option>
-                        <option>100</option>
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
                     </select>
                     <span class="text-muted" style="font-size:0.85rem;">entries</span>
                 </div>
@@ -293,62 +253,17 @@ $showDeleted = isset($_GET['deleted']);
                         </tr>
                     </thead>
                     <tbody id="discountTableBody">
-                        <?php if (empty($discounts)): ?>
-                        <tr>
-                            <td colspan="8" class="text-center py-4">
-                                <i class="fas fa-ticket-alt fa-2x text-muted mb-2 d-block"></i>
-                                <span class="text-muted">No coupons found. <a href="add-discount.php">Add your first coupon</a></span>
-                            </td>
-                        </tr>
-                        <?php else: ?>
-                        <?php foreach ($discounts as $d): ?>
-                        <tr data-id="<?= $d['id'] ?>" data-code="<?= htmlspecialchars($d['code']) ?>" data-discount="<?= htmlspecialchars($d['discount']) ?>" data-type="<?= $d['type'] ?>" data-eligibility="<?= htmlspecialchars($d['eligibility']) ?>" data-badge_elig="<?= $d['badge_elig'] ?>" data-usage="<?= $d['usage'] ?>" data-expires="<?= $d['expires'] ?>" data-status="<?= $d['status'] ?>" data-badge_status="<?= $d['badge_status'] ?>">
-                            <td data-label="#"><?= $d['id'] ?></td>
-                            <td data-label="Code">
-                                <span class="discount-code">
-                                    <?= $d['code'] ?>
-                                </span>
-                            </td>
-                            <td data-label="Discount"><span class="discount-amount <?= $d['type'] ?>"><?= $d['discount'] ?></span></td>
-                            <td data-label="Eligibility"><span class="eligibility-badge <?= $d['badge_elig'] ?>"><?= $d['eligibility'] ?></span></td>
-                            <td data-label="Usage limit"><?= $d['usage'] ?></td>
-                            <td data-label="Expires on"><?= $d['expires'] ?></td>
-                            <td data-label="Status"><span class="badge-status <?= $d['badge_status'] ?>"><?= $d['status'] ?></span></td>
-                            <td data-label="Action">
-                                <a href="edit-discount.php?id=<?= $d['id'] ?>" class="btn btn-sm btn-outline-secondary me-1" style="border-radius: 6px; padding: 4px 10px;">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="discounts.php?delete=1&id=<?= $d['id'] ?>" class="btn btn-sm btn-outline-danger" style="border-radius: 6px; padding: 4px 10px;" onclick="return confirm('Are you sure you want to delete this coupon?')">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
+                        <!-- Coupons will be rendered by JavaScript -->
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
             <div class="d-flex justify-content-between align-items-center mt-3">
-                <div class="pagination-info" id="paginationInfo">Showing 1 to <?= count($discounts) ?> of <?= count($discounts) ?> entries</div>
+                <div class="pagination-info" id="paginationInfo">Showing 0 to 0 of 0 entries</div>
                 <nav>
                     <ul class="pagination pagination-sm mb-0" id="paginationControls">
-                        <li class="page-item disabled" id="prevPage">
-                            <a class="page-link" href="#" onclick="changePage('prev')">Previous</a>
-                        </li>
-                        <li class="page-item active" data-page="1">
-                            <a class="page-link" href="#" onclick="goToPage(1)">1</a>
-                        </li>
-                        <li class="page-item" data-page="2">
-                            <a class="page-link" href="#" onclick="goToPage(2)">2</a>
-                        </li>
-                        <li class="page-item" data-page="3">
-                            <a class="page-link" href="#" onclick="goToPage(3)">3</a>
-                        </li>
-                        <li class="page-item" id="nextPage">
-                            <a class="page-link" href="#" onclick="changePage('next')">Next</a>
-                        </li>
+                        <!-- Pagination will be rendered by JavaScript -->
                     </ul>
                 </nav>
             </div>
@@ -359,160 +274,313 @@ $showDeleted = isset($_GET['deleted']);
     <script src="assets/js/script.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // ============================================================
+        // COUPON DATA - READ FROM LOCALSTORAGE
+        // ============================================================
+        function getCoupons() {
+            return JSON.parse(localStorage.getItem('coupons') || '[]');
+        }
 
-            // ---- AUTO-HIDE ALERTS ----
-            var alerts = document.querySelectorAll('.alert-custom');
-            alerts.forEach(function(alert) {
-                setTimeout(function() {
-                    alert.classList.remove('show');
-                }, 5000);
+        function saveCoupons(coupons) {
+            localStorage.setItem('coupons', JSON.stringify(coupons));
+        }
+
+        // Initialize coupons in localStorage if empty
+        if (getCoupons().length === 0) {
+            const defaultCoupons = [
+                {id: 1, code: 'SUMMER20', type: 'Percentage', discount: 20, apply: 'All Products', eligibility: 'Everyone', usage_total: 150, usage_per_customer: 5, valid_from: '2026-06-01', valid_till: '2026-07-31', status: 'Active', description: 'Summer sale discount', created_at: new Date().toISOString()},
+                {id: 2, code: 'FREESHIP', type: 'Free Shipping', discount: 0, apply: 'All Products', eligibility: 'Everyone', usage_total: 75, usage_per_customer: 3, valid_from: '2026-06-15', valid_till: '2026-08-15', status: 'Active', description: 'Free shipping on all orders', created_at: new Date().toISOString()},
+                {id: 3, code: 'WELCOME10', type: 'Percentage', discount: 10, apply: 'All Products', eligibility: 'New Customers', usage_total: 200, usage_per_customer: 2, valid_from: '2026-01-01', valid_till: '2026-12-31', status: 'Active', description: 'Welcome discount for new customers', created_at: new Date().toISOString()},
+                {id: 4, code: 'HOLIDAY25', type: 'Percentage', discount: 25, apply: 'All Products', eligibility: 'Everyone', usage_total: 50, usage_per_customer: 2, valid_from: '2026-12-01', valid_till: '2026-12-25', status: 'Scheduled', description: 'Holiday special discount', created_at: new Date().toISOString()},
+                {id: 5, code: 'FLASH50', type: 'Percentage', discount: 50, apply: 'Specific Category', eligibility: 'Everyone', usage_total: 30, usage_per_customer: 1, valid_from: '2026-06-01', valid_till: '2026-06-30', status: 'Expired', description: 'Flash sale on smart devices', created_at: new Date().toISOString()}
+            ];
+            saveCoupons(defaultCoupons);
+        }
+
+        let couponsData = getCoupons();
+        let filteredCoupons = [...couponsData];
+        let currentPage = 1;
+        let rowsPerPage = 5;
+
+        // ============================================================
+        // FUNCTION: Format Date
+        // ============================================================
+        function formatDate(dateStr) {
+            if (!dateStr) return 'N/A';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // ============================================================
+        // FUNCTION: Get Eligibility Badge Class
+        // ============================================================
+        function getEligibilityBadge(eligibility) {
+            if (eligibility === 'All Products' || eligibility === 'Everyone') return 'all';
+            if (eligibility === 'Specific Category' || eligibility === 'Category: Electronics' || eligibility === 'Category: Accessories') return 'category';
+            return 'specific';
+        }
+
+        // ============================================================
+        // FUNCTION: Get Status Badge Class
+        // ============================================================
+        function getStatusBadge(status) {
+            if (status === 'Active') return 'active';
+            if (status === 'Inactive') return 'inactive';
+            if (status === 'Expired') return 'expired';
+            if (status === 'Scheduled') return 'scheduled';
+            return 'active';
+        }
+
+        // ============================================================
+        // FUNCTION: Get Discount Display
+        // ============================================================
+        function getDiscountDisplay(type, discount) {
+            if (type === 'Percentage') return discount + '% OFF';
+            if (type === 'Fixed Amount') return '$' + discount.toFixed(2) + ' OFF';
+            if (type === 'Free Shipping') return 'Free Shipping';
+            if (type === 'Buy X Get Y') return 'Buy ' + discount + ' Get 1';
+            return discount + '% OFF';
+        }
+
+        // ============================================================
+        // FUNCTION: Render Coupons Table
+        // ============================================================
+        function renderCoupons() {
+            const tbody = document.getElementById('discountTableBody');
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = Math.min(start + rowsPerPage, filteredCoupons.length);
+            const pageCoupons = filteredCoupons.slice(start, end);
+
+            if (filteredCoupons.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <i class="fas fa-ticket-alt fa-2x text-muted mb-2 d-block"></i>
+                            <span class="text-muted">No coupons found. <a href="add-discount.php">Add your first coupon</a></span>
+                        </td>
+                    </tr>
+                `;
+                renderPagination();
+                return;
+            }
+
+            let html = '';
+            let serial = start + 1;
+            pageCoupons.forEach(c => {
+                const discountDisplay = getDiscountDisplay(c.type, c.discount);
+                const typeClass = c.type === 'Percentage' ? 'percentage' : 'fixed';
+                const eligBadge = getEligibilityBadge(c.eligibility);
+                const statusBadge = getStatusBadge(c.status);
+                const usageDisplay = c.usage_total || 'No limit';
+                const expiresDate = formatDate(c.valid_till);
+
+                html += `
+                    <tr data-id="${c.id}">
+                        <td data-label="#">${serial++}</td>
+                        <td data-label="Code">
+                            <span class="discount-code">${c.code}</span>
+                        </td>
+                        <td data-label="Discount"><span class="discount-amount ${typeClass}">${discountDisplay}</span></td>
+                        <td data-label="Eligibility"><span class="eligibility-badge ${eligBadge}">${c.eligibility}</span></td>
+                        <td data-label="Usage limit">${usageDisplay}</td>
+                        <td data-label="Expires on">${expiresDate}</td>
+                        <td data-label="Status"><span class="badge-status ${statusBadge}">${c.status}</span></td>
+                        <td data-label="Action">
+                            <a href="edit-discount.php?id=${c.id}" class="btn btn-sm btn-outline-secondary me-1" style="border-radius: 6px; padding: 4px 10px;">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-sm btn-outline-danger" style="border-radius: 6px; padding: 4px 10px;" onclick="deleteCoupon(${c.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
 
-            // ---- SEARCH DISCOUNTS ----
-            var discountSearch = document.getElementById('discountSearch');
-            if (discountSearch) {
-                discountSearch.addEventListener('keyup', function () {
-                    var term = this.value.toLowerCase().trim();
-                    var rows = document.querySelectorAll('#discountTableBody tr');
-                    var visibleCount = 0;
+            tbody.innerHTML = html;
+            renderPagination();
+        }
 
-                    rows.forEach(function (row) {
-                        var text = row.textContent.toLowerCase();
-                        if (text.includes(term) || !term) {
-                            row.style.display = '';
-                            visibleCount++;
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
+        // ============================================================
+        // FUNCTION: Render Pagination
+        // ============================================================
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredCoupons.length / rowsPerPage);
+            const controls = document.getElementById('paginationControls');
+            const info = document.getElementById('paginationInfo');
 
-                    var paginationInfo = document.getElementById('paginationInfo');
-                    if (paginationInfo) {
-                        paginationInfo.textContent = 'Showing ' + visibleCount + ' of ' + rows.length + ' entries';
-                    }
-                });
+            const start = (currentPage - 1) * rowsPerPage + 1;
+            const end = Math.min(currentPage * rowsPerPage, filteredCoupons.length);
+            info.textContent = `Showing ${filteredCoupons.length > 0 ? start : 0} to ${end} of ${filteredCoupons.length} entries`;
+
+            if (totalPages <= 1) {
+                controls.innerHTML = `
+                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                `;
+                return;
             }
 
-            // ---- ENTRIES SELECTOR ----
-            var entriesSelect = document.getElementById('entriesSelect');
-            if (entriesSelect) {
-                entriesSelect.addEventListener('change', function () {
-                    var value = parseInt(this.value);
-                    var rows = document.querySelectorAll('#discountTableBody tr');
-                    rows.forEach(function(row, index) {
-                        row.style.display = index < value ? '' : 'none';
-                    });
-                    updatePaginationInfo();
-                });
+            let html = '';
+            html += `<li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage('prev')">Previous</a>
+            </li>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+                </li>`;
             }
 
-            // ---- PAGINATION ----
-            var currentPage = 1;
-            var rowsPerPage = 5;
-            var rows = document.querySelectorAll('#discountTableBody tr');
-            var totalRows = rows.length;
-            var totalPages = Math.ceil(totalRows / rowsPerPage);
+            html += `<li class="page-item ${currentPage >= totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage('next')">Next</a>
+            </li>`;
 
-            function showPage(page) {
-                currentPage = page;
-                var start = (page - 1) * rowsPerPage;
-                var end = start + rowsPerPage;
+            controls.innerHTML = html;
+        }
 
-                rows.forEach(function(row, index) {
-                    if (index >= start && index < end) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
+        // ============================================================
+        // FUNCTION: Go to Page
+        // ============================================================
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredCoupons.length / rowsPerPage);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderCoupons();
+        }
 
-                var visibleCount = 0;
-                rows.forEach(function(row) {
-                    if (row.style.display !== 'none') visibleCount++;
-                });
-                var paginationInfo = document.getElementById('paginationInfo');
-                if (paginationInfo) {
-                    paginationInfo.textContent = 'Showing ' + (start + 1) + ' to ' + Math.min(end, totalRows) + ' of ' + totalRows + ' entries';
-                }
+        // ============================================================
+        // FUNCTION: Change Page
+        // ============================================================
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredCoupons.length / rowsPerPage);
+            if (direction === 'prev' && currentPage > 1) { currentPage--; }
+            else if (direction === 'next' && currentPage < totalPages) { currentPage++; }
+            else return;
+            renderCoupons();
+        }
 
-                var pageItems = document.querySelectorAll('#paginationControls .page-item');
-                pageItems.forEach(function(item) {
-                    var pageNum = parseInt(item.getAttribute('data-page'));
-                    if (pageNum) {
-                        item.classList.remove('active');
-                        if (pageNum === page) {
-                            item.classList.add('active');
-                        }
-                    }
-                });
-
-                var prevBtn = document.getElementById('prevPage');
-                var nextBtn = document.getElementById('nextPage');
-                if (prevBtn) {
-                    if (page <= 1) {
-                        prevBtn.classList.add('disabled');
-                    } else {
-                        prevBtn.classList.remove('disabled');
-                    }
-                }
-                if (nextBtn) {
-                    if (page >= totalPages) {
-                        nextBtn.classList.add('disabled');
-                    } else {
-                        nextBtn.classList.remove('disabled');
-                    }
-                }
+        // ============================================================
+        // FUNCTION: Delete Coupon
+        // ============================================================
+        function deleteCoupon(id) {
+            if (confirm('Are you sure you want to delete this coupon?')) {
+                couponsData = couponsData.filter(c => c.id !== id);
+                filteredCoupons = filteredCoupons.filter(c => c.id !== id);
+                saveCoupons(couponsData);
+                if (filteredCoupons.length === 0) currentPage = 1;
+                renderCoupons();
+                showAlert('Coupon deleted successfully!', 'success');
             }
+        }
 
-            window.goToPage = function(page) {
-                if (page < 1 || page > totalPages) return;
-                showPage(page);
+        // ============================================================
+        // FUNCTION: Show Alert
+        // ============================================================
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alertContainer');
+            const colors = {
+                success: { bg: '#D1FAE5', color: '#065F46', border: '#10B981', icon: 'check-circle' },
+                error: { bg: '#FEE2E2', color: '#991B1B', border: '#EF4444', icon: 'exclamation-circle' }
             };
+            const c = colors[type] || colors.success;
+            
+            container.innerHTML = `
+                <div class="alert-custom success show" style="background: ${c.bg}; color: ${c.color}; border-left-color: ${c.border};">
+                    <i class="fas fa-${c.icon} me-2"></i> ${message}
+                </div>
+            `;
+            setTimeout(() => {
+                const alert = container.querySelector('.alert-custom');
+                if (alert) alert.classList.remove('show');
+            }, 5000);
+        }
 
-            window.changePage = function(direction) {
-                if (direction === 'prev' && currentPage > 1) {
-                    showPage(currentPage - 1);
-                } else if (direction === 'next' && currentPage < totalPages) {
-                    showPage(currentPage + 1);
-                }
-            };
+        // ============================================================
+        // FUNCTION: Search Coupons
+        // ============================================================
+        function searchCoupons() {
+            const term = document.getElementById('discountSearch').value.toLowerCase().trim();
 
-            function updatePaginationInfo() {
-                var visibleRows = document.querySelectorAll('#discountTableBody tr:not([style*="display: none"])');
-                var totalRows = document.querySelectorAll('#discountTableBody tr').length;
-                var paginationInfo = document.getElementById('paginationInfo');
-                if (paginationInfo) {
-                    var start = visibleRows.length > 0 ? 1 : 0;
-                    var end = visibleRows.length;
-                    paginationInfo.textContent = 'Showing ' + start + ' to ' + end + ' of ' + totalRows + ' entries';
-                }
+            filteredCoupons = couponsData.filter(c => {
+                return !term || 
+                    c.code.toLowerCase().includes(term) || 
+                    c.eligibility.toLowerCase().includes(term) ||
+                    c.status.toLowerCase().includes(term) ||
+                    (c.type && c.type.toLowerCase().includes(term));
+            });
+
+            currentPage = 1;
+            renderCoupons();
+        }
+
+        // ============================================================
+        // FUNCTION: Entries Change
+        // ============================================================
+        function changeEntries() {
+            const value = parseInt(document.getElementById('entriesSelect').value);
+            rowsPerPage = value;
+            currentPage = 1;
+            renderCoupons();
+        }
+
+        // ============================================================
+        // CHECK URL PARAMETERS FOR ALERTS
+        // ============================================================
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('added')) {
+                showAlert('Coupon added successfully!', 'success');
             }
-
-            // Initialize pagination
-            if (totalRows > 0) {
-                showPage(1);
+            if (urlParams.has('deleted')) {
+                showAlert('Coupon deleted successfully!', 'success');
             }
+            if (urlParams.has('updated')) {
+                showAlert('Coupon updated successfully!', 'success');
+            }
+            if (urlParams.has('error')) {
+                showAlert('Failed to process coupon. Please check all fields.', 'error');
+            }
+        }
 
-            // ---- SIDEBAR TOGGLE (Mobile) ----
-            var sidebarToggle = document.querySelector('.sidebar-toggle');
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reload coupons from localStorage
+            couponsData = getCoupons();
+            filteredCoupons = [...couponsData];
+            
+            renderCoupons();
+            checkUrlParams();
+
+            // Search
+            document.getElementById('discountSearch')?.addEventListener('keyup', searchCoupons);
+
+            // Entries selector
+            document.getElementById('entriesSelect')?.addEventListener('change', changeEntries);
+
+            // Sidebar toggle
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
             if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', function () {
+                sidebarToggle.addEventListener('click', function() {
                     document.querySelector('.sidebar-wrapper')?.classList.toggle('open');
                 });
             }
 
-            document.addEventListener('click', function (e) {
+            document.addEventListener('click', function(e) {
                 if (window.innerWidth < 768) {
-                    var sidebar = document.querySelector('.sidebar-wrapper');
-                    var toggle = document.querySelector('.sidebar-toggle');
+                    const sidebar = document.querySelector('.sidebar-wrapper');
+                    const toggle = document.querySelector('.sidebar-toggle');
                     if (sidebar && toggle && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
                         sidebar.classList.remove('open');
                     }
                 }
             });
 
-            console.log('Discounts page initialized');
+            console.log('Discounts page initialized (100% JavaScript with localStorage)');
+            console.log('Total coupons:', couponsData.length);
         });
     </script>
 </body>
