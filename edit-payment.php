@@ -161,39 +161,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-     <?php include ('templates/navbar.php'); ?>
-   <?php include('templates/sidebar.php'); ?>
+    <?php include ('templates/navbar.php'); ?>
+    <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container">
-            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="settings-container bg-white border rounded-4 overflow-hidden">
+            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
                 <div>
-                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">✏️ Edit Payment Method</h1>
-                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Update payment method details.</p>
+                    <h1 class="fs-4 fw-bold text-dark mb-0">Edit Payment Method</h1>
+                    <p class="text-secondary small mb-0">Update payment method details.</p>
                 </div>
-                <a href="payments.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                <a href="payments.php" class="btn btn-light border mt-2 mt-sm-0">
                     <i class="fas fa-arrow-left"></i> Back to Payments
                 </a>
             </div>
 
             <?php if ($success_message): ?>
-                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-success m-3 rounded-3">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
-                    <br><small>Redirecting to payment methods list...</small>
+                    <br><small class="text-secondary">Redirecting to payment methods list...</small>
                 </div>
             <?php endif; ?>
 
             <?php if ($error_message): ?>
-                <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-danger m-3 rounded-3">
                     <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="" style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
+            <form method="POST" action="" class="bg-white border rounded-3 p-4 m-3">
                 
                 <!-- Method Name -->
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Method Name <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold small">Method Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="method_name" value="<?php echo htmlspecialchars($method['name']); ?>" required>
                 </div>
 
@@ -201,111 +201,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div id="formFields">
                     <?php if ($method['type'] == 'bank'): ?>
                         <hr>
-                        <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">Bank Transfer Details</h6>
+                        <h6 class="fw-semibold text-dark mb-3">Bank Transfer Details</h6>
                         <div class="mb-3">
-                            <label class="form-label">Account Number <span class="text-danger">*</span></label>
+                            <label class="form-label small">Account Number <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="bank_account" value="<?php echo htmlspecialchars($method['details']['accountNumber'] ?? ''); ?>" placeholder="Enter account number">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">IFSC Code <span class="text-danger">*</span></label>
+                            <label class="form-label small">IFSC Code <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="bank_ifsc" value="<?php echo htmlspecialchars($method['details']['ifscCode'] ?? ''); ?>" placeholder="Enter IFSC code">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Beneficiary Name <span class="text-danger">*</span></label>
+                            <label class="form-label small">Beneficiary Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="bank_beneficiary" value="<?php echo htmlspecialchars($method['details']['beneficiaryName'] ?? ''); ?>" placeholder="Enter beneficiary name">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Bank Name <span class="text-danger">*</span></label>
+                            <label class="form-label small">Bank Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="bank_name" value="<?php echo htmlspecialchars($method['details']['bankName'] ?? ''); ?>" placeholder="Enter bank name">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Branch Name</label>
+                            <label class="form-label small">Branch Name</label>
                             <input type="text" class="form-control" name="bank_branch" value="<?php echo htmlspecialchars($method['details']['branchName'] ?? ''); ?>" placeholder="Enter branch name">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Account Type</label>
-                            <select class="form-control" name="bank_account_type">
+                            <label class="form-label small">Account Type</label>
+                            <select class="form-select" name="bank_account_type">
                                 <option value="Current" <?php echo ($method['details']['accountType'] ?? '') == 'Current' ? 'selected' : ''; ?>>Current</option>
                                 <option value="Savings" <?php echo ($method['details']['accountType'] ?? '') == 'Savings' ? 'selected' : ''; ?>>Savings</option>
                             </select>
                         </div>
                     <?php elseif ($method['type'] == 'paypal'): ?>
                         <hr>
-                        <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">PayPal Details</h6>
+                        <h6 class="fw-semibold text-dark mb-3">PayPal Details</h6>
                         <div class="mb-3">
-                            <label class="form-label">PayPal Email <span class="text-danger">*</span></label>
+                            <label class="form-label small">PayPal Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" name="paypal_email" value="<?php echo htmlspecialchars($method['details']['email'] ?? ''); ?>" placeholder="Enter PayPal email">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Merchant ID</label>
+                            <label class="form-label small">Merchant ID</label>
                             <input type="text" class="form-control" name="paypal_merchant_id" value="<?php echo htmlspecialchars($method['details']['merchantId'] ?? ''); ?>" placeholder="Enter merchant ID">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Client ID</label>
+                            <label class="form-label small">Client ID</label>
                             <input type="text" class="form-control" name="paypal_client_id" value="<?php echo htmlspecialchars($method['details']['clientId'] ?? ''); ?>" placeholder="Enter client ID">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Secret</label>
+                            <label class="form-label small">Secret</label>
                             <input type="password" class="form-control" name="paypal_secret" value="<?php echo htmlspecialchars($method['details']['secret'] ?? ''); ?>" placeholder="Enter secret">
                         </div>
                     <?php elseif ($method['type'] == 'phonepe'): ?>
                         <hr>
-                        <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">PhonePe Details</h6>
+                        <h6 class="fw-semibold text-dark mb-3">PhonePe Details</h6>
                         <div class="mb-3">
-                            <label class="form-label">Merchant ID <span class="text-danger">*</span></label>
+                            <label class="form-label small">Merchant ID <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="phonepe_merchant_id" value="<?php echo htmlspecialchars($method['details']['merchantId'] ?? ''); ?>" placeholder="Enter merchant ID">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">API Key</label>
+                            <label class="form-label small">API Key</label>
                             <input type="password" class="form-control" name="phonepe_api_key" value="<?php echo htmlspecialchars($method['details']['apiKey'] ?? ''); ?>" placeholder="Enter API key">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">UPI ID <span class="text-danger">*</span></label>
+                            <label class="form-label small">UPI ID <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="phonepe_upi" value="<?php echo htmlspecialchars($method['details']['upiId'] ?? ''); ?>" placeholder="Enter UPI ID">
                         </div>
                     <?php elseif ($method['type'] == 'gpay'): ?>
                         <hr>
-                        <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">Google Pay Details</h6>
+                        <h6 class="fw-semibold text-dark mb-3">Google Pay Details</h6>
                         <div class="mb-3">
-                            <label class="form-label">UPI ID <span class="text-danger">*</span></label>
+                            <label class="form-label small">UPI ID <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="gpay_upi" value="<?php echo htmlspecialchars($method['details']['upiId'] ?? ''); ?>" placeholder="Enter UPI ID">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Merchant ID</label>
+                            <label class="form-label small">Merchant ID</label>
                             <input type="text" class="form-control" name="gpay_merchant_id" value="<?php echo htmlspecialchars($method['details']['merchantId'] ?? ''); ?>" placeholder="Enter merchant ID">
                         </div>
                     <?php elseif ($method['type'] == 'card'): ?>
                         <hr>
-                        <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">Credit Card Details</h6>
+                        <h6 class="fw-semibold text-dark mb-3">Credit Card Details</h6>
                         <div class="mb-3">
-                            <label class="form-label">Gateway <span class="text-danger">*</span></label>
-                            <select class="form-control" name="card_gateway">
+                            <label class="form-label small">Gateway <span class="text-danger">*</span></label>
+                            <select class="form-select" name="card_gateway">
                                 <option value="Razorpay" <?php echo ($method['details']['gateway'] ?? '') == 'Razorpay' ? 'selected' : ''; ?>>Razorpay</option>
                                 <option value="Stripe" <?php echo ($method['details']['gateway'] ?? '') == 'Stripe' ? 'selected' : ''; ?>>Stripe</option>
                                 <option value="PayU" <?php echo ($method['details']['gateway'] ?? '') == 'PayU' ? 'selected' : ''; ?>>PayU</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Merchant ID</label>
+                            <label class="form-label small">Merchant ID</label>
                             <input type="text" class="form-control" name="card_merchant_id" value="<?php echo htmlspecialchars($method['details']['merchantId'] ?? ''); ?>" placeholder="Enter merchant ID">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">API Key</label>
+                            <label class="form-label small">API Key</label>
                             <input type="text" class="form-control" name="card_api_key" value="<?php echo htmlspecialchars($method['details']['apiKey'] ?? ''); ?>" placeholder="Enter API key">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Secret</label>
+                            <label class="form-label small">Secret</label>
                             <input type="password" class="form-control" name="card_secret" value="<?php echo htmlspecialchars($method['details']['secret'] ?? ''); ?>" placeholder="Enter secret">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Accepted Cards</label>
+                            <label class="form-label small">Accepted Cards</label>
                             <input type="text" class="form-control" name="card_accepted" value="<?php echo htmlspecialchars($method['details']['acceptedCards'] ?? ''); ?>" placeholder="e.g., Visa, Mastercard, Amex">
                         </div>
                     <?php elseif ($method['type'] == 'cash'): ?>
                         <hr>
-                        <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">Cash Details</h6>
+                        <h6 class="fw-semibold text-dark mb-3">Cash Details</h6>
                         <div class="mb-3">
-                            <label class="form-label">Note</label>
+                            <label class="form-label small">Note</label>
                             <input type="text" class="form-control" name="cash_note" value="<?php echo htmlspecialchars($method['details']['note'] ?? ''); ?>" placeholder="Cash on delivery available">
                         </div>
                     <?php endif; ?>
@@ -315,16 +315,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3 mt-3">
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" name="enabled" id="enabled" <?php echo $method['enabled'] ? 'checked' : ''; ?>>
-                        <label class="form-check-label" for="enabled">Enable this payment method</label>
+                        <label class="form-check-label small" for="enabled">Enable this payment method</label>
                     </div>
                 </div>
 
                 <!-- Buttons -->
                 <div class="d-flex gap-3 mt-4">
-                    <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
+                    <button type="submit" class="btn btn-primary px-4 py-2">
                         <i class="fas fa-save"></i> Update Payment Method
                     </button>
-                    <a href="payments.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                    <a href="payments.php" class="btn btn-light border px-4 py-2">
                         Cancel
                     </a>
                 </div>

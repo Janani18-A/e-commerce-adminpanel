@@ -1,6 +1,6 @@
 <?php
 $current_page = 'settings';
-// Simulate data from database - in real project, fetch from DB
+// Simulate data from database
 $paymentMethods = [
     [ 
         'id' => 1, 
@@ -76,15 +76,13 @@ $paymentMethods = [
 // Handle Delete
 if (isset($_GET['delete']) && isset($_GET['id'])) {
     $deleteId = $_GET['id'];
-    // In real project: DELETE FROM payment_methods WHERE id = $deleteId
-    // For demo, we'll just remove from array
     foreach ($paymentMethods as $key => $method) {
         if ($method['id'] == $deleteId) {
             unset($paymentMethods[$key]);
             break;
         }
     }
-    $paymentMethods = array_values($paymentMethods); // Re-index
+    $paymentMethods = array_values($paymentMethods);
     $success_message = 'Payment method deleted successfully!';
 }
 
@@ -113,184 +111,176 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-     <?php include ('templates/navbar.php'); ?>
-   <?php include('templates/sidebar.php'); ?>
+    <?php include ('templates/navbar.php'); ?>
+    <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container">
-            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="settings-container bg-white border rounded-4 overflow-hidden">
+            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
                 <div>
-                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">💳 Payments</h1>
-                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Configure payment gateways and manage how customers pay for orders.</p>
+                    <h1 class="fs-4 fw-bold text-dark mb-0">Payments</h1>
+                    <p class="text-secondary small mb-0">Configure payment gateways and manage how customers pay for orders.</p>
                 </div>
-                <a href="settings.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                <a href="settings.php" class="btn btn-light border mt-2 mt-sm-0">
                     <i class="fas fa-arrow-left"></i> Back to Settings
                 </a>
             </div>
 
             <?php if (isset($success_message)): ?>
-                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-success m-3 rounded-3">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
                 </div>
             <?php endif; ?>
 
-            <!-- Main Settings Form -->
-            <form method="POST" action="" style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
-                
-                <!-- Enable Payment Gateways Toggle -->
-                <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 20px;">
-                    <div style="position: relative; width: 48px; height: 26px; flex-shrink: 0;">
-                        <input type="hidden" name="enable_gateways" value="0">
-                        <input type="checkbox" name="enable_gateways" value="1" checked 
-                               style="opacity: 0; width: 0; height: 0; position: absolute;" 
-                               onchange="togglePaymentGateways(this)">
-                        <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;"></span>
-                        <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
+            <form method="POST" action="" class="p-3">
+                <div class="bg-white border rounded-3 p-4">
+                    
+                    <!-- Enable Payment Gateways Toggle -->
+                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-3">
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" name="enable_gateways" value="1" checked 
+                                   style="width:48px; height:26px; cursor:pointer;" 
+                                   onchange="togglePaymentGateways(this)">
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-medium text-dark small">Enable Payment Gateways</div>
+                            <div class="text-secondary small">Enable online payments</div>
+                        </div>
                     </div>
-                    <div>
-                        <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Enable Payment Gateways</div>
-                        <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Enable online payments</div>
-                    </div>
-                </div>
 
-                <!-- Default Gateway -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Default Gateway</label>
-                    <select class="form-control" name="default_gateway" onchange="showGatewayConfig(this.value)">
-                        <option value="razorpay">Razorpay</option>
-                        <option value="paypal">PayPal</option>
-                        <option value="stripe">Stripe</option>
-                        <option value="instamojo">Instamojo</option>
-                    </select>
-                </div>
-
-                <!-- Razorpay Config -->
-                <div id="razorpayConfig" class="gateway-config" style="background: #F8FAFC; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
-                    <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 12px;">Razorpay Configuration</h6>
+                    <!-- Default Gateway -->
                     <div class="mb-3">
-                        <label class="form-label">Key ID</label>
-                        <input type="text" class="form-control" name="razorpay_key" value="rzp_live_xxxxxxxxxxxx" placeholder="Enter Key ID">
+                        <label class="form-label fw-semibold small">Default Gateway</label>
+                        <select class="form-select" name="default_gateway" onchange="showGatewayConfig(this.value)">
+                            <option value="razorpay">Razorpay</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="stripe">Stripe</option>
+                            <option value="instamojo">Instamojo</option>
+                        </select>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Key Secret</label>
-                        <input type="password" class="form-control" name="razorpay_secret" value="••••••••••••••" placeholder="Enter Key Secret">
-                    </div>
-                </div>
 
-                <!-- PayPal Config -->
-                <div id="paypalConfig" class="gateway-config" style="display:none; background: #F8FAFC; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
-                    <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 12px;">PayPal Configuration</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Client ID</label>
-                        <input type="text" class="form-control" name="paypal_client" value="••••••••••••••" placeholder="Enter Client ID">
+                    <!-- Razorpay Config -->
+                    <div id="razorpayConfig" class="gateway-config bg-light rounded-3 p-3 mb-3">
+                        <h6 class="fw-semibold text-dark mb-3">Razorpay Configuration</h6>
+                        <div class="mb-3">
+                            <label class="form-label small">Key ID</label>
+                            <input type="text" class="form-control" name="razorpay_key" value="rzp_live_xxxxxxxxxxxx" placeholder="Enter Key ID">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Key Secret</label>
+                            <input type="password" class="form-control" name="razorpay_secret" value="••••••••••••••" placeholder="Enter Key Secret">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Secret</label>
-                        <input type="password" class="form-control" name="paypal_secret" value="••••••••••••••" placeholder="Enter Secret">
-                    </div>
-                </div>
 
-                <!-- Stripe Config -->
-                <div id="stripeConfig" class="gateway-config" style="display:none; background: #F8FAFC; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
-                    <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 12px;">Stripe Configuration</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Publishable Key</label>
-                        <input type="text" class="form-control" name="stripe_publishable" value="pk_live_xxxxxxxxxxxx" placeholder="Enter Publishable Key">
+                    <!-- PayPal Config -->
+                    <div id="paypalConfig" class="gateway-config bg-light rounded-3 p-3 mb-3" style="display:none;">
+                        <h6 class="fw-semibold text-dark mb-3">PayPal Configuration</h6>
+                        <div class="mb-3">
+                            <label class="form-label small">Client ID</label>
+                            <input type="text" class="form-control" name="paypal_client" value="••••••••••••••" placeholder="Enter Client ID">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Secret</label>
+                            <input type="password" class="form-control" name="paypal_secret" value="••••••••••••••" placeholder="Enter Secret">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Secret Key</label>
-                        <input type="password" class="form-control" name="stripe_secret" value="sk_live_xxxxxxxxxxxx" placeholder="Enter Secret Key">
-                    </div>
-                </div>
 
-                <!-- UPI QR -->
-                <div style="border: 2px dashed #DBEAFE; border-radius: 12px; padding: 20px; text-align: center; background: #F8FAFC; margin-bottom: 15px;">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=store@upi&pn=MyStore" alt="UPI QR" style="width: 120px; height: 120px;">
-                    <p style="margin-top: 8px; font-size: 13px; color: #64748B;">UPI ID: store@upi</p>
-                </div>
-
-                <!-- COD Toggle -->
-                <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 20px;">
-                    <div style="position: relative; width: 48px; height: 26px; flex-shrink: 0;">
-                        <input type="hidden" name="enable_cod" value="0">
-                        <input type="checkbox" name="enable_cod" value="1" checked 
-                               style="opacity: 0; width: 0; height: 0; position: absolute;">
-                        <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;"></span>
-                        <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
+                    <!-- Stripe Config -->
+                    <div id="stripeConfig" class="gateway-config bg-light rounded-3 p-3 mb-3" style="display:none;">
+                        <h6 class="fw-semibold text-dark mb-3">Stripe Configuration</h6>
+                        <div class="mb-3">
+                            <label class="form-label small">Publishable Key</label>
+                            <input type="text" class="form-control" name="stripe_publishable" value="pk_live_xxxxxxxxxxxx" placeholder="Enter Publishable Key">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Secret Key</label>
+                            <input type="password" class="form-control" name="stripe_secret" value="sk_live_xxxxxxxxxxxx" placeholder="Enter Secret Key">
+                        </div>
                     </div>
-                    <div>
-                        <div style="font-size: 14px; color: #1E293B; font-weight: 500;">COD (Cash on Delivery)</div>
-                        <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Enable Cash on Delivery</div>
-                    </div>
-                </div>
 
-                <!-- Payment Methods List -->
-                <div style="margin-top:15px; padding:15px; background:#F8FAFC; border-radius:10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h6 style="margin:0; font-weight:600; color:#1E293B;">Additional Payment Methods</h6>
-                        <a href="add-payment.php" class="btn btn-primary btn-sm" style="background: #2563EB; color: #FFFFFF; border: none; padding: 6px 15px; border-radius: 6px; text-decoration: none;">
-                            <i class="fas fa-plus"></i> Add Method
+                    <!-- UPI QR -->
+                    <div class="border border-2 border-dashed rounded-3 p-4 text-center bg-light mb-3">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=store@upi&pn=MyStore" alt="UPI QR" style="width: 120px; height: 120px;">
+                        <p class="mt-2 small text-secondary">UPI ID: store@upi</p>
+                    </div>
+
+                    <!-- COD Toggle -->
+                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-3">
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" name="enable_cod" value="1" checked 
+                                   style="width:48px; height:26px; cursor:pointer;">
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-medium text-dark small">COD (Cash on Delivery)</div>
+                            <div class="text-secondary small">Enable Cash on Delivery</div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods List -->
+                    <div class="bg-light rounded-3 p-3 mt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-semibold text-dark mb-0">Additional Payment Methods</h6>
+                            <a href="add-payment.php" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Add Method
+                            </a>
+                        </div>
+                        <div id="paymentMethodsList">
+                            <?php foreach ($paymentMethods as $method): ?>
+                                <?php 
+                                $typeLabel = [
+                                    'bank' => '🏦',
+                                    'paypal' => '💳',
+                                    'phonepe' => '📱',
+                                    'gpay' => '🔵',
+                                    'card' => '💳',
+                                    'cash' => '💵'
+                                ][$method['type']] ?? '📌';
+                                
+                                $detailPreview = '';
+                                if ($method['type'] == 'bank') {
+                                    $detailPreview = $method['details']['bankName'] . ' - ' . $method['details']['accountNumber'];
+                                } else if ($method['type'] == 'paypal') {
+                                    $detailPreview = $method['details']['email'];
+                                } else if ($method['type'] == 'phonepe' || $method['type'] == 'gpay') {
+                                    $detailPreview = $method['details']['upiId'];
+                                } else if ($method['type'] == 'card') {
+                                    $detailPreview = $method['details']['gateway'];
+                                } else {
+                                    $detailPreview = $method['details']['note'] ?? '';
+                                }
+                                ?>
+                                <div class="bg-white border rounded-3 p-3 d-flex align-items-center gap-3 mb-2">
+                                    <div class="form-check form-switch mb-0">
+                                        <input class="form-check-input" type="checkbox" <?php echo $method['enabled'] ? 'checked' : ''; ?> 
+                                               style="width:48px; height:26px; cursor:pointer;"
+                                               onchange="window.location.href='payments.php?toggle=1&id=<?php echo $method['id']; ?>'">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-medium text-dark small"><?php echo $typeLabel . ' ' . $method['name']; ?></div>
+                                        <div class="text-secondary small" style="font-size: 11px;"><?php echo $detailPreview; ?></div>
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <a href="edit-payment.php?id=<?php echo $method['id']; ?>" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="payments.php?delete=1&id=<?php echo $method['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this payment method?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary px-4 py-2">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <a href="settings.php" class="btn btn-light border px-4 py-2">
+                            Cancel
                         </a>
                     </div>
-                    <div id="paymentMethodsList">
-                        <?php foreach ($paymentMethods as $method): ?>
-                            <?php 
-                            $typeLabel = [
-                                'bank' => '🏦',
-                                'paypal' => '💳',
-                                'phonepe' => '📱',
-                                'gpay' => '🔵',
-                                'card' => '💳',
-                                'cash' => '💵'
-                            ][$method['type']] ?? '📌';
-                            
-                            $detailPreview = '';
-                            if ($method['type'] == 'bank') {
-                                $detailPreview = $method['details']['bankName'] . ' - ' . $method['details']['accountNumber'];
-                            } else if ($method['type'] == 'paypal') {
-                                $detailPreview = $method['details']['email'];
-                            } else if ($method['type'] == 'phonepe' || $method['type'] == 'gpay') {
-                                $detailPreview = $method['details']['upiId'];
-                            } else if ($method['type'] == 'card') {
-                                $detailPreview = $method['details']['gateway'];
-                            } else {
-                                $detailPreview = $method['details']['note'] ?? '';
-                            }
-                            ?>
-                            <div class="toggle-group" style="display: flex; align-items: center; gap: 15px; padding: 12px; background: #FFFFFF; border-radius: 8px; margin-bottom: 10px; border: 1px solid #E2E8F0;">
-                                <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0;">
-                                    <input type="checkbox" <?php echo $method['enabled'] ? 'checked' : ''; ?> 
-                                           onchange="window.location.href='payments.php?toggle=1&id=<?php echo $method['id']; ?>'"
-                                           style="opacity: 0; width: 0; height: 0; position: absolute;">
-                                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: <?php echo $method['enabled'] ? '#2563EB' : '#CBD5E1'; ?>; border-radius: 34px; transition: 0.3s;">
-                                        <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: <?php echo $method['enabled'] ? 'translateX(22px)' : 'translateX(0)'; ?>;"></span>
-                                    </span>
-                                </label>
-                                <div style="flex:1;">
-                                    <div style="font-size: 14px; color: #1E293B; font-weight: 500;"><?php echo $typeLabel . ' ' . $method['name']; ?></div>
-                                    <div style="font-size: 11px; color: #94A3B8;"><?php echo $detailPreview; ?></div>
-                                </div>
-                                <div>
-                                    <a href="edit-payment.php?id=<?php echo $method['id']; ?>" class="btn btn-sm btn-primary" style="padding: 4px 10px; border-radius: 6px; background: #2563EB; color: #FFFFFF; border: none; text-decoration: none;">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="payments.php?delete=1&id=<?php echo $method['id']; ?>" class="btn btn-sm btn-danger" style="padding: 4px 10px; border-radius: 6px; background: #EF4444; color: #FFFFFF; border: none; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this payment method?')">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-
-                <!-- Save Button -->
-                <div class="d-flex gap-3 mt-4">
-                    <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
-                        <i class="fas fa-save"></i> Save Changes
-                    </button>
-                    <a href="settings.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
-                        Cancel
-                    </a>
                 </div>
             </form>
         </div>
@@ -298,6 +288,22 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
-  
+
+    <script>
+    function togglePaymentGateways(checkbox) {
+        // Your existing toggle logic
+        console.log('Payment gateways toggled:', checkbox.checked);
+    }
+
+    function showGatewayConfig(value) {
+        document.querySelectorAll('.gateway-config').forEach(el => {
+            el.style.display = 'none';
+        });
+        const selected = document.getElementById(value + 'Config');
+        if (selected) {
+            selected.style.display = 'block';
+        }
+    }
+    </script>
 </body>
 </html>

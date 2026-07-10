@@ -37,41 +37,43 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-     <?php include ('templates/navbar.php'); ?>
-   <?php include('templates/sidebar.php'); ?>
+    <?php include ('templates/navbar.php'); ?>
+    <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container">
+        <div class="settings-container bg-white border rounded-4 overflow-hidden">
             <!-- Header -->
-            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
                 <div>
-                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">📍 Locations</h1>
-                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Manage warehouse, pickup, and store locations used for fulfillment.</p>
+                    <h1 class="fs-4 fw-bold text-dark mb-0">Locations</h1>
+                    <p class="text-secondary small mb-0">Manage warehouse, pickup, and store locations used for fulfillment.</p>
                 </div>
-                <a href="settings.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                <a href="settings.php" class="btn btn-light border mt-2 mt-sm-0">
                     <i class="fas fa-arrow-left"></i> Back to Settings
                 </a>
             </div>
 
             <?php if ($success_message): ?>
-                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-success m-3 rounded-3">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
                 </div>
                 <script>
                     setTimeout(function() {
-                        showToast('<?php echo $success_message; ?>', 'success');
+                        if (typeof showToast === 'function') {
+                            showToast('<?php echo $success_message; ?>', 'success');
+                        }
                     }, 500);
                 </script>
             <?php endif; ?>
 
-            <form method="POST" action="" onsubmit="return saveLocations();">
-                <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
+            <form method="POST" action="" onsubmit="return saveLocations();" class="p-3">
+                <div class="bg-white border rounded-3 p-4">
                     
                     <!-- Warehouse Locations -->
-                    <h6 style="font-weight: 600; color: #1E293B; margin-bottom: 15px;">🏢 Warehouse Locations</h6>
+                    <h6 class="fw-semibold text-dark mb-3">Warehouse Locations</h6>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead style="background: #F8FAFC;">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
                                 <tr>
                                     <th>Name</th>
                                     <th>Address</th>
@@ -93,13 +95,13 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="edit-location.php?id=<?php echo $loc['id']; ?>" class="btn btn-sm btn-primary" style="padding: 3px 8px; margin-right: 3px;">
+                                            <a href="edit-location.php?id=<?php echo $loc['id']; ?>" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="locations.php?toggle=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm <?php echo $loc['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" style="padding: 3px 8px; margin-right: 3px;" onclick="return confirm('Change status?')">
+                                            <a href="locations.php?toggle=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm <?php echo $loc['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" onclick="return confirm('Change status?')">
                                                 <i class="fas <?php echo $loc['status'] == 'Active' ? 'fa-pause' : 'fa-play'; ?>"></i>
                                             </a>
-                                            <a href="locations.php?delete=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm btn-danger" style="padding: 3px 8px;" onclick="return confirm('Are you sure you want to delete this location?')">
+                                            <a href="locations.php?delete=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this location?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>
@@ -111,10 +113,10 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
                     </div>
 
                     <!-- Pickup Locations -->
-                    <h6 style="font-weight: 600; color: #1E293B; margin: 25px 0 15px;">📍 Pickup Locations</h6>
+                    <h6 class="fw-semibold text-dark mt-4 mb-3">Pickup Locations</h6>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead style="background: #F8FAFC;">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
                                 <tr>
                                     <th>Name</th>
                                     <th>Address</th>
@@ -136,13 +138,13 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="edit-location.php?id=<?php echo $loc['id']; ?>" class="btn btn-sm btn-primary" style="padding: 3px 8px; margin-right: 3px;">
+                                            <a href="edit-location.php?id=<?php echo $loc['id']; ?>" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="locations.php?toggle=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm <?php echo $loc['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" style="padding: 3px 8px; margin-right: 3px;" onclick="return confirm('Change status?')">
+                                            <a href="locations.php?toggle=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm <?php echo $loc['status'] == 'Active' ? 'btn-warning' : 'btn-success'; ?>" onclick="return confirm('Change status?')">
                                                 <i class="fas <?php echo $loc['status'] == 'Active' ? 'fa-pause' : 'fa-play'; ?>"></i>
                                             </a>
-                                            <a href="locations.php?delete=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm btn-danger" style="padding: 3px 8px;" onclick="return confirm('Are you sure you want to delete this location?')">
+                                            <a href="locations.php?delete=1&id=<?php echo $loc['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this location?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>
@@ -154,16 +156,16 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
                     </div>
 
                     <!-- Add Button -->
-                    <a href="add-location.php" class="btn btn-primary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none; margin-top: 10px;">
+                    <a href="add-location.php" class="btn btn-primary mt-3">
                         <i class="fas fa-plus"></i> Add Location
                     </a>
 
                     <!-- Buttons -->
                     <div class="d-flex gap-3 mt-4">
-                        <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
+                        <button type="submit" class="btn btn-primary px-4 py-2">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
-                        <a href="settings.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                        <a href="settings.php" class="btn btn-light border px-4 py-2">
                             Cancel
                         </a>
                     </div>
@@ -174,5 +176,12 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
+
+    <script>
+    function saveLocations() {
+        // Your existing save logic
+        return true; // Allow form submission
+    }
+    </script>
 </body>
 </html>
