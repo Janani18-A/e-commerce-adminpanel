@@ -12,22 +12,219 @@ $current_page = 'settings';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .settings-card {
+            transition: all 0.2s ease;
+            height: 100%;
+            min-height: 100px;
+            padding: 1.25rem !important;
+            width: 100%;
+        }
+        
+        .settings-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            flex-shrink: 0;
+        }
+        
+        .settings-card .card-body {
+            padding: 0;
+            min-width: 0;
+            flex: 1;
+        }
+        
+        .settings-card h4 {
+            font-size: 0.95rem;
+            white-space: nowrap;
+            /* Prevents text wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .settings-card p {
+            font-size: 0.8rem;
+            white-space: nowrap;
+            /* Prevents text wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.25rem;
+        }
+        
+        .settings-card .card-link {
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+        
+        /* Tab button responsive */
+        .tab-bar .tab-btn {
+            font-size: 0.85rem;
+            padding: 0.5rem 1.2rem;
+            white-space: nowrap;
+        }
+        
+        .tab-bar .tab-btn span {
+            display: inline;
+        }
+        
+        /* WIDER GRID - 2 columns on desktop */
+        .settings-grid .col-12 {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        
+        @media (min-width: 576px) {
+            .settings-grid .col-sm-6 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .settings-grid .col-lg-6 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 576px) {
+            .settings-card {
+                min-height: 80px;
+                padding: 0.85rem !important;
+            }
+            
+            .settings-card h4 {
+                font-size: 0.82rem;
+                white-space: nowrap;
+            }
+            
+            .settings-card p {
+                font-size: 0.68rem;
+                white-space: nowrap;
+            }
+            
+            .settings-card .card-link {
+                font-size: 0.68rem;
+                white-space: nowrap;
+            }
+            
+            .card-icon {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+            }
+            
+            .card-icon i {
+                font-size: 0.85rem !important;
+            }
+            
+            .tab-bar {
+                padding: 0.5rem 0.75rem !important;
+                gap: 0.25rem !important;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .tab-bar .tab-btn {
+                font-size: 0.7rem;
+                padding: 0.35rem 0.6rem;
+                flex-shrink: 0;
+            }
+            
+            .tab-bar .tab-btn span {
+                display: none;
+            }
+            
+            .tab-bar .tab-btn i {
+                font-size: 1rem;
+            }
+            
+            .settings-header h1 {
+                font-size: 1.1rem !important;
+            }
+            
+            .settings-header p {
+                font-size: 0.7rem !important;
+            }
+            
+            .section-title {
+                font-size: 0.95rem !important;
+            }
+            
+            .tab-content {
+                padding: 0.75rem !important;
+            }
+            
+            .settings-grid {
+                gap: 0.5rem !important;
+            }
+            
+            .settings-grid .col-12 {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+        }
+        
+        @media (min-width: 577px) and (max-width: 768px) {
+            .settings-card {
+                padding: 1rem !important;
+            }
+            
+            .settings-card h4 {
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+            
+            .settings-card p {
+                font-size: 0.72rem;
+                white-space: nowrap;
+            }
+            
+            .tab-bar .tab-btn {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.9rem;
+            }
+            
+            .tab-content {
+                padding: 1rem !important;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 991px) {
+            .settings-card h4 {
+                font-size: 0.88rem;
+                white-space: nowrap;
+            }
+            
+            .settings-card p {
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <?php include ('templates/navbar.php'); ?>
-   <?php include('templates/sidebar.php'); ?>
+    <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
         <div class="settings-container bg-white border rounded-4 overflow-hidden">
             <!-- Header -->
-            <div class="settings-header p-4 border-bottom">
-                <h1 class="fs-4 fw-bold text-dark mb-0">⚙️ Settings</h1>
+            <div class="settings-header p-3 p-md-4 border-bottom">
+                <h1 class="fs-4 fw-bold text-dark mb-0"> Settings</h1>
                 <p class="text-secondary small mb-0">Manage your store configuration</p>
             </div>
 
             <!-- Tab Buttons -->
-            <div class="tab-bar d-flex gap-1 px-4 pt-3 bg-white border-bottom flex-wrap">
+            <div class="tab-bar d-flex gap-1 px-2 px-md-4 pt-2 pt-md-3 bg-white border-bottom flex-nowrap overflow-auto">
                 <button class="tab-btn btn btn-primary btn-sm active" data-tab="general" onclick="switchTab('general')">
                     <i class="fas fa-cog"></i> <span>General</span>
                 </button>
@@ -45,62 +242,63 @@ $current_page = 'settings';
                 </button>
             </div>
 
-           <!-- Tab Content -->
-            <div class="tab-content p-4 bg-light" style="min-height:350px;">
+            <!-- Tab Content -->
+            <div class="tab-content p-3 p-md-4 bg-light" style="min-height:350px;">
 
                 <!-- ========================================================== -->
                 <!-- TAB 1: GENERAL                                             -->
                 <!-- ========================================================== -->
                 <div class="tab-pane active" id="tab-general">
-                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">⚙️ General</div>
-                    <div class="settings-grid row g-3">
-                        <div class="col-md-6">
+                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">General</div>
+                    <div class="settings-grid row g-2 g-md-3">
+                        <!-- Changed col-lg-4 to col-lg-6 for wider cards -->
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='system-preference.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-globe-americas fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-globe-americas fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">🌐 System Preference</h4>
-                                    <p class="small text-secondary mb-1">Manage your store's language, currency, timezone, and regional preferences.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Configure Settings <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">System Preference</h4>
+                                    <p class="small text-secondary mb-1">Language, currency, timezone</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Configure <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='store-information.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-store fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-store fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">🏪 Store Information</h4>
-                                    <p class="small text-secondary mb-1">Update your store details including name, contact, address, and branding.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Store <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Store Information</h4>
+                                    <p class="small text-secondary mb-1">Name, contact, address, branding</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='account-overview.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-user-circle fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-user-circle fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">👤 Account Overview</h4>
-                                    <p class="small text-secondary mb-1">View account status, balance, upgrade options, and visibility settings.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">View Account <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Account Overview</h4>
+                                    <p class="small text-secondary mb-1">Status, balance, upgrade options</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">View <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='notifications.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-bell fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-bell fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">🔔 Notifications</h4>
-                                    <p class="small text-secondary mb-1">Manage push notifications, email alerts, and subscription preferences.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Notifications <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Notifications</h4>
+                                    <p class="small text-secondary mb-1">Push, email alerts, subscriptions</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='account-visibility.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-eye fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-eye fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">👀 Account Visibility</h4>
-                                    <p class="small text-secondary mb-1">Control who can see your account and profile information.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Visibility <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Account Visibility</h4>
+                                    <p class="small text-secondary mb-1">Who can see your account?</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -111,45 +309,45 @@ $current_page = 'settings';
                 <!-- TAB 2: COMMERCE                                             -->
                 <!-- ========================================================== -->
                 <div class="tab-pane" id="tab-commerce">
-                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">💳 Commerce</div>
-                    <div class="settings-grid row g-3">
-                        <div class="col-md-6">
+                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">Commerce</div>
+                    <div class="settings-grid row g-2 g-md-3">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='payments.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-credit-card fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-credit-card fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">💳 Payments</h4>
-                                    <p class="small text-secondary mb-1">Configure payment gateways and manage how customers pay for orders.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Payments <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Payments</h4>
+                                    <p class="small text-secondary mb-1">Gateways, customer payments</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='taxes.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-receipt fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-receipt fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">🧾 Taxes</h4>
-                                    <p class="small text-secondary mb-1">Set up tax rules, GST settings, and regional tax configurations.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Configure Taxes <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Taxes</h4>
+                                    <p class="small text-secondary mb-1">Rules, GST, regional config</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Configure <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='locations.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-map-marker-alt fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-map-marker-alt fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">📍 Locations</h4>
-                                    <p class="small text-secondary mb-1">Manage warehouse, pickup, and store locations used for fulfillment.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Locations <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Locations</h4>
+                                    <p class="small text-secondary mb-1">Warehouse, pickup, stores</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='delivery-method.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-truck fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-truck fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">🚚 Delivery Method</h4>
-                                    <p class="small text-secondary mb-1">Configure shipping methods, delivery charges, and service areas.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Delivery <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Delivery Method</h4>
+                                    <p class="small text-secondary mb-1">Shipping, charges, service areas</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -160,15 +358,15 @@ $current_page = 'settings';
                 <!-- TAB 3: STAFF                                                -->
                 <!-- ========================================================== -->
                 <div class="tab-pane" id="tab-staff">
-                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">👥 Staff</div>
-                    <div class="settings-grid row g-3">
-                        <div class="col-md-6">
+                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">Staff</div>
+                    <div class="settings-grid row g-2 g-md-3">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='staff-management.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-user-tie fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-user-tie fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">👨‍💼 Staff Management</h4>
-                                    <p class="small text-secondary mb-1">Control staff access, permissions, and administrative roles.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Team <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Staff Management</h4>
+                                    <p class="small text-secondary mb-1">Access, permissions, roles</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -179,15 +377,15 @@ $current_page = 'settings';
                 <!-- TAB 4: MARKETING                                            -->
                 <!-- ========================================================== -->
                 <div class="tab-pane" id="tab-marketing">
-                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">📢 Marketing</div>
-                    <div class="settings-grid row g-3">
-                        <div class="col-md-6">
+                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">Marketing</div>
+                    <div class="settings-grid row g-2 g-md-3">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='social-links.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-share-alt fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-share-alt fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">🔗 Social Links</h4>
-                                    <p class="small text-secondary mb-1">Connect your social media profiles to increase brand visibility and engagement.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage Links <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">Social Links</h4>
+                                    <p class="small text-secondary mb-1">Connect social media profiles</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Manage <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -198,15 +396,15 @@ $current_page = 'settings';
                 <!-- TAB 5: WEBSITE                                              -->
                 <!-- ========================================================== -->
                 <div class="tab-pane" id="tab-website">
-                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">🌐 Website</div>
-                    <div class="settings-grid row g-3">
-                        <div class="col-md-6">
+                    <div class="section-title fs-5 fw-bold text-dark pb-2 mb-3 border-bottom">Website</div>
+                    <div class="settings-grid row g-2 g-md-3">
+                        <div class="col-12 col-sm-6 col-lg-6">
                             <div class="settings-card bg-white p-3 rounded-3 border d-flex align-items-start gap-3 cursor-pointer" onclick="window.location.href='sms-otp.php'">
-                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;"><i class="fas fa-sms fs-5"></i></div>
+                                <div class="card-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"><i class="fas fa-sms fs-5"></i></div>
                                 <div class="card-body flex-grow-1">
-                                    <h4 class="fs-6 fw-semibold text-dark mb-1">📱 SMS OTP</h4>
-                                    <p class="small text-secondary mb-1">Enable secure phone verification and one-time password authentication for customers.</p>
-                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Configure OTP <i class="fas fa-arrow-right fs-6"></i></span>
+                                    <h4 class="fs-6 fw-semibold text-dark mb-1">SMS OTP</h4>
+                                    <p class="small text-secondary mb-1">Phone verification, OTP auth</p>
+                                    <span class="card-link text-primary fw-semibold text-decoration-none small d-inline-flex align-items-center gap-1">Configure <i class="fas fa-arrow-right fs-6"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -227,21 +425,17 @@ $current_page = 'settings';
         </div>
     </div>
 
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
 
     <script>
-    // Tab switching function - maintains compatibility with existing JS
     function switchTab(tabName) {
-        // Remove active class from all tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('active');
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-secondary');
         });
         
-        // Add active class to clicked tab
         const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
         if (activeBtn) {
             activeBtn.classList.add('active');
@@ -249,13 +443,11 @@ $current_page = 'settings';
             activeBtn.classList.remove('btn-outline-secondary');
         }
         
-        // Hide all tab panes
         document.querySelectorAll('.tab-pane').forEach(pane => {
             pane.classList.remove('active');
             pane.style.display = 'none';
         });
         
-        // Show selected tab pane
         const activePane = document.getElementById(`tab-${tabName}`);
         if (activePane) {
             activePane.classList.add('active');
@@ -263,9 +455,7 @@ $current_page = 'settings';
         }
     }
 
-    // Initialize - show first tab
     document.addEventListener('DOMContentLoaded', function() {
-        // Ensure only general tab is visible initially
         document.querySelectorAll('.tab-pane').forEach(pane => {
             if (pane.id === 'tab-general') {
                 pane.classList.add('active');

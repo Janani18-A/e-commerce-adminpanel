@@ -85,19 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <span id="loginStatus" class="text-secondary fw-medium small">Disabled</span>
                         </div>
 
-                        <!-- Enable Checkout OTP -->
-                        <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-3">
-                            <div class="form-check form-switch mb-0">
-                                <input class="form-check-input" type="checkbox" name="enable_checkout_otp" value="1" 
-                                       style="width:48px; height:26px; cursor:pointer;" 
-                                       onchange="toggleOtpSub(this, 'checkout')" id="checkoutOtpToggle">
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="fw-medium text-dark small">Enable Checkout OTP</div>
-                                <div class="text-secondary small">Require OTP for high-value orders</div>
-                            </div>
-                            <span id="checkoutStatus" class="text-secondary fw-medium small">Disabled</span>
-                        </div>
+                        
 
                         <!-- OTP Expiry Time -->
                         <div class="mb-3">
