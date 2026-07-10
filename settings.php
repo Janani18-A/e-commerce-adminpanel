@@ -45,7 +45,7 @@ $current_page = 'settings';
                 </button>
             </div>
 
-            <!-- Tab Content -->
+           <!-- Tab Content -->
             <div class="tab-content p-4 bg-light" style="min-height:350px;">
 
                 <!-- ========================================================== -->
@@ -213,7 +213,7 @@ $current_page = 'settings';
                     </div>
                 </div>
 
-            </div>
+            </div> 
         </div>
     </div>
 
