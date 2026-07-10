@@ -48,20 +48,13 @@
                 <span>Products V1</span>
             </a>
         </li>
-         <li>
+     
+        <li>
             <a href="product_v2.php">
                 <svg class="icon">
-                    <use href="assets/icons/icons.svg#icon-products" />
+                    <use href="assets/icons/icons.svg#icon-shopping-bag"></use>
                 </svg>
                 <span>Products V2</span>
-            </a>
-        </li>
-        <li>
-            <a href="product-categories.php">
-                <svg class="icon">
-                    <use href="assets/icons/icons.svg#icon-categories" />
-                </svg>
-                <span>Product Categories</span>
             </a>
         </li>
         <li>

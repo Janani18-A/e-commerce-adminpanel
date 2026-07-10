@@ -223,5 +223,17 @@ stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <line x1="18" y1="20" x2="18" y2="14"></line>
     <line x1="3" y1="20" x2="21" y2="20"></line>
 </symbol>
+<symbol id="icon-shopping-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 7h12l1 13H5L6 7z"></path>
+    <path d="M9 7V5a3 3 0 0 1 6 0v2"></path>
+</symbol>
+
+<symbol id="icon-product-box" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2L3 7l9 5 9-5-9-5z"></path>
+    <path d="M3 7v10l9 5 9-5V7"></path>
+    <path d="M12 12v10"></path>
+</symbol>
 
 </svg>
