@@ -28,118 +28,132 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-     <?php include ('templates/navbar.php'); ?>
-   <?php include('templates/sidebar.php'); ?>
+    <?php include ('templates/navbar.php'); ?>
+    <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container">
+        <div class="settings-container bg-white border rounded-4 overflow-hidden">
             <!-- Header -->
-            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
                 <div>
-                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">🔔 Notifications</h1>
-                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Manage push notifications, email alerts, and subscription preferences.</p>
+                    <h1 class="fs-4 fw-bold text-dark mb-0">🔔 Notifications</h1>
+                    <p class="text-secondary small mb-0">Manage push notifications, email alerts, and subscription preferences.</p>
                 </div>
-                <a href="settings.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                <a href="settings.php" class="btn btn-light border mt-2 mt-sm-0">
                     <i class="fas fa-arrow-left"></i> Back to Settings
                 </a>
             </div>
 
             <!-- Success Message -->
             <?php if ($success_message): ?>
-                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-success m-3 rounded-3">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
                 </div>
                 <script>
                     setTimeout(function() {
-                        showToast('<?php echo $success_message; ?>', 'success');
+                        if (typeof showToast === 'function') {
+                            showToast('<?php echo $success_message; ?>', 'success');
+                        }
                     }, 500);
                 </script>
             <?php endif; ?>
 
             <?php if ($error_message): ?>
-                <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-danger m-3 rounded-3">
                     <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
                 </div>
             <?php endif; ?>
 
             <!-- Content -->
-            <form method="POST" action="" onsubmit="return saveNotifications();">
-                <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
+            <form method="POST" action="" onsubmit="return saveNotifications();" class="p-3">
+                <div class="bg-white border rounded-3 p-4">
                     
                     <!-- Push Notifications -->
-                    <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 10px;">
-                        <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-2">
+                        <label class="position-relative d-inline-block" style="width:48px; height:26px; flex-shrink:0; cursor:pointer;">
                             <input type="checkbox" name="push_notifications" value="1" checked 
-                                   style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                   class="opacity-0 position-absolute w-100 h-100" 
+                                   style="z-index:2; cursor:pointer;" 
                                    onchange="toggleNotification(this, 'push')">
-                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;">
-                                <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
+                            <span class="position-absolute top-0 start-0 end-0 bottom-0 rounded-pill transition" 
+                                  style="background:#2563EB; transition:0.3s;">
+                                <span class="position-absolute bg-white rounded-circle" 
+                                      style="height:20px; width:20px; left:3px; bottom:3px; transition:0.3s; transform:translateX(22px);"></span>
                             </span>
                         </label>
-                        <div>
-                            <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Push Notifications</div>
-                            <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Receive notifications on your phone</div>
+                        <div class="flex-grow-1">
+                            <div class="fw-medium text-dark small">Push Notifications</div>
+                            <div class="text-secondary small">Receive notifications on your phone</div>
                         </div>
-                        <span id="pushStatus" style="margin-left: auto; font-size: 12px; color: #10B981; font-weight: 500;">Enabled</span>
+                        <span id="pushStatus" class="text-success fw-medium small">Enabled</span>
                     </div>
 
                     <!-- Email Notifications -->
-                    <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 10px;">
-                        <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-2">
+                        <label class="position-relative d-inline-block" style="width:48px; height:26px; flex-shrink:0; cursor:pointer;">
                             <input type="checkbox" name="email_notifications" value="1" checked 
-                                   style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                   class="opacity-0 position-absolute w-100 h-100" 
+                                   style="z-index:2; cursor:pointer;" 
                                    onchange="toggleNotification(this, 'email')">
-                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;">
-                                <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
+                            <span class="position-absolute top-0 start-0 end-0 bottom-0 rounded-pill transition" 
+                                  style="background:#2563EB; transition:0.3s;">
+                                <span class="position-absolute bg-white rounded-circle" 
+                                      style="height:20px; width:20px; left:3px; bottom:3px; transition:0.3s; transform:translateX(22px);"></span>
                             </span>
                         </label>
-                        <div>
-                            <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Email Notifications</div>
-                            <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Receive notifications on your email</div>
+                        <div class="flex-grow-1">
+                            <div class="fw-medium text-dark small">Email Notifications</div>
+                            <div class="text-secondary small">Receive notifications on your email</div>
                         </div>
-                        <span id="emailStatus" style="margin-left: auto; font-size: 12px; color: #10B981; font-weight: 500;">Enabled</span>
+                        <span id="emailStatus" class="text-success fw-medium small">Enabled</span>
                     </div>
 
                     <!-- Order Updates -->
-                    <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 10px;">
-                        <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-2">
+                        <label class="position-relative d-inline-block" style="width:48px; height:26px; flex-shrink:0; cursor:pointer;">
                             <input type="checkbox" name="order_updates" value="1" 
-                                   style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                   class="opacity-0 position-absolute w-100 h-100" 
+                                   style="z-index:2; cursor:pointer;" 
                                    onchange="toggleNotification(this, 'order')">
-                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #CBD5E1; border-radius: 34px; transition: 0.3s;">
-                                <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s;"></span>
+                            <span class="position-absolute top-0 start-0 end-0 bottom-0 rounded-pill transition" 
+                                  style="background:#CBD5E1; transition:0.3s;">
+                                <span class="position-absolute bg-white rounded-circle" 
+                                      style="height:20px; width:20px; left:3px; bottom:3px; transition:0.3s;"></span>
                             </span>
                         </label>
-                        <div>
-                            <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Order Updates</div>
-                            <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Receive order status updates</div>
+                        <div class="flex-grow-1">
+                            <div class="fw-medium text-dark small">Order Updates</div>
+                            <div class="text-secondary small">Receive order status updates</div>
                         </div>
-                        <span id="orderStatus" style="margin-left: auto; font-size: 12px; color: #94A3B8; font-weight: 500;">Disabled</span>
+                        <span id="orderStatus" class="text-secondary fw-medium small">Disabled</span>
                     </div>
 
                     <!-- Promotional Updates -->
-                    <div class="toggle-group" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #F8FAFC; border-radius: 10px; margin-bottom: 10px;">
-                        <label class="toggle-switch" style="position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer;">
+                    <div class="bg-light rounded-3 p-3 d-flex align-items-center gap-3 mb-2">
+                        <label class="position-relative d-inline-block" style="width:48px; height:26px; flex-shrink:0; cursor:pointer;">
                             <input type="checkbox" name="promotional_updates" value="1" checked 
-                                   style="opacity: 0; width: 0; height: 0; position: absolute;" 
+                                   class="opacity-0 position-absolute w-100 h-100" 
+                                   style="z-index:2; cursor:pointer;" 
                                    onchange="toggleNotification(this, 'promo')">
-                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2563EB; border-radius: 34px; transition: 0.3s;">
-                                <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; transform: translateX(22px);"></span>
+                            <span class="position-absolute top-0 start-0 end-0 bottom-0 rounded-pill transition" 
+                                  style="background:#2563EB; transition:0.3s;">
+                                <span class="position-absolute bg-white rounded-circle" 
+                                      style="height:20px; width:20px; left:3px; bottom:3px; transition:0.3s; transform:translateX(22px);"></span>
                             </span>
                         </label>
-                        <div>
-                            <div style="font-size: 14px; color: #1E293B; font-weight: 500;">Promotional Updates</div>
-                            <div style="font-size: 12px; color: #94A3B8; margin-top: 2px;">Receive promotional emails and offers</div>
+                        <div class="flex-grow-1">
+                            <div class="fw-medium text-dark small">Promotional Updates</div>
+                            <div class="text-secondary small">Receive promotional emails and offers</div>
                         </div>
-                        <span id="promoStatus" style="margin-left: auto; font-size: 12px; color: #10B981; font-weight: 500;">Enabled</span>
+                        <span id="promoStatus" class="text-success fw-medium small">Enabled</span>
                     </div>
 
                     <!-- Buttons -->
                     <div class="d-flex gap-3 mt-4">
-                        <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
+                        <button type="submit" class="btn btn-primary px-4 py-2">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
-                        <a href="settings.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                        <a href="settings.php" class="btn btn-light border px-4 py-2">
                             Cancel
                         </a>
                     </div>
@@ -150,5 +164,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
+
+    <script>
+    // Toggle notification function
+    function toggleNotification(checkbox, type) {
+        const statusMap = {
+            'push': 'pushStatus',
+            'email': 'emailStatus',
+            'order': 'orderStatus',
+            'promo': 'promoStatus'
+        };
+        
+        const statusElement = document.getElementById(statusMap[type]);
+        const toggleSpan = checkbox.parentElement.querySelector('span:first-child');
+        const circleSpan = toggleSpan.querySelector('span');
+        
+        if (checkbox.checked) {
+            // Enabled
+            toggleSpan.style.background = '#2563EB';
+            circleSpan.style.transform = 'translateX(22px)';
+            if (statusElement) {
+                statusElement.textContent = 'Enabled';
+                statusElement.className = 'text-success fw-medium small';
+            }
+        } else {
+            // Disabled
+            toggleSpan.style.background = '#CBD5E1';
+            circleSpan.style.transform = 'translateX(0)';
+            if (statusElement) {
+                statusElement.textContent = 'Disabled';
+                statusElement.className = 'text-secondary fw-medium small';
+            }
+        }
+    }
+
+    // Save notifications function
+    function saveNotifications() {
+        // Your existing save logic
+        return true; // Allow form submission
+    }
+
+    // Initialize toggles on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+            if (checkbox.checked) {
+                const typeMap = {
+                    'push_notifications': 'push',
+                    'email_notifications': 'email',
+                    'order_updates': 'order',
+                    'promotional_updates': 'promo'
+                };
+                const type = typeMap[checkbox.name];
+                if (type) {
+                    const statusMap = {
+                        'push': 'pushStatus',
+                        'email': 'emailStatus',
+                        'order': 'orderStatus',
+                        'promo': 'promoStatus'
+                    };
+                    const statusElement = document.getElementById(statusMap[type]);
+                    const toggleSpan = checkbox.parentElement.querySelector('span:first-child');
+                    const circleSpan = toggleSpan.querySelector('span');
+                    
+                    if (statusElement) {
+                        statusElement.textContent = 'Enabled';
+                        statusElement.className = 'text-success fw-medium small';
+                    }
+                    if (toggleSpan && checkbox.checked) {
+                        toggleSpan.style.background = '#2563EB';
+                        if (circleSpan) {
+                            circleSpan.style.transform = 'translateX(22px)';
+                        }
+                    }
+                }
+            }
+        });
+    });
+    </script>
 </body>
 </html>

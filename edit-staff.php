@@ -49,80 +49,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-     <?php include ('templates/navbar.php'); ?>
-   <?php include('templates/sidebar.php'); ?>
+    <?php include ('templates/navbar.php'); ?>
+    <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
-        <div class="settings-container">
-            <div class="settings-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="settings-container bg-white border rounded-4 overflow-hidden">
+            <div class="settings-header p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center">
                 <div>
-                    <h1 style="font-size: 22px; font-weight: 700; color: #1E293B;">✏️ Edit Staff Member</h1>
-                    <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Update staff member details.</p>
+                    <h1 class="fs-4 fw-bold text-dark mb-0">✏️ Edit Staff Member</h1>
+                    <p class="text-secondary small mb-0">Update staff member details.</p>
                 </div>
-                <a href="staff-management.php" class="btn btn-secondary" style="padding: 8px 20px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                <a href="staff-management.php" class="btn btn-light border mt-2 mt-sm-0">
                     <i class="fas fa-arrow-left"></i> Back to Staff Management
                 </a>
             </div>
 
             <?php if ($success_message): ?>
-                <div class="alert alert-success" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-success m-3 rounded-3">
                     <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
-                    <br><small>Redirecting to staff list...</small>
+                    <br><small class="text-secondary">Redirecting to staff list...</small>
                 </div>
                 <script>
                     setTimeout(function() {
-                        showToast('<?php echo $success_message; ?>', 'success');
+                        if (typeof showToast === 'function') {
+                            showToast('<?php echo $success_message; ?>', 'success');
+                        }
                     }, 500);
                 </script>
             <?php endif; ?>
 
             <?php if ($error_message): ?>
-                <div class="alert alert-danger" style="margin-top: 15px; border-radius: 8px;">
+                <div class="alert alert-danger m-3 rounded-3">
                     <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
                 </div>
                 <script>
-                    showToast('<?php echo $error_message; ?>', 'error');
+                    if (typeof showToast === 'function') {
+                        showToast('<?php echo $error_message; ?>', 'error');
+                    }
                 </script>
             <?php endif; ?>
 
-            <div style="background: #FFFFFF; border-radius: 12px; border: 1px solid #DBEAFE; padding: 30px; margin-top: 20px;">
+            <div class="bg-white border rounded-3 p-4 m-3">
                 <form method="POST" action="" onsubmit="return updateStaffMember();">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Name <span class="text-danger">*</span></label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($staff['name']); ?>" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" name="email" value="<?php echo htmlspecialchars($staff['email']); ?>" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Role</label>
-                            <select class="form-control" name="role">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Role</label>
+                            <select class="form-select" name="role">
                                 <option value="Admin" <?php echo $staff['role'] == 'Admin' ? 'selected' : ''; ?>>Admin</option>
                                 <option value="Manager" <?php echo $staff['role'] == 'Manager' ? 'selected' : ''; ?>>Manager</option>
                                 <option value="Staff" <?php echo $staff['role'] == 'Staff' ? 'selected' : ''; ?>>Staff</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Password</label>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Password</label>
                             <input type="password" class="form-control" name="password" placeholder="Leave blank to keep current password">
-                            <small style="color: #94A3B8; font-size: 12px;">Leave blank to keep current password</small>
+                            <small class="text-secondary" style="font-size: 11px;">Leave blank to keep current password</small>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label fw-bold">Status</label>
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold small">Status</label>
                             <div class="form-check mt-2">
                                 <input type="checkbox" class="form-check-input" name="status" <?php echo $staff['status'] == 'Active' ? 'checked' : ''; ?>>
-                                <label class="form-check-label">Active</label>
+                                <label class="form-check-label small">Active</label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="d-flex gap-3 mt-3">
-                        <button type="submit" class="btn btn-primary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #2563EB; color: #FFFFFF; border: none;">
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary px-4 py-2">
                             <i class="fas fa-save"></i> Update Staff
                         </button>
-                        <a href="staff-management.php" class="btn btn-secondary" style="padding: 10px 30px; border-radius: 8px; font-weight: 600; background: #F1F5F9; color: #1E293B; text-decoration: none; border: none;">
+                        <a href="staff-management.php" class="btn btn-light border px-4 py-2">
                             Cancel
                         </a>
                     </div>
@@ -133,5 +137,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
+
+    <script>
+    function updateStaffMember() {
+        // Your existing update logic
+        // Validate form if needed
+        return true; // Allow form submission
+    }
+    </script>
 </body>
 </html>
