@@ -33,7 +33,6 @@ $current_page = 'orders';
         }
 
         .badge-menu {
-            background: #2563eb;
             color: #fff;
             font-size: 11px;
             padding: 2px 10px;
@@ -81,17 +80,22 @@ $current_page = 'orders';
 <body>
     <!-- Navbar -->
     <?php include 'templates/navbar.php'; ?>
-    
+
     <!-- Sidebar -->
-     <?php include 'templates/sidebar.php'; ?>
+    <?php include 'templates/sidebar.php'; ?>
 
     <div class="content-area">
         <div class="orders-container">
 
             <!-- Top Bar -->
-            <div class="bg-white p-3 p-md-4 rounded-3 border mb-3 mb-md-4">
-                <h1 class="h4 fw-bold text-dark m-0">📦 <span class="text-primary">Orders</span></h1>
+
+            <div class="page-header">
+                <h4 class="page-title">
+                    <i class="fas fa-shopping-bag text-primary me-2"></i> ORDERS
+                </h4>
             </div>
+
+
 
             <!-- Filters Bar - Bootstrap Grid -->
             <div class="bg-white p-3 p-md-4 rounded-3 border mb-3 mb-md-4">
@@ -157,9 +161,9 @@ $current_page = 'orders';
             <div class="bg-white p-3 p-md-4 rounded-3 border">
                 <!-- Table Controls -->
                 <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-3 mb-3">
-                    <div class="position-relative" style="flex:1; max-width:300px;">
-                        <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary" style="font-size:14px;"></i>
-                        <input type="text" class="form-control form-control-sm ps-5" id="tableSearch" placeholder="Search by Order ID or Payment ID" />
+                    <div class="position-relative " style="flex:1; max-width:300px;">
+                        <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-secondary" style="font-size:14px;"></i>
+                        <input type="text" class="form-control form-control-sm ps-5 ms-2" id="tableSearch" placeholder="Search by Order ID or Payment ID" />
                     </div>
                     <div class="d-flex flex-wrap align-items-center gap-2">
                         <div class="d-flex align-items-center gap-2">
@@ -312,14 +316,19 @@ $current_page = 'orders';
 
                 <!-- Table Footer -->
                 <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-2 mt-3 pt-3 border-top">
-                    <div class="text-secondary small" id="tableInfo">Showing 1 to 10 of 25 entries</div>
-                    <div class="d-flex gap-1">
+                    <div class="text-secondary small" id="tableInfo">
+                        Showing 1 to 10 of 25 entries
+                    </div>
+
+                    <div class="d-flex gap-1 pagination">
                         <button class="btn btn-outline-secondary btn-sm" id="prevPage" disabled>
                             <i class="fas fa-chevron-left"></i>
                         </button>
-                        <button class="btn btn-primary btn-sm active">1</button>
-                        <button class="btn btn-outline-secondary btn-sm">2</button>
-                        <button class="btn btn-outline-secondary btn-sm">3</button>
+
+                        <button class="btn btn-primary btn-sm page-btn active" data-page="1">1</button>
+                        <button class="btn btn-outline-secondary btn-sm page-btn" data-page="2">2</button>
+                        <button class="btn btn-outline-secondary btn-sm page-btn" data-page="3">3</button>
+
                         <button class="btn btn-outline-secondary btn-sm" id="nextPage">
                             <i class="fas fa-chevron-right"></i>
                         </button>
@@ -367,13 +376,52 @@ $current_page = 'orders';
             });
 
             // Pagination buttons
-            document.querySelectorAll('.pagination .btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.pagination .btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
+            // Pagination buttons
+            const pageButtons = document.querySelectorAll(".page-btn");
+            const prevBtn = document.getElementById("prevPage");
+            const nextBtn = document.getElementById("nextPage");
+
+            let currentPage = 1;
+            const totalPages = pageButtons.length;
+
+            function updatePagination() {
+
+                pageButtons.forEach((btn, index) => {
+                    btn.classList.remove("btn-primary", "active");
+                    btn.classList.add("btn-outline-secondary");
+
+                    if (index + 1 === currentPage) {
+                        btn.classList.remove("btn-outline-secondary");
+                        btn.classList.add("btn-primary", "active");
+                    }
+                });
+
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages;
+            }
+
+            pageButtons.forEach((btn, index) => {
+                btn.addEventListener("click", function() {
+                    currentPage = index + 1;
+                    updatePagination();
                 });
             });
 
+            prevBtn.addEventListener("click", function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            });
+
+            nextBtn.addEventListener("click", function() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePagination();
+                }
+            });
+
+            updatePagination();
             // Filter change - simple demo
             document.querySelectorAll('#filtersBar select').forEach(select => {
                 select.addEventListener('change', function() {
