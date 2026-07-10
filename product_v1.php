@@ -324,7 +324,7 @@
                 <h1 class="h2">Products</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <a href="add-product.php" class="btn btn-sm btn-outline-primary">
+                        <a href="add-product_v1.php" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-plus-circle me-1"></i> Add Product
                         </a>
                     </div>
@@ -512,7 +512,7 @@
                     <tr>
                         <td colspan="8" class="text-center py-4">
                             <i class="fas fa-box-open fa-2x text-muted mb-2 d-block"></i>
-                            <span class="text-muted">No products found. <a href="add-product.php">Add your first product</a></span>
+                            <span class="text-muted">No products found. <a href="add-product_v1.php">Add your first product</a></span>
                         </td>
                     </tr>
                 `;
@@ -550,7 +550,7 @@
                             <span style="font-weight: 500; text-transform: capitalize;">${p.status}</span>
                         </td>
                         <td data-label="Action" class="text-center">
-                            <a href="edit-product.php?id=${p.id}" class="btn btn-sm btn-outline-secondary me-1" style="border-radius: 6px; padding: 4px 10px;">
+                            <a href="edit-product_v1.php?id=${p.id}" class="btn btn-sm btn-outline-secondary me-1" style="border-radius: 6px; padding: 4px 10px;">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button class="btn btn-sm btn-outline-danger" style="border-radius: 6px; padding: 4px 10px;" onclick="deleteProduct(${p.id})">

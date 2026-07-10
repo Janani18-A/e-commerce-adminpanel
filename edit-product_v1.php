@@ -221,27 +221,33 @@
         }
 
         /* ============================================
-           VARIATIONS
+           VARIATIONS - Two rows: Color|Size, Weight|Price|MRP
            ============================================ */
         .variations-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            grid-template-columns: 1fr 1fr 0.8fr 1fr 1fr auto;
             gap: 10px;
-            align-items: end;
-            padding: 12px;
+            align-items: start;
+            padding: 15px;
             background: #F8FAFC;
             border-radius: 0.5rem;
             border: 1px solid #E2E8F0;
             margin-bottom: 10px;
+            min-width: 650px;
         }
         .variations-grid .form-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             margin-bottom: 4px;
             color: #64748B;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
-        .variations-grid .form-control {
+        .variations-grid .form-control,
+        .variations-grid .form-select {
             font-size: 0.8rem;
-            padding: 0.3rem 0.5rem;
+            padding: 0.35rem 0.5rem;
+            border-radius: 0.4rem;
         }
         .variations-grid .btn-remove-variation {
             color: #EF4444;
@@ -250,9 +256,62 @@
             font-size: 0.85rem;
             cursor: pointer;
             padding: 6px 10px;
-            margin-top: 22px;
+            grid-column: 6;
+            grid-row: 1 / 3;
+            align-self: center;
         }
         .variations-grid .btn-remove-variation:hover { color: #DC2626; }
+
+        /* Weight with unit - input group */
+        .weight-input-group {
+            display: flex;
+            align-items: stretch;
+        }
+        .weight-input-group .form-control {
+            border-radius: 0.4rem 0 0 0.4rem;
+            border-right: none;
+            flex: 1;
+            min-width: 0;
+        }
+        .weight-input-group .form-select {
+            border-radius: 0 0.4rem 0.4rem 0;
+            width: auto;
+            flex: 0 0 65px;
+            padding: 0.35rem 0.3rem;
+            font-size: 0.7rem;
+        }
+        .weight-input-group .form-control:focus + .form-select,
+        .weight-input-group .form-select:focus {
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Row 1 - Color & Size */
+        .variations-grid .col-row1 { grid-row: 1; }
+        .variations-grid .col-row2 { grid-row: 2; }
+
+        /* Scrollable variation container */
+        #variationsContainer {
+            max-height: 450px;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding-right: 5px;
+        }
+        #variationsContainer::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        #variationsContainer::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 10px;
+        }
+        #variationsContainer::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+        #variationsContainer::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
 
         /* ============================================
            ALERTS
@@ -291,7 +350,6 @@
             margin-bottom: 1rem;
         }
 
-        
         /* ============================================
            SIDEBAR TOGGLE
            ============================================ */
@@ -307,6 +365,12 @@
         /* ============================================
            RESPONSIVE
            ============================================ */
+        @media (max-width: 991.98px) {
+            .variations-grid {
+                grid-template-columns: 1fr 1fr 0.8fr 1fr 1fr auto;
+                min-width: 600px;
+            }
+        }
         @media (max-width: 767.98px) {
             .sidebar-wrapper { width: 0; transform: translateX(-100%); transition: all 0.3s ease; }
             .sidebar-wrapper.open { width: 280px; transform: translateX(0); }
@@ -317,11 +381,18 @@
             .images-row { flex-direction: column; }
             .variations-grid {
                 grid-template-columns: 1fr 1fr;
+                min-width: auto;
             }
             .variations-grid .btn-remove-variation {
                 grid-column: span 2;
+                grid-row: 3;
                 justify-self: end;
                 margin-top: 0;
+            }
+            .variations-grid .col-row1 { grid-row: auto; }
+            .variations-grid .col-row2 { grid-row: auto; }
+            .weight-input-group .form-select {
+                flex: 0 0 60px;
             }
         }
         @media (max-width: 479.98px) {
@@ -332,6 +403,10 @@
             }
             .variations-grid .btn-remove-variation {
                 grid-column: span 1;
+                grid-row: auto;
+            }
+            .weight-input-group .form-select {
+                flex: 0 0 55px;
             }
         }
     </style>
@@ -347,14 +422,12 @@
     <div class="content-area main-content">
         <div id="edit-product-page" class="page-section active-page">
             
-            
-
             <!-- Page Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Edit Product</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <a href="product.php" class="btn btn-sm btn-outline-secondary">
+                        <a href="product_v1.php" class="btn btn-sm btn-outline-secondary">
                             <i class="fas fa-arrow-left me-1"></i> Back to Products
                         </a>
                     </div>
@@ -543,13 +616,6 @@
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Weight</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="weight" name="weight" step="0.01" value="0">
-                                <span class="input-group-text">kg</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
                             <label class="form-label">Unlimited Stock</label>
                             <div class="d-flex align-items-center mt-2">
                                 <label class="toggle-switch">
@@ -615,10 +681,10 @@
                     </div>
 
                     <!-- ========================================== -->
-                    <!-- PRODUCT VARIATIONS                         -->
+                    <!-- PRODUCT VARIATIONS - Two rows: Color|Size, Weight|Price|MRP -->
                     <!-- ========================================== -->
                     <div class="section-header mt-4">
-                        <h6>Product Variations</h6>
+                        <h6>Product Variation 1 </h6>
                     </div>
 
                     <div id="variationsContainer"></div>
@@ -626,7 +692,7 @@
                     <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addVariation()">
                         <i class="fas fa-plus me-1"></i> Add Variation
                     </button>
-                    <small class="d-block text-muted mt-2">Add variations like size, color, material etc.</small>
+                    <small class="d-block text-muted mt-2">Add color, size, weight (with unit), selling price and MRP for each variation.</small>
 
                     <!-- ========================================== -->
                     <!-- SEO INFORMATION                           -->
@@ -652,7 +718,7 @@
                         <button type="submit" class="btn btn-primary" id="updateProductBtn">
                             Update Product
                         </button>
-                        <a href="product.php" class="btn btn-secondary">
+                        <a href="product_v1.php" class="btn btn-secondary">
                             Cancel
                         </a>
                     </div>
@@ -693,7 +759,7 @@
             const product = products.find(p => p.id === id);
 
             if (!product) {
-                window.location.href = 'product.php';
+                window.location.href = 'product_v1.php';
                 return;
             }
 
@@ -711,7 +777,6 @@
             document.getElementById('unitLabel').textContent = product.unit || 'piece';
             document.getElementById('minPurchase').value = product.min_purchase || 1;
             document.getElementById('maxPurchase').value = product.max_purchase || 0;
-            document.getElementById('weight').value = product.weight || 0;
             document.getElementById('productStatus').value = product.status || 'In Stock';
             document.getElementById('productVisibility').value = product.visibility || 'Published';
             document.getElementById('productBadge').value = product.badge_text || '';
@@ -727,7 +792,7 @@
                 document.getElementById('outOfStock').checked = true;
             }
 
-            // Load variations
+            // Load variations - New format: Color, Size, Weight, Weight Unit, Price, MRP
             const container = document.getElementById('variationsContainer');
             container.innerHTML = '';
             if (product.variations && product.variations.length > 0) {
@@ -767,33 +832,106 @@
         }
 
         // ============================================================
-        // ADD VARIATION WITH DATA
+        // ADD VARIATION WITH DATA - New format
         // ============================================================
         function addVariationWithData(variation) {
             const container = document.getElementById('variationsContainer');
+            const color = variation.color || '';
+            const size = variation.size || '';
+            const weight = variation.weight || 0;
+            const weightUnit = variation.weight_unit || 'kg';
+            const price = variation.price || 0;
+            const mrp = variation.mrp || 0;
+
             const template = `
                 <div class="variations-grid">
-                    <div>
-                        <label class="form-label">Variation Name</label>
-                        <input type="text" class="form-control" name="variation_name[]" value="${variation.name || ''}" placeholder="e.g., Size L">
+                    <!-- ROW 1: COLOR -->
+                    <div class="col-row1">
+                        <label class="form-label">Color <span class="required-star">*</span></label>
+                        <select class="form-select" name="variation_color[]" required>
+                            <option value="">Select Color</option>
+                            <option value="Red" ${color === 'Red' ? 'selected' : ''}>Red</option>
+                            <option value="Blue" ${color === 'Blue' ? 'selected' : ''}>Blue</option>
+                            <option value="Green" ${color === 'Green' ? 'selected' : ''}>Green</option>
+                            <option value="Yellow" ${color === 'Yellow' ? 'selected' : ''}>Yellow</option>
+                            <option value="Black" ${color === 'Black' ? 'selected' : ''}>Black</option>
+                            <option value="White" ${color === 'White' ? 'selected' : ''}>White</option>
+                            <option value="Pink" ${color === 'Pink' ? 'selected' : ''}>Pink</option>
+                            <option value="Purple" ${color === 'Purple' ? 'selected' : ''}>Purple</option>
+                            <option value="Orange" ${color === 'Orange' ? 'selected' : ''}>Orange</option>
+                            <option value="Brown" ${color === 'Brown' ? 'selected' : ''}>Brown</option>
+                            <option value="Grey" ${color === 'Grey' ? 'selected' : ''}>Grey</option>
+                            <option value="Gold" ${color === 'Gold' ? 'selected' : ''}>Gold</option>
+                            <option value="Silver" ${color === 'Silver' ? 'selected' : ''}>Silver</option>
+                            <option value="Navy" ${color === 'Navy' ? 'selected' : ''}>Navy</option>
+                            <option value="Maroon" ${color === 'Maroon' ? 'selected' : ''}>Maroon</option>
+                            <option value="Teal" ${color === 'Teal' ? 'selected' : ''}>Teal</option>
+                            <option value="Coral" ${color === 'Coral' ? 'selected' : ''}>Coral</option>
+                            <option value="Lavender" ${color === 'Lavender' ? 'selected' : ''}>Lavender</option>
+                            <option value="Mint" ${color === 'Mint' ? 'selected' : ''}>Mint</option>
+                            <option value="Peach" ${color === 'Peach' ? 'selected' : ''}>Peach</option>
+                        </select>
                     </div>
-                    <div>
-                        <label class="form-label">SKU</label>
-                        <input type="text" class="form-control" name="variation_sku[]" value="${variation.sku || ''}" placeholder="SKU">
+
+                    <!-- ROW 1: SIZE -->
+                    <div class="col-row1">
+                        <label class="form-label">Size</label>
+                        <select class="form-select" name="variation_size[]">
+                            <option value="">Select Size</option>
+                            <option value="XS" ${size === 'XS' ? 'selected' : ''}>XS</option>
+                            <option value="S" ${size === 'S' ? 'selected' : ''}>S</option>
+                            <option value="M" ${size === 'M' ? 'selected' : ''}>M</option>
+                            <option value="L" ${size === 'L' ? 'selected' : ''}>L</option>
+                            <option value="XL" ${size === 'XL' ? 'selected' : ''}>XL</option>
+                            <option value="XXL" ${size === 'XXL' ? 'selected' : ''}>XXL</option>
+                            <option value="3XL" ${size === '3XL' ? 'selected' : ''}>3XL</option>
+                            <option value="4XL" ${size === '4XL' ? 'selected' : ''}>4XL</option>
+                            <option value="5XL" ${size === '5XL' ? 'selected' : ''}>5XL</option>
+                            <option value="Free" ${size === 'Free' ? 'selected' : ''}>Free</option>
+                            <option value="One Size" ${size === 'One Size' ? 'selected' : ''}>One Size</option>
+                        </select>
                     </div>
-                    <div>
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" name="variation_price[]" value="${variation.price || 0}" placeholder="0.00" step="0.01">
+
+                    <!-- ROW 1: EMPTY -->
+                    <div class="col-row1"></div>
+                    <div class="col-row1"></div>
+                    <div class="col-row1"></div>
+
+                    <!-- ROW 2: WEIGHT -->
+                    <div class="col-row2">
+                        <label class="form-label">Weight</label>
+                        <div class="weight-input-group">
+                            <input type="number" class="form-control" name="variation_weight[]" placeholder="0.00" step="0.01" min="0" value="${weight}">
+                            <select class="form-select" name="variation_weight_unit[]">
+                                <option value="kg" ${weightUnit === 'kg' ? 'selected' : ''}>kg</option>
+                                <option value="g" ${weightUnit === 'g' ? 'selected' : ''}>g</option>
+                                <option value="mg" ${weightUnit === 'mg' ? 'selected' : ''}>mg</option>
+                                <option value="lb" ${weightUnit === 'lb' ? 'selected' : ''}>lb</option>
+                                <option value="oz" ${weightUnit === 'oz' ? 'selected' : ''}>oz</option>
+                                <option value="litre" ${weightUnit === 'litre' ? 'selected' : ''}>litre</option>
+                                <option value="ml" ${weightUnit === 'ml' ? 'selected' : ''}>ml</option>
+                                <option value="ton" ${weightUnit === 'ton' ? 'selected' : ''}>ton</option>
+                                <option value="piece" ${weightUnit === 'piece' ? 'selected' : ''}>piece</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="form-label">Stock</label>
-                        <input type="number" class="form-control" name="variation_stock[]" value="${variation.stock || 0}" placeholder="0" min="0">
+
+                    <!-- ROW 2: SELLING PRICE -->
+                    <div class="col-row2">
+                        <label class="form-label">Selling Price <span class="required-star">*</span></label>
+                        <input type="number" class="form-control" name="variation_price[]" placeholder="0.00" step="0.01" min="0.01" value="${price}" required>
                     </div>
-                    <div>
-                        <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
-                            <i class="fas fa-times-circle"></i>
-                        </button>
+
+                    <!-- ROW 2: MRP -->
+                    <div class="col-row2">
+                        <label class="form-label">MRP</label>
+                        <input type="number" class="form-control" name="variation_mrp[]" placeholder="0.00" step="0.01" min="0" value="${mrp}">
                     </div>
+
+                    <!-- REMOVE BUTTON -->
+                    <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', template);
@@ -862,33 +1000,99 @@
         }
 
         // ============================================================
-        // VARIATIONS
+        // VARIATIONS - Add new empty variation
         // ============================================================
         function addVariation() {
             const container = document.getElementById('variationsContainer');
             const template = `
                 <div class="variations-grid">
-                    <div>
-                        <label class="form-label">Variation Name</label>
-                        <input type="text" class="form-control" name="variation_name[]" placeholder="e.g., Size L">
+                    <!-- ROW 1: COLOR -->
+                    <div class="col-row1">
+                        <label class="form-label">Color <span class="required-star">*</span></label>
+                        <select class="form-select" name="variation_color[]" required>
+                            <option value="">Select Color</option>
+                            <option value="Red">Red</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Green">Green</option>
+                            <option value="Yellow">Yellow</option>
+                            <option value="Black">Black</option>
+                            <option value="White">White</option>
+                            <option value="Pink">Pink</option>
+                            <option value="Purple">Purple</option>
+                            <option value="Orange">Orange</option>
+                            <option value="Brown">Brown</option>
+                            <option value="Grey">Grey</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Silver">Silver</option>
+                            <option value="Navy">Navy</option>
+                            <option value="Maroon">Maroon</option>
+                            <option value="Teal">Teal</option>
+                            <option value="Coral">Coral</option>
+                            <option value="Lavender">Lavender</option>
+                            <option value="Mint">Mint</option>
+                            <option value="Peach">Peach</option>
+                        </select>
                     </div>
-                    <div>
-                        <label class="form-label">SKU</label>
-                        <input type="text" class="form-control" name="variation_sku[]" placeholder="SKU">
+
+                    <!-- ROW 1: SIZE -->
+                    <div class="col-row1">
+                        <label class="form-label">Size</label>
+                        <select class="form-select" name="variation_size[]">
+                            <option value="">Select Size</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                            <option value="3XL">3XL</option>
+                            <option value="4XL">4XL</option>
+                            <option value="5XL">5XL</option>
+                            <option value="Free">Free</option>
+                            <option value="One Size">One Size</option>
+                        </select>
                     </div>
-                    <div>
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" name="variation_price[]" placeholder="0.00" step="0.01">
+
+                    <!-- ROW 1: EMPTY -->
+                    <div class="col-row1"></div>
+                    <div class="col-row1"></div>
+                    <div class="col-row1"></div>
+
+                    <!-- ROW 2: WEIGHT -->
+                    <div class="col-row2">
+                        <label class="form-label">Weight</label>
+                        <div class="weight-input-group">
+                            <input type="number" class="form-control" name="variation_weight[]" placeholder="0.00" step="0.01" min="0" value="0">
+                            <select class="form-select" name="variation_weight_unit[]">
+                                <option value="kg">kg</option>
+                                <option value="g">g</option>
+                                <option value="mg">mg</option>
+                                <option value="lb">lb</option>
+                                <option value="oz">oz</option>
+                                <option value="litre">litre</option>
+                                <option value="ml">ml</option>
+                                <option value="ton">ton</option>
+                                <option value="piece">piece</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="form-label">Stock</label>
-                        <input type="number" class="form-control" name="variation_stock[]" placeholder="0" min="0">
+
+                    <!-- ROW 2: SELLING PRICE -->
+                    <div class="col-row2">
+                        <label class="form-label">Selling Price <span class="required-star">*</span></label>
+                        <input type="number" class="form-control" name="variation_price[]" placeholder="0.00" step="0.01" min="0.01" required>
                     </div>
-                    <div>
-                        <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
-                            <i class="fas fa-times-circle"></i>
-                        </button>
+
+                    <!-- ROW 2: MRP -->
+                    <div class="col-row2">
+                        <label class="form-label">MRP</label>
+                        <input type="number" class="form-control" name="variation_mrp[]" placeholder="0.00" step="0.01" min="0">
                     </div>
+
+                    <!-- REMOVE BUTTON -->
+                    <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', template);
@@ -958,7 +1162,7 @@
                         <i class="fas fa-${c.icon} me-2"></i>
                         <strong>${message}</strong>
                     </span>
-                    <a href="product.php" class="alert-link">
+                    <a href="product_v1.php" class="alert-link">
                         <i class="fas fa-arrow-right me-1"></i> View Products
                     </a>
                 </div>
@@ -988,7 +1192,6 @@
             const min_purchase = parseInt(document.getElementById('minPurchase').value) || 1;
             const max_purchase = parseInt(document.getElementById('maxPurchase').value) || 0;
             const unit = document.getElementById('unit').value;
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
             const status = document.getElementById('productStatus').value;
             const visibility = document.getElementById('productVisibility').value;
             const badge_text = document.getElementById('productBadge').value;
@@ -1029,19 +1232,23 @@
                 return false;
             }
 
-            // Get variations
-            const variationNames = document.getElementsByName('variation_name[]');
-            const variationSkus = document.getElementsByName('variation_sku[]');
+            // Get variations - New format: Color, Size, Weight, Weight Unit, Price, MRP
+            const variationColors = document.getElementsByName('variation_color[]');
+            const variationSizes = document.getElementsByName('variation_size[]');
+            const variationWeights = document.getElementsByName('variation_weight[]');
+            const variationWeightUnits = document.getElementsByName('variation_weight_unit[]');
             const variationPrices = document.getElementsByName('variation_price[]');
-            const variationStocks = document.getElementsByName('variation_stock[]');
+            const variationMrps = document.getElementsByName('variation_mrp[]');
             const variations = [];
-            for (let i = 0; i < variationNames.length; i++) {
-                if (variationNames[i].value.trim()) {
+            for (let i = 0; i < variationColors.length; i++) {
+                if (variationColors[i].value && variationPrices[i].value) {
                     variations.push({
-                        name: variationNames[i].value.trim(),
-                        sku: variationSkus[i]?.value.trim() || '',
+                        color: variationColors[i].value,
+                        size: variationSizes[i]?.value || '',
+                        weight: parseFloat(variationWeights[i]?.value) || 0,
+                        weight_unit: variationWeightUnits[i]?.value || 'kg',
                         price: parseFloat(variationPrices[i]?.value) || 0,
-                        stock: parseInt(variationStocks[i]?.value) || 0
+                        mrp: parseFloat(variationMrps[i]?.value) || 0
                     });
                 }
             }
@@ -1073,7 +1280,6 @@
                 min_purchase: min_purchase,
                 max_purchase: max_purchase,
                 unit: unit,
-                weight: weight ? weight.toFixed(2) : '0.00',
                 status: status,
                 badge: badge,
                 badge_text: badge_text,
@@ -1091,12 +1297,12 @@
 
             saveProducts(products);
 
-            // Show success message on edit page
+            // Show success message
             showAlert(`Product '${name}' updated successfully!`, 'success');
 
-            // Redirect to product.php WITHOUT any query parameter
+            // Redirect to product.php
             setTimeout(() => {
-                window.location.href = 'product.php';
+                window.location.href = 'product_v1.php';
             }, 1500);
 
             return false;
@@ -1125,12 +1331,8 @@
                 }
             });
 
-            console.log('Edit Product page initialized (100% JavaScript with localStorage)');
+            console.log('Edit Product page initialized with two-row variation layout');
         });
     </script>
 </body>
 </html>
-
-
-
-

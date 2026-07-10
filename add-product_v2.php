@@ -166,37 +166,202 @@
         }
         .additional-image-item .remove-btn:hover { background: #DC2626; }
 
+        /* ===== VARIATION GRID ===== */
         .variations-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr auto;
-            gap: 10px;
-            align-items: end;
-            padding: 12px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px 20px;
+            padding: 20px;
             background: #F8FAFC;
             border-radius: 0.5rem;
             border: 1px solid #E2E8F0;
             margin-bottom: 10px;
+            position: relative;
         }
         .variations-grid .form-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             margin-bottom: 4px;
             color: #64748B;
+            font-weight: 600;
         }
         .variations-grid .form-control,
         .variations-grid .form-select {
-            font-size: 0.8rem;
-            padding: 0.3rem 0.5rem;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 0.4rem;
         }
         .variations-grid .btn-remove-variation {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             color: #EF4444;
             background: none;
             border: none;
-            font-size: 0.85rem;
+            font-size: 1rem;
             cursor: pointer;
-            padding: 6px 10px;
-            margin-top: 22px;
+            padding: 4px 8px;
         }
         .variations-grid .btn-remove-variation:hover { color: #DC2626; }
+
+        /* Full width fields */
+        .variations-grid .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Scrollable variation container */
+        #variationsContainer {
+            max-height: 600px;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding-right: 5px;
+        }
+        #variationsContainer::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        #variationsContainer::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 10px;
+        }
+        #variationsContainer::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+        #variationsContainer::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* Toggle switch inside variation */
+        .variation-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        .variation-toggle .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            display: inline-block;
+        }
+        .variation-toggle .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .variation-toggle .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #CBD5E1;
+            transition: .3s;
+            border-radius: 22px;
+        }
+        .variation-toggle .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        .variation-toggle .toggle-switch input:checked + .toggle-slider { background: #2563EB; }
+        .variation-toggle .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); }
+        .variation-toggle .toggle-label {
+            font-size: 0.8rem;
+            color: #64748B;
+        }
+
+        /* Variation image upload */
+        .variation-image-box {
+            border: 2px dashed #DBEAFE;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+            position: relative;
+        }
+        .variation-image-box:hover {
+            border-color: #2563EB;
+            background: #EFF6FF;
+        }
+        .variation-image-box .upload-icon {
+            font-size: 20px;
+            color: #94A3B8;
+        }
+        .variation-image-box .upload-text {
+            color: #64748B;
+            font-size: 0.7rem;
+        }
+        .variation-image-box input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .variation-image-preview {
+            display: none;
+            position: relative;
+            margin-top: 5px;
+        }
+        .variation-image-preview img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #DBEAFE;
+        }
+        .variation-image-preview .remove-btn {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #EF4444;
+            color: #fff;
+            border: none;
+            font-size: 9px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Weight with unit dropdown */
+        .weight-input-group {
+            display: flex;
+            align-items: stretch;
+        }
+        .weight-input-group .form-control {
+            border-radius: 0.4rem 0 0 0.4rem;
+            border-right: none;
+            flex: 1;
+            min-width: 0;
+        }
+        .weight-input-group .form-select {
+            border-radius: 0 0.4rem 0.4rem 0;
+            width: auto;
+            flex: 0 0 75px;
+            padding: 0.35rem 0.3rem;
+            font-size: 0.75rem;
+        }
+        .weight-input-group .form-control:focus + .form-select,
+        .weight-input-group .form-select:focus {
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
 
         .alert-success-custom {
             background: #D1FAE5;
@@ -274,8 +439,6 @@
             margin-left: 8px;
         }
 
-        
-
         .sidebar-toggle {
             display: none;
             background: transparent;
@@ -285,23 +448,28 @@
             padding: 0 10px;
         }
 
+        @media (max-width: 991.98px) {
+            .variations-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
         @media (max-width: 767.98px) {
             .main-content { margin-left: 0; padding: 10px 12px; }
             .form-section { padding: 1rem; }
             .images-row { flex-direction: column; }
             .variations-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
             }
-            .variations-grid .btn-remove-variation {
-                grid-column: span 2;
-                justify-self: end;
-                margin-top: 0;
+            .variations-grid .full-width {
+                grid-column: 1;
             }
             .image-preview img { width: 80px; height: 80px; }
             .additional-image-item { width: 65px; height: 65px; }
             .sidebar-toggle { display: block !important; }
-            .breadcrumb-custom { font-size: 0.8rem; }
             .alert-success-custom { flex-direction: column; gap: 8px; align-items: flex-start; }
+            .weight-input-group .form-select {
+                flex: 0 0 65px;
+            }
         }
         @media (max-width: 479.98px) {
             .main-content { padding: 6px 8px; }
@@ -309,12 +477,11 @@
             .variations-grid {
                 grid-template-columns: 1fr;
             }
-            .variations-grid .btn-remove-variation {
-                grid-column: span 1;
-            }
             .image-preview img { width: 70px; height: 70px; }
             .additional-image-item { width: 55px; height: 55px; }
-            .breadcrumb-custom { font-size: 0.75rem; }
+            .weight-input-group .form-select {
+                flex: 0 0 60px;
+            }
         }
     </style>
 </head>
@@ -325,11 +492,9 @@
     <div class="content-area main-content">
         <div id="add-product-page" class="page-section active-page">
 
-            
-
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Add New Product</h1>
-                <a href="product.php" class="btn btn-outline-secondary btn-sm">
+                <a href="product_v2.php" class="btn btn-outline-secondary btn-sm">
                     <i class="fas fa-arrow-left me-1"></i> Back to Products
                 </a>
             </div>
@@ -499,13 +664,6 @@
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Weight</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="weight" placeholder="0.00" step="0.01" value="0">
-                                <span class="input-group-text">kg</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
                             <label class="form-label">Unlimited Stock</label>
                             <div class="d-flex align-items-center mt-2">
                                 <label class="toggle-switch">
@@ -567,32 +725,134 @@
                         <small class="text-muted">Comma separated tags</small>
                     </div>
 
+                    <!-- ============================================================ -->
+                    <!-- PRODUCT VARIATIONS - With Color dropdown & Weight unit dropdown -->
+                    <!-- ============================================================ -->
                     <div class="section-header mt-4">
-                        <h6>Product Variations</h6>
+                        <h6>Product Variation 2</h6>
                     </div>
 
                     <div id="variationsContainer">
                         <div class="variations-grid">
-                            <div>
-                                <label class="form-label">Variation Name</label>
-                                <input type="text" class="form-control" name="variation_name[]" placeholder="e.g., Size L">
+                            <!-- Remove button -->
+                            <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+
+                            <!-- Variation Name -->
+                            <div class="full-width">
+                                <label class="form-label">Variation <span class="required-star">*</span></label>
+                                <input type="text" class="form-control" name="variation_name[]" placeholder="e.g. Red" required>
                             </div>
+
+                           
+
+                            <!-- Price -->
                             <div>
-                                <label class="form-label">SKU</label>
-                                <input type="text" class="form-control" name="variation_sku[]" placeholder="SKU">
+                                <label class="form-label">Price <span class="required-star">*</span></label>
+                                <input type="number" class="form-control" name="variation_price[]" placeholder="0" step="0.01" min="0.01" required>
                             </div>
+
+                            <!-- MRP Price -->
                             <div>
-                                <label class="form-label">Price</label>
-                                <input type="number" class="form-control" name="variation_price[]" placeholder="0.00" step="0.01">
+                                <label class="form-label">MRP Price <span class="required-star">*</span></label>
+                                <input type="number" class="form-control" name="variation_mrp[]" placeholder="0" step="0.01" min="0.01" required>
                             </div>
+
+                            <!-- Unit -->
+                            <div>
+                                <label class="form-label">Unit <span class="required-star">*</span></label>
+                                <select class="form-select" name="variation_unit[]" required>
+                                    <option value="piece">piece</option>
+                                    <option value="kg">kg</option>
+                                    <option value="g">g</option>
+                                    <option value="liter">liter</option>
+                                    <option value="ml">ml</option>
+                                    <option value="box">box</option>
+                                    <option value="pack">pack</option>
+                                </select>
+                            </div>
+
+                            <!-- Minimum Purchase -->
+                            <div>
+                                <label class="form-label">Enter Minimum Purchase</label>
+                                <input type="number" class="form-control" name="variation_min_purchase[]" placeholder="0" min="0" value="1">
+                            </div>
+
+                            <!-- Stock -->
                             <div>
                                 <label class="form-label">Stock</label>
-                                <input type="number" class="form-control" name="variation_stock[]" placeholder="0" min="0">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="variation_stock[]" placeholder="0" min="0" value="0">
+                                    <span class="input-group-text">piece</span>
+                                </div>
                             </div>
+
+                            <!-- Stock for Buy -->
                             <div>
-                                <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
-                                    <i class="fas fa-times-circle"></i>
-                                </button>
+                                <label class="form-label">Stock for buy</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="variation_stock_for_buy[]" placeholder="0" min="0" value="0">
+                                    <span class="input-group-text">piece</span>
+                                </div>
+                                <small class="text-muted">Maximum stock for single buy</small>
+                            </div>
+
+                            <!-- Unlimited Stock Toggle -->
+                            <div>
+                                <label class="form-label">Unlimited Stock</label>
+                                <div class="variation-toggle">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" name="variation_unlimited_stock[]">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    
+                                </div>
+                            </div>
+
+                            <!-- Weight with unit dropdown -->
+                            <div>
+                                <label class="form-label">Weight</label>
+                                <div class="weight-input-group">
+                                    <input type="number" class="form-control" name="variation_weight[]" placeholder="0" step="0.01" min="0" value="0">
+                                    <select class="form-select" name="variation_weight_unit[]">
+                                        <option value="kg">kg</option>
+                                        <option value="g">g</option>
+                                        <option value="mg">mg</option>
+                                        <option value="lb">lb</option>
+                                        <option value="oz">oz</option>
+                                        <option value="litre">litre</option>
+                                        <option value="ml">ml</option>
+                                        <option value="ton">ton</option>
+                                        <option value="piece">piece</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- SKU -->
+                            <div>
+                                <label class="form-label">SKU</label>
+                                <input type="text" class="form-control" name="variation_sku[]" placeholder="Stock Keeping Unit">
+                            </div>
+
+                            <!-- Image Upload -->
+                            <div>
+                                <label class="form-label">Image</label>
+                                <div class="variation-image-box" onclick="this.querySelector('input[type=file]').click()">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Choose File
+                                    </div>
+                                    <input type="file" accept="image/*" onchange="previewVariationImage(this)">
+                                </div>
+                                <div class="variation-image-preview">
+                                    <img src="#" alt="Variation Image">
+                                    <button type="button" class="remove-btn" onclick="removeVariationImage(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -600,7 +860,7 @@
                     <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addVariation()">
                         <i class="fas fa-plus me-1"></i> Add Variation
                     </button>
-                    <small class="d-block text-muted mt-2">Add variations like size, color, material etc.</small>
+                    <small class="d-block text-muted mt-2">Add product variations with color, price, stock, weight and other details.</small>
 
                     <div class="section-header mt-4">
                         <h6>SEO Information</h6>
@@ -622,7 +882,7 @@
                         <button type="submit" class="btn btn-primary" id="saveProductBtn">
                             Save Product
                         </button>
-                        <a href="product.php" class="btn btn-secondary">
+                        <a href="product_v2.php" class="btn btn-secondary">
                             Cancel
                         </a>
                     </div>
@@ -649,13 +909,13 @@
         // Initialize products in localStorage if empty
         if (getProducts().length === 0) {
             const defaultProducts = [
-                {id: 1, name: 'Lotus', sku: 'LOTUS-001', slug: 'lotus', category: 'Flowers', subcategory: 'N/A', price: '99.00', mrp: '100.00', stock: 9999, min_purchase: 1, max_purchase: 10, unit: 'piece', weight: '0.00', status: 'In Stock', badge: 'success', badge_text: '', color: '2563EB', visibility: 'Published', tags: '', unlimited_stock: true, out_of_stock: false, seo_title: 'Lotus', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
-                {id: 2, name: 'White and Red Rose Wedding Garland', sku: 'ROSE-002', slug: 'white-red-rose-wedding-garland', category: 'Wedding', subcategory: 'N/A', price: '199.00', mrp: '199.00', stock: 15, min_purchase: 1, max_purchase: 5, unit: 'piece', weight: '0.00', status: 'In Stock', badge: 'success', badge_text: '', color: 'F59E0B', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'White and Red Rose Wedding Garland', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 3},
-                {id: 3, name: 'Vale', sku: 'VALE-003', slug: 'vale', category: 'Flowers', subcategory: 'N/A', price: '279.00', mrp: '279.00', stock: 20, min_purchase: 1, max_purchase: 2, unit: 'piece', weight: '0.00', status: 'In Stock', badge: 'success', badge_text: '', color: 'EF4444', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Vale', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 2},
-                {id: 4, name: 'Paradise Mixed Roses Bouquet', sku: 'PARADISE-004', slug: 'paradise-mixed-roses-bouquet', category: 'Bouquet', subcategory: 'N/A', price: '449.00', mrp: '449.00', stock: 12, min_purchase: 1, max_purchase: 3, unit: 'piece', weight: '0.00', status: 'In Stock', badge: 'success', badge_text: '', color: '8B5CF6', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Paradise Mixed Roses Bouquet', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
-                {id: 5, name: 'Flowers Bouquet In Paper Packing', sku: 'PAPER-005', slug: 'flowers-bouquet-in-paper-packing', category: 'Bouquet', subcategory: 'N/A', price: '199.00', mrp: '199.00', stock: 30, min_purchase: 1, max_purchase: 5, unit: 'piece', weight: '0.00', status: 'In Stock', badge: 'success', badge_text: '', color: '06B6D4', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Flowers Bouquet In Paper Packing', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
-                {id: 6, name: 'Flower Fantasy', sku: 'FANTASY-006', slug: 'flower-fantasy', category: 'Flowers', subcategory: 'N/A', price: '349.00', mrp: '349.00', stock: 17, min_purchase: 1, max_purchase: 2, unit: 'piece', weight: '0.00', status: 'In Stock', badge: 'success', badge_text: '', color: '1E293B', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Flower Fantasy', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
-                {id: 7, name: 'Floral n Chocolatey Elegance', sku: 'CHOCOLATE-007', slug: 'floral-n-chocolatey-elegance', category: 'Gifts', subcategory: 'N/A', price: '599.00', mrp: '599.00', stock: 22, min_purchase: 1, max_purchase: 2, unit: 'piece', weight: '0.00', status: 'In Stock', badge: 'success', badge_text: '', color: 'EC4899', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Floral n Chocolatey Elegance', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0}
+                {id: 1, name: 'Lotus', sku: 'LOTUS-001', slug: 'lotus', category: 'Flowers', subcategory: 'N/A', price: '99.00', mrp: '100.00', stock: 9999, min_purchase: 1, max_purchase: 10, unit: 'piece', status: 'In Stock', badge: 'success', badge_text: '', color: '2563EB', visibility: 'Published', tags: '', unlimited_stock: true, out_of_stock: false, seo_title: 'Lotus', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
+                {id: 2, name: 'White and Red Rose Wedding Garland', sku: 'ROSE-002', slug: 'white-red-rose-wedding-garland', category: 'Wedding', subcategory: 'N/A', price: '199.00', mrp: '199.00', stock: 15, min_purchase: 1, max_purchase: 5, unit: 'piece', status: 'In Stock', badge: 'success', badge_text: '', color: 'F59E0B', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'White and Red Rose Wedding Garland', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 3},
+                {id: 3, name: 'Vale', sku: 'VALE-003', slug: 'vale', category: 'Flowers', subcategory: 'N/A', price: '279.00', mrp: '279.00', stock: 20, min_purchase: 1, max_purchase: 2, unit: 'piece', status: 'In Stock', badge: 'success', badge_text: '', color: 'EF4444', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Vale', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 2},
+                {id: 4, name: 'Paradise Mixed Roses Bouquet', sku: 'PARADISE-004', slug: 'paradise-mixed-roses-bouquet', category: 'Bouquet', subcategory: 'N/A', price: '449.00', mrp: '449.00', stock: 12, min_purchase: 1, max_purchase: 3, unit: 'piece', status: 'In Stock', badge: 'success', badge_text: '', color: '8B5CF6', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Paradise Mixed Roses Bouquet', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
+                {id: 5, name: 'Flowers Bouquet In Paper Packing', sku: 'PAPER-005', slug: 'flowers-bouquet-in-paper-packing', category: 'Bouquet', subcategory: 'N/A', price: '199.00', mrp: '199.00', stock: 30, min_purchase: 1, max_purchase: 5, unit: 'piece', status: 'In Stock', badge: 'success', badge_text: '', color: '06B6D4', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Flowers Bouquet In Paper Packing', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
+                {id: 6, name: 'Flower Fantasy', sku: 'FANTASY-006', slug: 'flower-fantasy', category: 'Flowers', subcategory: 'N/A', price: '349.00', mrp: '349.00', stock: 17, min_purchase: 1, max_purchase: 2, unit: 'piece', status: 'In Stock', badge: 'success', badge_text: '', color: '1E293B', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Flower Fantasy', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0},
+                {id: 7, name: 'Floral n Chocolatey Elegance', sku: 'CHOCOLATE-007', slug: 'floral-n-chocolatey-elegance', category: 'Gifts', subcategory: 'N/A', price: '599.00', mrp: '599.00', stock: 22, min_purchase: 1, max_purchase: 2, unit: 'piece', status: 'In Stock', badge: 'success', badge_text: '', color: 'EC4899', visibility: 'Published', tags: '', unlimited_stock: false, out_of_stock: false, seo_title: 'Floral n Chocolatey Elegance', seo_description: '', description: '', main_image: '', additional_images: [], variations: [], visitors: 0}
             ];
             saveProducts(defaultProducts);
         }
@@ -723,6 +983,33 @@
         }
 
         // ============================================================
+        // VARIATION IMAGE UPLOAD
+        // ============================================================
+        function previewVariationImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = input.closest('.variation-image-box').nextElementSibling;
+                    const img = preview.querySelector('img');
+                    img.src = e.target.result;
+                    preview.style.display = 'block';
+                    input.closest('.variation-image-box').style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeVariationImage(btn) {
+            const preview = btn.closest('.variation-image-preview');
+            const box = preview.previousElementSibling;
+            preview.style.display = 'none';
+            box.style.display = 'block';
+            const input = box.querySelector('input[type="file"]');
+            if (input) input.value = '';
+        }
+
+        // ============================================================
         // AUTO GENERATE SLUG FROM PRODUCT NAME
         // ============================================================
         document.getElementById('productName')?.addEventListener('input', function() {
@@ -768,32 +1055,144 @@
         });
 
         // ============================================================
-        // VARIATIONS
+        // VARIATIONS - With Color dropdown & Weight unit dropdown
         // ============================================================
         function addVariation() {
             const container = document.getElementById('variationsContainer');
             const template = `
                 <div class="variations-grid">
-                    <div>
-                        <label class="form-label">Variation Name</label>
-                        <input type="text" class="form-control" name="variation_name[]" placeholder="e.g., Size L">
+                    <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+
+                    <div class="full-width">
+                        <label class="form-label">Variation <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" name="variation_name[]" placeholder="e.g. Red" required>
                     </div>
+
                     <div>
-                        <label class="form-label">SKU</label>
-                        <input type="text" class="form-control" name="variation_sku[]" placeholder="SKU">
+                        <label class="form-label">Color</label>
+                        <select class="form-select" name="variation_color[]">
+                            <option value="">Select Color</option>
+                            <option value="Red">Red</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Green">Green</option>
+                            <option value="Yellow">Yellow</option>
+                            <option value="Black">Black</option>
+                            <option value="White">White</option>
+                            <option value="Pink">Pink</option>
+                            <option value="Purple">Purple</option>
+                            <option value="Orange">Orange</option>
+                            <option value="Brown">Brown</option>
+                            <option value="Grey">Grey</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Silver">Silver</option>
+                            <option value="Navy">Navy</option>
+                            <option value="Maroon">Maroon</option>
+                            <option value="Teal">Teal</option>
+                            <option value="Coral">Coral</option>
+                            <option value="Lavender">Lavender</option>
+                            <option value="Mint">Mint</option>
+                            <option value="Peach">Peach</option>
+                        </select>
                     </div>
+
                     <div>
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" name="variation_price[]" placeholder="0.00" step="0.01">
+                        <label class="form-label">Price <span class="required-star">*</span></label>
+                        <input type="number" class="form-control" name="variation_price[]" placeholder="0" step="0.01" min="0.01" required>
                     </div>
+
+                    <div>
+                        <label class="form-label">MRP Price <span class="required-star">*</span></label>
+                        <input type="number" class="form-control" name="variation_mrp[]" placeholder="0" step="0.01" min="0.01" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Unit <span class="required-star">*</span></label>
+                        <select class="form-select" name="variation_unit[]" required>
+                            <option value="piece">piece</option>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="liter">liter</option>
+                            <option value="ml">ml</option>
+                            <option value="box">box</option>
+                            <option value="pack">pack</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Enter Minimum Purchase</label>
+                        <input type="number" class="form-control" name="variation_min_purchase[]" placeholder="0" min="0" value="1">
+                    </div>
+
                     <div>
                         <label class="form-label">Stock</label>
-                        <input type="number" class="form-control" name="variation_stock[]" placeholder="0" min="0">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="variation_stock[]" placeholder="0" min="0" value="0">
+                            <span class="input-group-text">piece</span>
+                        </div>
                     </div>
+
                     <div>
-                        <button type="button" class="btn-remove-variation" onclick="removeVariation(this)">
-                            <i class="fas fa-times-circle"></i>
-                        </button>
+                        <label class="form-label">Stock for buy</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="variation_stock_for_buy[]" placeholder="0" min="0" value="0">
+                            <span class="input-group-text">piece</span>
+                        </div>
+                        <small class="text-muted">Maximum stock for single buy</small>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Unlimited Stock</label>
+                        <div class="variation-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="variation_unlimited_stock[]">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label">☐</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Weight</label>
+                        <div class="weight-input-group">
+                            <input type="number" class="form-control" name="variation_weight[]" placeholder="0" step="0.01" min="0" value="0">
+                            <select class="form-select" name="variation_weight_unit[]">
+                                <option value="kg">kg</option>
+                                <option value="g">g</option>
+                                <option value="mg">mg</option>
+                                <option value="lb">lb</option>
+                                <option value="oz">oz</option>
+                                <option value="litre">litre</option>
+                                <option value="ml">ml</option>
+                                <option value="ton">ton</option>
+                                <option value="piece">piece</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label">SKU</label>
+                        <input type="text" class="form-control" name="variation_sku[]" placeholder="Stock Keeping Unit">
+                    </div>
+
+                    <div>
+                        <label class="form-label">Image</label>
+                        <div class="variation-image-box" onclick="this.querySelector('input[type=file]').click()">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                Choose File
+                            </div>
+                            <input type="file" accept="image/*" onchange="previewVariationImage(this)">
+                        </div>
+                        <div class="variation-image-preview">
+                            <img src="#" alt="Variation Image">
+                            <button type="button" class="remove-btn" onclick="removeVariationImage(this)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -852,7 +1251,7 @@
                             <i class="fas fa-check-circle me-2"></i> 
                             <strong>${message}</strong>
                         </span>
-                        <a href="product.php" class="alert-link">
+                        <a href="product_v2.php" class="alert-link">
                             <i class="fas fa-arrow-right me-1"></i> View Products
                         </a>
                     </div>
@@ -865,10 +1264,8 @@
                 `;
             }
 
-            // Scroll to alert
             container.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Auto hide after 5 seconds
             setTimeout(() => {
                 const alert = container.querySelector('.alert-success-custom, .alert-error-custom');
                 if (alert) {
@@ -895,7 +1292,6 @@
             const min_purchase = parseInt(document.getElementById('minPurchase').value) || 1;
             const max_purchase = parseInt(document.getElementById('maxPurchase').value) || 0;
             const unit = document.getElementById('unit').value;
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
             const status = document.getElementById('productStatus').value;
             const visibility = document.getElementById('productVisibility').value;
             const badge_text = document.getElementById('productBadge').value;
@@ -904,26 +1300,51 @@
             const seo_description = document.getElementById('seoDescription').value.trim();
             const description = document.getElementById('productDescription').value.trim();
 
-            // Get variations
+            // Get Variations
             const variationNames = document.getElementsByName('variation_name[]');
-            const variationSkus = document.getElementsByName('variation_sku[]');
+            const variationColors = document.getElementsByName('variation_color[]');
             const variationPrices = document.getElementsByName('variation_price[]');
-            const variationStocks = document.getElementsByName('variation_stock[]');
+            const variationMrps = document.getElementsByName('variation_mrp[]');
+            const variationUnits = document.getElementsByName('variation_unit[]');
+            const variationMinPurchase = document.getElementsByName('variation_min_purchase[]');
+            const variationStock = document.getElementsByName('variation_stock[]');
+            const variationStockForBuy = document.getElementsByName('variation_stock_for_buy[]');
+            const variationUnlimitedStock = document.getElementsByName('variation_unlimited_stock[]');
+            const variationWeight = document.getElementsByName('variation_weight[]');
+            const variationWeightUnit = document.getElementsByName('variation_weight_unit[]');
+            const variationSku = document.getElementsByName('variation_sku[]');
+
             const variations = [];
             for (let i = 0; i < variationNames.length; i++) {
                 if (variationNames[i].value.trim()) {
+                    // Get image if exists
+                    const box = variationNames[i].closest('.variations-grid').querySelector('.variation-image-box');
+                    const preview = box ? box.nextElementSibling : null;
+                    let image = '';
+                    if (preview && preview.style.display !== 'none') {
+                        const img = preview.querySelector('img');
+                        if (img) image = img.src;
+                    }
+
                     variations.push({
                         name: variationNames[i].value.trim(),
-                        sku: variationSkus[i]?.value.trim() || '',
+                        color: variationColors[i]?.value || '',
                         price: parseFloat(variationPrices[i]?.value) || 0,
-                        stock: parseInt(variationStocks[i]?.value) || 0
+                        mrp: parseFloat(variationMrps[i]?.value) || 0,
+                        unit: variationUnits[i]?.value || 'piece',
+                        min_purchase: parseInt(variationMinPurchase[i]?.value) || 1,
+                        stock: parseInt(variationStock[i]?.value) || 0,
+                        stock_for_buy: parseInt(variationStockForBuy[i]?.value) || 0,
+                        unlimited_stock: variationUnlimitedStock[i]?.checked || false,
+                        weight: parseFloat(variationWeight[i]?.value) || 0,
+                        weight_unit: variationWeightUnit[i]?.value || 'kg',
+                        sku: variationSku[i]?.value.trim() || '',
+                        image: image
                     });
                 }
             }
 
-            // ============================================================
-            // VALIDATION - Show proper error messages
-            // ============================================================
+            // VALIDATION
             if (!name) {
                 showAlert('Please enter product name', 'error');
                 document.getElementById('productName').focus();
@@ -963,7 +1384,6 @@
             if (status === 'Low Stock') badge = 'warning';
             if (status === 'Out of Stock') badge = 'danger';
 
-            // Get existing products
             const products = getProducts();
             const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
 
@@ -980,7 +1400,6 @@
                 min_purchase: min_purchase,
                 max_purchase: max_purchase,
                 unit: unit,
-                weight: weight ? weight.toFixed(2) : '0.00',
                 status: status,
                 badge: badge,
                 badge_text: badge_text,
@@ -998,14 +1417,11 @@
                 visitors: 0
             };
 
-            // Save to localStorage
             products.push(newProduct);
             saveProducts(products);
 
-            // Show success message (but don't redirect with success param)
             showAlert(`Product '${name}' added successfully!`, 'success');
 
-            // Reset form
             document.getElementById('addProductForm').reset();
             document.getElementById('mainImagePreview').style.display = 'none';
             document.getElementById('mainImageUpload').style.display = 'block';
@@ -1014,12 +1430,11 @@
             additionalImageFiles = [];
             document.getElementById('unitLabel').textContent = 'piece';
 
-            // Redirect to product.php without any query parameter
             setTimeout(() => {
-                window.location.href = 'product.php';
+                window.location.href = 'product_v2.php';
             }, 1500);
 
-            console.log('Product saved:', newProduct);
+            console.log('Product saved with variations:', newProduct);
             return false;
         }
 
@@ -1044,7 +1459,7 @@
                 }
             });
 
-            console.log('Add Product page initialized (100% JavaScript with localStorage)');
+            console.log('Add Product page initialized with Color dropdown and Weight unit dropdown');
         });
     </script>
 </body>
