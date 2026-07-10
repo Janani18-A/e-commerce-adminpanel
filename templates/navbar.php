@@ -1,18 +1,16 @@
 <div class="navbar-custom">
-    <div class="nav-left">
-       
-        
-        <!-- Hamburger Menu Button -->
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <!-- Logo -->
-        <h2>
-            <svg class="icon"><use href="assets/icons/icons.svg#icon-store"/></svg>
-            Admin Panel
-        </h2>
-    </div>
+<div class="nav-left">
+    <!-- Hamburger Menu Button - NOW FIRST -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Logo - NOW SECOND -->
+    <h2>
+        <svg class="icon"><use href="assets/icons/icons.svg#icon-store"/></svg>
+        Admin Panel
+    </h2>
+</div>
     
     <div class="nav-center">
         <!-- Search or other center content -->
