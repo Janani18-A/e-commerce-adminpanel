@@ -204,8 +204,8 @@
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
     <circle cx="12" cy="7" r="4"></circle>
 </symbol>
-<<<<<<< HEAD:assets/icons/icons.svg
-=======
+
+
 
 <symbol id="icon-product-report" viewBox="0 0 24 24" fill="none" stroke="currentColor"
 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -224,6 +224,4 @@ stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <line x1="3" y1="20" x2="21" y2="20"></line>
 </symbol>
 
-
->>>>>>> 129cdbd (update-files committed):e-commerce-adminpanel-main/assets/icons/icons.svg
 </svg>
