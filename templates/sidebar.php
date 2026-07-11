@@ -1,5 +1,5 @@
 <div class="sidebar-custom">
-    <div class="sidebar-header">
+    <div class="sidebar-header mt-4">
         <h2>
             <svg class="icon">
                 <use href="assets/icons/icons.svg#icon-store" />
