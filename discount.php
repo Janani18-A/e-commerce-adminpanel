@@ -1,31 +1,40 @@
 <?php
+include 'config/config.php';
+?>
+
+
+<?php
 $current_page = 'discounts';
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discounts - Admin Panel</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+<head>
+    <?php include 'head.php'; ?>
 
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #F8FAFC; }
+        * {
+            box-sizing: border-box;
+        }
 
-        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F8FAFC;
+        }
+
+
         .discount-table-container {
             background: #FFFFFF;
             border-radius: 8px;
             border: 1px solid #E2E8F0;
             overflow: hidden;
         }
-        .discount-table-container .table { margin-bottom: 0; }
+
+        .discount-table-container .table {
+            margin-bottom: 0;
+        }
+
         .discount-table-container .table thead th {
             background: #F8FAFC;
             color: #1E293B;
@@ -36,13 +45,20 @@ $current_page = 'discounts';
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         .discount-table-container .table tbody td {
             padding: 12px 15px;
             vertical-align: middle;
             border-bottom: 1px solid #E2E8F0;
         }
-        .discount-table-container .table tbody tr:hover { background: #F8FAFC; }
-        .discount-table-container .table tbody tr:last-child td { border-bottom: none; }
+
+        .discount-table-container .table tbody tr:hover {
+            background: #F8FAFC;
+        }
+
+        .discount-table-container .table tbody tr:last-child td {
+            border-bottom: none;
+        }
 
         .discount-code {
             display: inline-block;
@@ -56,9 +72,18 @@ $current_page = 'discounts';
             letter-spacing: 0.5px;
         }
 
-        .discount-amount { font-weight: 700; font-size: 1rem; }
-        .discount-amount.percentage { color: #2563EB; }
-        .discount-amount.fixed { color: #10B981; }
+        .discount-amount {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .discount-amount.percentage {
+            color: #2563EB;
+        }
+
+        .discount-amount.fixed {
+            color: #10B981;
+        }
 
         .eligibility-badge {
             padding: 4px 10px;
@@ -68,9 +93,21 @@ $current_page = 'discounts';
             background: #F1F5F9;
             color: #1E293B;
         }
-        .eligibility-badge.all { background: #DBEAFE; color: #1E40AF; }
-        .eligibility-badge.category { background: #D1FAE5; color: #065F46; }
-        .eligibility-badge.specific { background: #FEF3C7; color: #92400E; }
+
+        .eligibility-badge.all {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .eligibility-badge.category {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .eligibility-badge.specific {
+            background: #FEF3C7;
+            color: #92400E;
+        }
 
         .badge-status {
             padding: 4px 12px;
@@ -78,10 +115,26 @@ $current_page = 'discounts';
             font-size: 0.75rem;
             font-weight: 500;
         }
-        .badge-status.active { background: #D1FAE5; color: #065F46; }
-        .badge-status.inactive { background: #FEE2E2; color: #991B1B; }
-        .badge-status.expired { background: #FEF3C7; color: #92400E; }
-        .badge-status.scheduled { background: #CFFAFE; color: #0E7490; }
+
+        .badge-status.active {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge-status.inactive {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .badge-status.expired {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-status.scheduled {
+            background: #CFFAFE;
+            color: #0E7490;
+        }
 
         .action-btn {
             padding: 4px 8px;
@@ -93,8 +146,16 @@ $current_page = 'discounts';
             text-decoration: none;
             display: inline-block;
         }
-        .action-btn:hover { background: #F1F5F9; color: #1E293B; }
-        .action-btn.delete:hover { color: #EF4444; background: #FEE2E2; }
+
+        .action-btn:hover {
+            background: #F1F5F9;
+            color: #1E293B;
+        }
+
+        .action-btn.delete:hover {
+            color: #EF4444;
+            background: #FEE2E2;
+        }
 
         .btn-add-coupon {
             background: #2563EB;
@@ -106,7 +167,11 @@ $current_page = 'discounts';
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        .btn-add-coupon:hover { background: #1E40AF; color: #FFFFFF; }
+
+        .btn-add-coupon:hover {
+            background: #1E40AF;
+            color: #FFFFFF;
+        }
 
         .table-tools {
             display: flex;
@@ -116,6 +181,7 @@ $current_page = 'discounts';
             gap: 15px;
             margin-bottom: 20px;
         }
+
         .table-tools .left-section,
         .table-tools .right-section {
             display: flex;
@@ -123,10 +189,19 @@ $current_page = 'discounts';
             gap: 10px;
             flex-wrap: wrap;
         }
-        .entries-select { width: 80px !important; }
-        .search-input { width: 250px !important; }
 
-        .pagination-info { color: #64748B; font-size: 0.9rem; }
+        .entries-select {
+            width: 80px !important;
+        }
+
+        .search-input {
+            width: 250px !important;
+        }
+
+        .pagination-info {
+            color: #64748B;
+            font-size: 0.9rem;
+        }
 
         .alert-custom {
             padding: 12px 16px;
@@ -135,23 +210,83 @@ $current_page = 'discounts';
             display: none;
             border-left: 4px solid;
         }
-        .alert-custom.show { display: block; }
-        .alert-custom.success { background: #D1FAE5; color: #065F46; border-left-color: #10B981; }
-        .alert-custom.error { background: #FEE2E2; color: #991B1B; border-left-color: #EF4444; }
 
-        .sidebar-toggle { display: none; background: transparent; border: none; color: #1E293B; font-size: 1.2rem; padding: 0 10px; }
+        .alert-custom.show {
+            display: block;
+        }
+
+        .alert-custom.success {
+            background: #D1FAE5;
+            color: #065F46;
+            border-left-color: #10B981;
+        }
+
+        .alert-custom.error {
+            background: #FEE2E2;
+            color: #991B1B;
+            border-left-color: #EF4444;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: #1E293B;
+            font-size: 1.2rem;
+            padding: 0 10px;
+        }
 
         @media (max-width: 767.98px) {
-            .sidebar-wrapper { width: 0; transform: translateX(-100%); transition: all 0.3s ease; position: fixed; top: 56px; left: 0; bottom: 0; z-index: 1040; background: #FFFFFF; overflow-y: auto; box-shadow: 2px 0 8px rgba(0,0,0,0.1); }
-            .sidebar-wrapper.open { width: 280px; transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 10px 12px; }
-            .sidebar-toggle { display: block !important; }
-            .d-flex.justify-content-between.align-items-center { flex-direction: column; align-items: flex-start !important; gap: 8px; }
-            .btn-toolbar { width: 100%; }
-            .btn-toolbar .btn-group { width: 100%; }
-            .btn-toolbar .btn-group .btn { width: 100%; }
-            
-            .discount-table-container .table thead { display: none; }
+            .sidebar-wrapper {
+                width: 0;
+                transform: translateX(-100%);
+                transition: all 0.3s ease;
+                position: fixed;
+                top: 56px;
+                left: 0;
+                bottom: 0;
+                z-index: 1040;
+                background: #FFFFFF;
+                overflow-y: auto;
+                box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar-wrapper.open {
+                width: 280px;
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 10px 12px;
+            }
+
+            .sidebar-toggle {
+                display: block !important;
+            }
+
+            .d-flex.justify-content-between.align-items-center {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 8px;
+            }
+
+            .btn-toolbar {
+                width: 100%;
+            }
+
+            .btn-toolbar .btn-group {
+                width: 100%;
+            }
+
+            .btn-toolbar .btn-group .btn {
+                width: 100%;
+            }
+
+            .discount-table-container .table thead {
+                display: none;
+            }
+
             .discount-table-container .table tbody td {
                 display: flex;
                 padding: 4px 10px;
@@ -162,6 +297,7 @@ $current_page = 'discounts';
                 gap: 8px;
                 flex-wrap: wrap;
             }
+
             .discount-table-container .table tbody td:before {
                 content: attr(data-label);
                 font-weight: 600;
@@ -169,41 +305,91 @@ $current_page = 'discounts';
                 min-width: 100px;
                 flex-shrink: 0;
             }
-            .discount-table-container .table tbody td:last-child:before { display: none; }
-            .discount-table-container .table tbody td:last-child { justify-content: flex-start; }
-            .discount-table-container .table tbody td:first-child:before { display: none; }
-            .discount-table-container .table tbody tr { display: block; border-bottom: 1px solid #E2E8F0; padding: 4px 0; }
-            .discount-table-container .table tbody tr:last-child { border-bottom: none; }
-            .discount-table-container .table tbody td:first-child { padding-top: 8px; }
-            .discount-table-container .table tbody td:last-child { padding-bottom: 8px; }
-            
-            .table-tools { flex-direction: column; align-items: stretch; }
-            .search-input { width: 100% !important; }
-            
-            .modal-dialog { margin: 0.5rem; }
-            .modal-body { padding: 1rem; }
+
+            .discount-table-container .table tbody td:last-child:before {
+                display: none;
+            }
+
+            .discount-table-container .table tbody td:last-child {
+                justify-content: flex-start;
+            }
+
+            .discount-table-container .table tbody td:first-child:before {
+                display: none;
+            }
+
+            .discount-table-container .table tbody tr {
+                display: block;
+                border-bottom: 1px solid #E2E8F0;
+                padding: 4px 0;
+            }
+
+            .discount-table-container .table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .discount-table-container .table tbody td:first-child {
+                padding-top: 8px;
+            }
+
+            .discount-table-container .table tbody td:last-child {
+                padding-bottom: 8px;
+            }
+
+            .table-tools {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                width: 100% !important;
+            }
+
+            .modal-dialog {
+                margin: 0.5rem;
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
         }
 
         @media (max-width: 479.98px) {
-            .main-content { padding: 6px 8px; }
+            .main-content {
+                padding: 6px 8px;
+            }
         }
 
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .custom-alert { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .custom-alert {
+            animation: slideIn 0.3s ease-out;
+        }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <?php include 'templates/navbar.php'; ?>
-    
+
     <!-- Sidebar -->
     <?php include 'templates/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="content-area main-content">
         <div id="discounts-page" class="page-section active-page">
-            
-            
+
+
 
             <!-- Alert Container -->
             <div id="alertContainer"></div>
@@ -270,9 +456,10 @@ $current_page = 'discounts';
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS Bundle (Latest Stable) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/script.js"></script>
-    
+
     <script>
         // ============================================================
         // COUPON DATA - READ FROM LOCALSTORAGE
@@ -287,12 +474,81 @@ $current_page = 'discounts';
 
         // Initialize coupons in localStorage if empty
         if (getCoupons().length === 0) {
-            const defaultCoupons = [
-                {id: 1, code: 'SUMMER20', type: 'Percentage', discount: 20, apply: 'All Products', eligibility: 'Everyone', usage_total: 150, usage_per_customer: 5, valid_from: '2026-06-01', valid_till: '2026-07-31', status: 'Active', description: 'Summer sale discount', created_at: new Date().toISOString()},
-                {id: 2, code: 'FREESHIP', type: 'Free Shipping', discount: 0, apply: 'All Products', eligibility: 'Everyone', usage_total: 75, usage_per_customer: 3, valid_from: '2026-06-15', valid_till: '2026-08-15', status: 'Active', description: 'Free shipping on all orders', created_at: new Date().toISOString()},
-                {id: 3, code: 'WELCOME10', type: 'Percentage', discount: 10, apply: 'All Products', eligibility: 'New Customers', usage_total: 200, usage_per_customer: 2, valid_from: '2026-01-01', valid_till: '2026-12-31', status: 'Active', description: 'Welcome discount for new customers', created_at: new Date().toISOString()},
-                {id: 4, code: 'HOLIDAY25', type: 'Percentage', discount: 25, apply: 'All Products', eligibility: 'Everyone', usage_total: 50, usage_per_customer: 2, valid_from: '2026-12-01', valid_till: '2026-12-25', status: 'Scheduled', description: 'Holiday special discount', created_at: new Date().toISOString()},
-                {id: 5, code: 'FLASH50', type: 'Percentage', discount: 50, apply: 'Specific Category', eligibility: 'Everyone', usage_total: 30, usage_per_customer: 1, valid_from: '2026-06-01', valid_till: '2026-06-30', status: 'Expired', description: 'Flash sale on smart devices', created_at: new Date().toISOString()}
+            const defaultCoupons = [{
+                    id: 1,
+                    code: 'SUMMER20',
+                    type: 'Percentage',
+                    discount: 20,
+                    apply: 'All Products',
+                    eligibility: 'Everyone',
+                    usage_total: 150,
+                    usage_per_customer: 5,
+                    valid_from: '2026-06-01',
+                    valid_till: '2026-07-31',
+                    status: 'Active',
+                    description: 'Summer sale discount',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 2,
+                    code: 'FREESHIP',
+                    type: 'Free Shipping',
+                    discount: 0,
+                    apply: 'All Products',
+                    eligibility: 'Everyone',
+                    usage_total: 75,
+                    usage_per_customer: 3,
+                    valid_from: '2026-06-15',
+                    valid_till: '2026-08-15',
+                    status: 'Active',
+                    description: 'Free shipping on all orders',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 3,
+                    code: 'WELCOME10',
+                    type: 'Percentage',
+                    discount: 10,
+                    apply: 'All Products',
+                    eligibility: 'New Customers',
+                    usage_total: 200,
+                    usage_per_customer: 2,
+                    valid_from: '2026-01-01',
+                    valid_till: '2026-12-31',
+                    status: 'Active',
+                    description: 'Welcome discount for new customers',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 4,
+                    code: 'HOLIDAY25',
+                    type: 'Percentage',
+                    discount: 25,
+                    apply: 'All Products',
+                    eligibility: 'Everyone',
+                    usage_total: 50,
+                    usage_per_customer: 2,
+                    valid_from: '2026-12-01',
+                    valid_till: '2026-12-25',
+                    status: 'Scheduled',
+                    description: 'Holiday special discount',
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 5,
+                    code: 'FLASH50',
+                    type: 'Percentage',
+                    discount: 50,
+                    apply: 'Specific Category',
+                    eligibility: 'Everyone',
+                    usage_total: 30,
+                    usage_per_customer: 1,
+                    valid_from: '2026-06-01',
+                    valid_till: '2026-06-30',
+                    status: 'Expired',
+                    description: 'Flash sale on smart devices',
+                    created_at: new Date().toISOString()
+                }
             ];
             saveCoupons(defaultCoupons);
         }
@@ -308,7 +564,11 @@ $current_page = 'discounts';
         function formatDate(dateStr) {
             if (!dateStr) return 'N/A';
             const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
         }
 
         // ============================================================
@@ -455,9 +715,11 @@ $current_page = 'discounts';
         // ============================================================
         function changePage(direction) {
             const totalPages = Math.ceil(filteredCoupons.length / rowsPerPage);
-            if (direction === 'prev' && currentPage > 1) { currentPage--; }
-            else if (direction === 'next' && currentPage < totalPages) { currentPage++; }
-            else return;
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 'next' && currentPage < totalPages) {
+                currentPage++;
+            } else return;
             renderCoupons();
         }
 
@@ -481,11 +743,21 @@ $current_page = 'discounts';
         function showAlert(message, type = 'success') {
             const container = document.getElementById('alertContainer');
             const colors = {
-                success: { bg: '#D1FAE5', color: '#065F46', border: '#10B981', icon: 'check-circle' },
-                error: { bg: '#FEE2E2', color: '#991B1B', border: '#EF4444', icon: 'exclamation-circle' }
+                success: {
+                    bg: '#D1FAE5',
+                    color: '#065F46',
+                    border: '#10B981',
+                    icon: 'check-circle'
+                },
+                error: {
+                    bg: '#FEE2E2',
+                    color: '#991B1B',
+                    border: '#EF4444',
+                    icon: 'exclamation-circle'
+                }
             };
             const c = colors[type] || colors.success;
-            
+
             container.innerHTML = `
                 <div class="alert-custom success show" style="background: ${c.bg}; color: ${c.color}; border-left-color: ${c.border};">
                     <i class="fas fa-${c.icon} me-2"></i> ${message}
@@ -504,8 +776,8 @@ $current_page = 'discounts';
             const term = document.getElementById('discountSearch').value.toLowerCase().trim();
 
             filteredCoupons = couponsData.filter(c => {
-                return !term || 
-                    c.code.toLowerCase().includes(term) || 
+                return !term ||
+                    c.code.toLowerCase().includes(term) ||
                     c.eligibility.toLowerCase().includes(term) ||
                     c.status.toLowerCase().includes(term) ||
                     (c.type && c.type.toLowerCase().includes(term));
@@ -551,7 +823,7 @@ $current_page = 'discounts';
             // Reload coupons from localStorage
             couponsData = getCoupons();
             filteredCoupons = [...couponsData];
-            
+
             renderCoupons();
             checkUrlParams();
 
@@ -584,4 +856,5 @@ $current_page = 'discounts';
         });
     </script>
 </body>
+
 </html>

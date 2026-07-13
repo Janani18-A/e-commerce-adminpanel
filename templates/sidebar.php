@@ -58,6 +58,14 @@
             </a>
         </li>
         <li>
+            <a href="product-categories.php">
+                <svg class="icon">
+                    <use href="assets/icons/icons.svg#icon-categories"></use>
+                </svg>
+                <span>Products Categories</span>
+            </a>
+        </li>
+        <li>
             <a href="product-report.php">
                 <svg class="icon">
                     <use href="assets/icons/icons.svg#icon-product-report" />
