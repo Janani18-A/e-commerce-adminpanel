@@ -1,3 +1,6 @@
+<?php
+include 'config/config.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,10 +16,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Load SVG Icons -->
-    <link rel="stylesheet" href="assets/icons/icons.svg">
+    <link rel="stylesheet" href="<?= APP_URL; ?>/assets/icons/icons.svg">
 
     <!-- Common Styles -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="<?= APP_URL; ?>/assets/css/style.css">
 
 
 </head>
@@ -31,7 +34,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Common JS -->
-    <script src="assets/js/script.js"></script>
+    <script src="<?= APP_URL; ?>/assets/js/script.js"></script>
 
 </body>
 

@@ -1,4 +1,7 @@
 <?php
+include 'config/config.php';
+?>
+<?php
 $current_page = 'settings';
 ?>
 <!DOCTYPE html>
@@ -11,7 +14,7 @@ $current_page = 'settings';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="<?= APP_URL; ?>/assets/css/style.css">
     <style>
         .settings-card {
             transition: all 0.2s ease;
@@ -20,25 +23,25 @@ $current_page = 'settings';
             padding: 1.25rem !important;
             width: 100%;
         }
-        
+
         .settings-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        
+
         .card-icon {
             width: 44px;
             height: 44px;
             min-width: 44px;
             flex-shrink: 0;
         }
-        
+
         .settings-card .card-body {
             padding: 0;
             min-width: 0;
             flex: 1;
         }
-        
+
         .settings-card h4 {
             font-size: 0.95rem;
             white-space: nowrap;
@@ -46,7 +49,7 @@ $current_page = 'settings';
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .settings-card p {
             font-size: 0.8rem;
             white-space: nowrap;
@@ -55,75 +58,75 @@ $current_page = 'settings';
             text-overflow: ellipsis;
             margin-bottom: 0.25rem;
         }
-        
+
         .settings-card .card-link {
             font-size: 0.78rem;
             white-space: nowrap;
         }
-        
+
         /* Tab button responsive */
         .tab-bar .tab-btn {
             font-size: 0.85rem;
             padding: 0.5rem 1.2rem;
             white-space: nowrap;
         }
-        
+
         .tab-bar .tab-btn span {
             display: inline;
         }
-        
+
         /* WIDER GRID - 2 columns on desktop */
         .settings-grid .col-12 {
             padding-left: 8px;
             padding-right: 8px;
         }
-        
+
         @media (min-width: 576px) {
             .settings-grid .col-sm-6 {
                 flex: 0 0 50%;
                 max-width: 50%;
             }
         }
-        
+
         @media (min-width: 992px) {
             .settings-grid .col-lg-6 {
                 flex: 0 0 50%;
                 max-width: 50%;
             }
         }
-        
+
         /* Mobile responsive */
         @media (max-width: 576px) {
             .settings-card {
                 min-height: 80px;
                 padding: 0.85rem !important;
             }
-            
+
             .settings-card h4 {
                 font-size: 0.82rem;
                 white-space: nowrap;
             }
-            
+
             .settings-card p {
                 font-size: 0.68rem;
                 white-space: nowrap;
             }
-            
+
             .settings-card .card-link {
                 font-size: 0.68rem;
                 white-space: nowrap;
             }
-            
+
             .card-icon {
                 width: 32px;
                 height: 32px;
                 min-width: 32px;
             }
-            
+
             .card-icon i {
                 font-size: 0.85rem !important;
             }
-            
+
             .tab-bar {
                 padding: 0.5rem 0.75rem !important;
                 gap: 0.25rem !important;
@@ -131,78 +134,78 @@ $current_page = 'settings';
                 flex-wrap: nowrap;
                 -webkit-overflow-scrolling: touch;
             }
-            
+
             .tab-bar .tab-btn {
                 font-size: 0.7rem;
                 padding: 0.35rem 0.6rem;
                 flex-shrink: 0;
             }
-            
+
             .tab-bar .tab-btn span {
                 display: none;
             }
-            
+
             .tab-bar .tab-btn i {
                 font-size: 1rem;
             }
-            
+
             .settings-header h1 {
                 font-size: 1.1rem !important;
             }
-            
+
             .settings-header p {
                 font-size: 0.7rem !important;
             }
-            
+
             .section-title {
                 font-size: 0.95rem !important;
             }
-            
+
             .tab-content {
                 padding: 0.75rem !important;
             }
-            
+
             .settings-grid {
                 gap: 0.5rem !important;
             }
-            
+
             .settings-grid .col-12 {
                 padding-left: 4px;
                 padding-right: 4px;
             }
         }
-        
+
         @media (min-width: 577px) and (max-width: 768px) {
             .settings-card {
                 padding: 1rem !important;
             }
-            
+
             .settings-card h4 {
                 font-size: 0.85rem;
                 white-space: nowrap;
             }
-            
+
             .settings-card p {
                 font-size: 0.72rem;
                 white-space: nowrap;
             }
-            
+
             .tab-bar .tab-btn {
                 font-size: 0.75rem;
                 padding: 0.4rem 0.9rem;
             }
-            
+
             .tab-content {
                 padding: 1rem !important;
             }
         }
-        
+
         @media (min-width: 769px) and (max-width: 991px) {
             .settings-card h4 {
                 font-size: 0.88rem;
                 white-space: nowrap;
             }
-            
+
             .settings-card p {
                 font-size: 0.75rem;
                 white-space: nowrap;
@@ -212,7 +215,7 @@ $current_page = 'settings';
 </head>
 
 <body>
-    <?php include ('templates/navbar.php'); ?>
+    <?php include('templates/navbar.php'); ?>
     <?php include('templates/sidebar.php'); ?>
 
     <div class="content-area">
@@ -411,7 +414,7 @@ $current_page = 'settings';
                     </div>
                 </div>
 
-            </div> 
+            </div>
         </div>
     </div>
 
@@ -426,46 +429,46 @@ $current_page = 'settings';
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/script.js"></script>
+    <script src="<?= APP_URL; ?>/assets/js/script.js"></script>
 
     <script>
-    function switchTab(tabName) {
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-            btn.classList.remove('btn-primary');
-            btn.classList.add('btn-outline-secondary');
-        });
-        
-        const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
-            activeBtn.classList.add('btn-primary');
-            activeBtn.classList.remove('btn-outline-secondary');
-        }
-        
-        document.querySelectorAll('.tab-pane').forEach(pane => {
-            pane.classList.remove('active');
-            pane.style.display = 'none';
-        });
-        
-        const activePane = document.getElementById(`tab-${tabName}`);
-        if (activePane) {
-            activePane.classList.add('active');
-            activePane.style.display = 'block';
-        }
-    }
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-secondary');
+            });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.tab-pane').forEach(pane => {
-            if (pane.id === 'tab-general') {
-                pane.classList.add('active');
-                pane.style.display = 'block';
-            } else {
+            const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.classList.add('btn-primary');
+                activeBtn.classList.remove('btn-outline-secondary');
+            }
+
+            document.querySelectorAll('.tab-pane').forEach(pane => {
                 pane.classList.remove('active');
                 pane.style.display = 'none';
+            });
+
+            const activePane = document.getElementById(`tab-${tabName}`);
+            if (activePane) {
+                activePane.classList.add('active');
+                activePane.style.display = 'block';
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                if (pane.id === 'tab-general') {
+                    pane.classList.add('active');
+                    pane.style.display = 'block';
+                } else {
+                    pane.classList.remove('active');
+                    pane.style.display = 'none';
+                }
+            });
         });
-    });
     </script>
 </body>
 

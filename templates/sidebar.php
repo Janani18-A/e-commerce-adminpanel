@@ -9,7 +9,7 @@
     </div>
     <ul class="sidebar-menu">
         <li class="active">
-            <a href="../index.php">
+           <a href="<?= APP_URL; ?>">
                 <svg class="icon">
                     <use href="assets/icons/icons.svg#icon-dashboard" />
                 </svg>
