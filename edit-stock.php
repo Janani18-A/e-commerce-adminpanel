@@ -8,7 +8,7 @@ $current_page = 'stock';
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
  <?php include 'templates/head.php'; ?>
 
     <style>

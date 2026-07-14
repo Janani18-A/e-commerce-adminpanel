@@ -6,7 +6,7 @@ include 'config/config.php';
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
       <?php include 'templates/head.php'; ?>
 
     <style>
@@ -647,7 +647,7 @@ include 'config/config.php';
             let html = `
                 <!DOCTYPE html>
                 <html>
-                <head>
+                
                     <style>
                         body { font-family: Arial, sans-serif; }
                         h1 { color: #2563EB; text-align: center; }

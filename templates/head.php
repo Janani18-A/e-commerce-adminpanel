@@ -13,4 +13,3 @@
 
         <link rel="stylesheet" href="<?= APP_URL; ?>/assets/css/style.css">
         
-    </head>

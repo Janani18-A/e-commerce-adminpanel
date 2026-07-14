@@ -27,7 +27,7 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
     <?php include 'templates/head.php'; ?>
 </head>
 <body>

@@ -106,7 +106,7 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
 <?php include 'templates/head.php'; ?>
 </head>
 <body>

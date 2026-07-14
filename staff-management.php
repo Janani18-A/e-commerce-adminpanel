@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
       <?php include 'templates/head.php'; ?>
     
 </head>

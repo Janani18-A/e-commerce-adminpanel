@@ -10,7 +10,7 @@ $current_page = 'discounts';
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+
    <?php include 'templates/head.php'; ?>
 
     <style>

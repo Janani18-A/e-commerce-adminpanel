@@ -9,7 +9,7 @@ $current_page = 'stock-management';
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
    <?php include 'templates/head.php'; ?>
 
     <style>

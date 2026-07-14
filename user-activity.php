@@ -7,7 +7,7 @@ $current_page = 'user-activity';
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
     <?php include 'templates/head.php'; ?>
 </head>
 <body>

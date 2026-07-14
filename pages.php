@@ -7,7 +7,7 @@ include 'config/config.php';
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+
  <?php include 'templates/head.php'; ?>
     <style>
         /* Minimal custom overrides – everything else uses Bootstrap */
