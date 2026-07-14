@@ -11,7 +11,7 @@ $current_page = 'discounts';
 <html lang="en">
 
 <head>
-    <?php include 'head.php'; ?>
+   <?php include 'templates/head.php'; ?>
 
     <style>
         * {

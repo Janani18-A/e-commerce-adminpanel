@@ -6,7 +6,7 @@ include 'config/config.php';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <?php include 'head.php'; ?>
+ <?php include 'templates/head.php'; ?>
 
     <style>
         * { box-sizing: border-box; }

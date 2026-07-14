@@ -10,7 +10,7 @@ $current_page = 'settings';
 
 <head>
 
-  <?php include 'head.php'; ?>
+ <?php include 'templates/head.php'; ?>
 
 </head>
 <body>

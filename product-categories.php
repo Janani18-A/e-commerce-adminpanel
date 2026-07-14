@@ -10,7 +10,7 @@ $current_page = 'categories';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <?php include 'head.php'; ?>
+  <?php include 'templates/head.php'; ?>
 
     <style>
         /* ============================================

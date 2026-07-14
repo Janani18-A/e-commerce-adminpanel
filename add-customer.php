@@ -8,7 +8,7 @@ $current_page = 'add-customer';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <?php include 'head.php'; ?>
+    <?php include 'templates/head.php'; ?>
      
 </head>
 <body>

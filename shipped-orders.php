@@ -10,7 +10,7 @@ $current_page = 'shipped-orders';
 
 <head>
 
-   <?php include 'head.php'; ?>
+  <?php include 'templates/head.php'; ?>
 
     <style>
         body {

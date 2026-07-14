@@ -8,7 +8,7 @@ $current_page = 'settings';
 <html lang="en">
 
 <head>
-     <?php include 'head.php'; ?>
+    <?php include 'templates/head.php'; ?>
     <style>
         .settings-card {
             transition: all 0.2s ease;

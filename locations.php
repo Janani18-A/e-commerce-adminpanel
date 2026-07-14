@@ -32,7 +32,7 @@ if (isset($_GET['toggle']) && isset($_GET['id'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <?php include 'head.php'; ?>
+ <?php include 'templates/head.php'; ?>
 </head>
 <body>
     <?php include ('templates/navbar.php'); ?>

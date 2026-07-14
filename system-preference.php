@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 
 <head>
-     <?php include 'head.php'; ?>
+    <?php include 'templates/head.php'; ?>
 </head>
 
 <body>

@@ -9,7 +9,7 @@ $current_page = 'customers';
 <html lang="en">
 
 <head>
- <?php include 'head.php'; ?>
+<?php include 'templates/head.php'; ?>
 
     <style>
         /* Minimal overrides – only to match the shipped-orders layout, no custom design */
