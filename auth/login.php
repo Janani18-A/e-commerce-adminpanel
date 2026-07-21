@@ -4,26 +4,8 @@ require_once __DIR__ . '/../config/config.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
-    header('Location: ' . APP_URL . '/dashboard');
+    header('Location: ' . APP_URL . '/index.php');
     exit;
-}
-
-// Handle login form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    // Your authentication logic here
-    if ($username === 'admin' && $password === 'password') {
-        $_SESSION['user_id'] = 1;
-        $_SESSION['username'] = $username;
-
-        // Redirect to dashboard after successful login
-        header('Location: ' . APP_URL . '/dashboard');
-        exit;
-    } else {
-        $error = 'Invalid username or password';
-    }
 }
 ?>
 <!DOCTYPE html>
@@ -39,6 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <style>
         body {
@@ -131,8 +116,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-color: #667eea;
         }
 
-        .form-control:focus+.input-group-text {
-            border-color: #667eea;
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .form-control.is-valid {
+            border-color: #28a745;
         }
 
         .btn-login {
@@ -144,25 +133,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 10px;
             transition: all 0.3s ease;
             width: 100%;
+            color: white;
         }
 
-        .btn-login:hover {
+        .btn-login:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            color: white;
         }
 
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .alert {
-            border-radius: 10px;
-            padding: 12px 15px;
-            font-size: 14px;
-        }
-
-        .alert i {
-            margin-right: 8px;
+        .btn-login:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         .login-footer {
@@ -219,7 +201,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding-right: 45px;
         }
 
-        /* Responsive */
+        .invalid-feedback {
+            font-size: 12px;
+        }
+
         @media (max-width: 480px) {
             .login-card {
                 padding: 30px 20px;
@@ -240,17 +225,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Sign in to access the dashboard</p>
         </div>
 
-        <!-- Error Alert -->
-        <?php if (isset($error)): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-circle"></i>
-                <?php echo htmlspecialchars($error); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
-
         <!-- Login Form -->
-        <form method="POST" action="">
+        <form id="loginForm" novalidate>
             <div class="form-group">
                 <label for="username">Username</label>
                 <div class="input-group">
@@ -260,6 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" class="form-control" id="username" name="username"
                         placeholder="Enter username" required autofocus>
                 </div>
+                <div class="invalid-feedback"></div>
             </div>
 
             <div class="form-group">
@@ -274,6 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <i class="fas fa-eye"></i>
                     </button>
                 </div>
+                <div class="invalid-feedback"></div>
             </div>
 
             <div class="form-group d-flex justify-content-between align-items-center">
@@ -288,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </a>
             </div>
 
-            <button type="submit" class="btn btn-login text-white">
+            <button type="submit" class="btn btn-login" id="loginBtn">
                 <i class="fas fa-sign-in-alt me-2"></i>Sign In
             </button>
         </form>
@@ -298,44 +276,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="mb-0 text-center">
                 <i class="fas fa-info-circle me-1" style="color: #667eea;"></i>
                 <strong>Demo Credentials:</strong><br>
-                <span class="badge bg-light text-dark me-1">Username: admin</span>
-                <span class="badge bg-light text-dark">Password: password</span>
+                <span class="badge bg-light text-dark me-1">Username: qwe</span>
+                <span class="badge bg-light text-dark">Password: Test@123</span>
             </p>
         </div>
 
         <div class="login-footer">
-            &copy; <?php echo date('Y'); ?> Admin Panel. All rights reserved.
+            Don't have an account? <a href="<?php echo APP_URL; ?>/auth/register">Register Here</a>
         </div>
     </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Password Toggle Script -->
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Pass APP_URL to JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const togglePassword = document.getElementById('togglePassword');
-            const passwordInput = document.getElementById('password');
-
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.querySelector('i').classList.toggle('fa-eye');
-                this.querySelector('i').classList.toggle('fa-eye-slash');
-            });
-
-            // Auto-dismiss alerts after 5 seconds
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    const closeBtn = alert.querySelector('.btn-close');
-                    if (closeBtn) {
-                        closeBtn.click();
-                    }
-                }, 5000);
-            });
-        });
+        var APP_URL = "<?php echo APP_URL; ?>";
     </script>
+
+    <!-- Custom Login JS -->
+    <script src="<?php echo APP_URL; ?>/assets/js/login.js"></script>
 </body>
 
 </html>
